@@ -1,0 +1,92 @@
+#!/usr/bin/env python
+"""
+This file is a state-machine prototype for the husky demo.
+In the future, this will be replaced with an auto-generated
+script from the experiment configuration.
+"""
+
+__author__ = 'SebastianKrach'
+
+import smach_ros
+from smach import StateMachine
+from hbp_nrp_excontrol.nrp_states import WaitToClockState, RobotPoseMonitorState, \
+    SetMaterialColorServiceState
+
+FINISHED = 'FINISHED'
+ERROR = 'ERROR'
+PREEMPTED = 'PREEMPTED'
+
+sm = StateMachine(outcomes=[FINISHED, ERROR, PREEMPTED])
+
+with sm:
+    StateMachine.add(
+        "initial_timeline_condition",
+        WaitToClockState(20),
+        transitions = {'valid': 'initial_timeline_condition',
+                       'invalid': 'set_right_screen_red',
+                       'preempted': PREEMPTED}
+    )
+
+    StateMachine.add(
+        "wait_for_husky_left",
+        RobotPoseMonitorState(lambda ud, p: not ((-1 < p.position.x < 1) and
+                                                        (-2.5 < p.position.y < -1.8) and
+                                                        (0 < p.position.z < 1))),
+        transitions = {'valid': 'wait_for_husky_left',
+                       'invalid': 'set_left_screen_blue',
+                       'preempted': PREEMPTED}
+    )
+
+    StateMachine.add(
+        "wait_for_husky_right",
+        RobotPoseMonitorState(lambda ud, p: not ((-1 < p.position.x < 1) and
+                                                        (1.8 < p.position.y < 2.5) and
+                                                        (0 < p.position.z < 1))),
+        transitions = {'valid': 'wait_for_husky_right',
+                       'invalid': 'set_right_screen_blue',
+                       'preempted': PREEMPTED}
+    )
+
+    StateMachine.add(
+        "set_left_screen_red",
+        SetMaterialColorServiceState('left_vr_screen',
+                                            'body',
+                                            'screen_glass',
+                                            'Gazebo/Red'),
+        transitions = {'succeeded': 'wait_for_husky_left',
+                       'aborted': ERROR,
+                       'preempted': PREEMPTED}
+    )
+
+    StateMachine.add(
+        "set_right_screen_red",
+        SetMaterialColorServiceState('right_vr_screen',
+                                            'body',
+                                            'screen_glass',
+                                            'Gazebo/Red'),
+        transitions = {'succeeded': 'wait_for_husky_right',
+                       'aborted': ERROR,
+                       'preempted': PREEMPTED}
+    )
+
+    StateMachine.add(
+        "set_left_screen_blue",
+        SetMaterialColorServiceState('left_vr_screen',
+                                            'body',
+                                            'screen_glass',
+                                            'Gazebo/Blue'),
+        transitions = {'succeeded': 'set_right_screen_red',
+                       'aborted': ERROR,
+                       'preempted': PREEMPTED}
+    )
+
+    StateMachine.add(
+        "set_right_screen_blue",
+        SetMaterialColorServiceState('right_vr_screen',
+                                            'body',
+                                            'screen_glass',
+                                            'Gazebo/Blue'),
+        transitions = {'succeeded': 'set_left_screen_red',
+                       'aborted': ERROR,
+                       'preempted': PREEMPTED}
+    )

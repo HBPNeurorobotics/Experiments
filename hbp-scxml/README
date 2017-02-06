@@ -1,0 +1,30 @@
+This folder contains the schema files for the adapted version of SCXML for the Human Brain Project.
+
+The W3C proposed recommendation and the original schema files can be found at the following
+locations:
+  - http://www.w3.org/TR/scxml/ (Specification of Proposed Recommendation)
+  - http://www.w3.org/2011/04/SCXML/scxml.xsd (Root Schema File)
+
+While the original SCXML schema defines the namespace
+    http://www.w3.org/2005/07/scxml
+the HBP adaption uses
+    http://schemas.humanbrainproject.eu/SP10/2015/ExDConfig/scxml
+
+Currently the adaptions are limited to introducing an additional type "EventMapper" which allows
+to formally specify mappings between SCXML events (internal and external events in
+accordance with the specification) and external system events that trigger SCXML events. A mapping
+is active as long as the state that declares it is active. Therefore, the 'EventMapper' extends the
+SCXML 'invoke' directive.
+In order to allow for event mappings for the entire runtime of the state machine the 'SCXML' type
+was adapted to allow 'invoke' directives on the root level (semantics: "the invoked service is
+active during the entire runtime of the state machine")
+
+The 'scxml-ros-extensions' schema describes the concrete extension of the SCXML specification with
+ROS specific directives. Amongst others, it specifies a EventMapper type to describe mappings
+between incoming messages on ROS topics and subsequently raised SCXML events.
+
+The introduced ROS specific types are:
+- MessageOnROSTopic (extension of EventMapper and Invoke): Specified mapping between incoming
+messages and subsequently raised events.
+- Message (extension of SCXML Send): Specifies the sending of a particular message on a ROS topic
+- ServiceRequest (extension of SCXML Send): Specifies the invokation of a ROS service.

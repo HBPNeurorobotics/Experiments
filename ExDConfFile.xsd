@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:bibi="http://schemas.humanbrainproject.eu/SP10/2014/BIBI"
+            xmlns:sc="http://schemas.humanbrainproject.eu/SP10/2015/ExDConfig/scxml"
+            xmlns:tns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
+
+            targetNamespace="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
+            xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
+            xsi:schemaLocation="
+                       http://schemas.humanbrainproject.eu/SP10/2014/BIBI bibi_configuration.xsd
+                       http://schemas.humanbrainproject.eu/SP10/2015/ExDConfig/scxml hbp-scxml/hbp-scxml.xsd"
+            attributeFormDefault="unqualified" elementFormDefault="qualified">
+
+    <xsd:import namespace="http://schemas.humanbrainproject.eu/SP10/2015/ExDConfig/scxml"
+                schemaLocation="hbp-scxml/hbp-scxml.xsd"/>
+
+    <xsd:simpleType name="ThumbnailFile">
+        <xsd:restriction base="xsd:string">
+            <xsd:pattern value="[a-zA-Z0-9\._\-/]*\.(png|gif|jp[e]?g)"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="MaturityType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="development"/>
+            <xsd:enumeration value="production"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <!--Contains a pose -->
+    <xsd:attributeGroup name="RobotPose.attrs">
+        <xsd:attribute name="x" type="xsd:double"/>
+        <xsd:attribute name="y" type="xsd:double"/>
+        <xsd:attribute name="z" type="xsd:double"/>
+        <xsd:attribute name="ux" type="xsd:double"/>
+        <xsd:attribute name="uy" type="xsd:double"/>
+        <xsd:attribute name="uz" type="xsd:double"/>
+        <xsd:attribute name="theta" type="xsd:double"/>
+    </xsd:attributeGroup>
+    <xsd:complexType name="RobotPose">
+        <xsd:attributeGroup ref="RobotPose.attrs"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="Conf_File">
+        <xsd:attribute name="src" type="xsd:string"/>
+        <xsd:attribute name="type" type="Conf_Type"/>
+    </xsd:complexType>
+
+    <xsd:simpleType name="Conf_Type">
+        <xsd:union memberTypes="Conf_Type_Enumeration xsd:string"/>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="Conf_Type_Enumeration">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="3d-settings"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <!--Contains a position -->
+    <xsd:attributeGroup name="Position.attrs">
+        <xsd:attribute name="x" type="xsd:double"/>
+        <xsd:attribute name="y" type="xsd:double"/>
+        <xsd:attribute name="z" type="xsd:double"/>
+    </xsd:attributeGroup>
+    <xsd:complexType name="Position">
+        <xsd:attributeGroup ref="Position.attrs"/>
+    </xsd:complexType>
+
+    <!--Contains the Three.JS camera pose configuration -->
+    <xsd:complexType name="CameraPose">
+        <xsd:sequence>
+            <xsd:element name="cameraPosition" type="Position"/>
+            <xsd:element name="cameraLookAt" type="Position"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+
+
+    <!--Contains an environmentModel -->
+    <xsd:complexType name="EnvironmentModel">
+        <xsd:sequence>
+            <xsd:element name="robotPose" type="RobotPose"/>
+        </xsd:sequence>
+        <xsd:attribute name="src" type="xsd:string"/>
+    </xsd:complexType>
+
+    <!-- Contains a visualModel with pose and scale for the frontend -->
+    <xsd:complexType name="VisualModel">
+        <xsd:sequence>
+            <xsd:element name="visualPose" type="RobotPose"/>
+        </xsd:sequence>
+        <xsd:attribute name="src" type="xsd:string"/>
+        <xsd:attribute name="scale" type="xsd:double"/>
+    </xsd:complexType>
+
+    <!-- Contains brain configuration and number of processes -->
+    <xsd:simpleType name="BrainProcesses">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="1"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="bibiConf">
+        <xsd:attribute name="src" type="xsd:string"/>
+        <xsd:attribute name="processes" type="BrainProcesses" use="optional" default="1"/>
+    </xsd:complexType>
+
+    <!--Root element of the ExD file -->
+    <xsd:complexType name="ExD">
+        <xsd:sequence>
+            <xsd:element name="name" type="xsd:string"/>
+            <xsd:element name="thumbnail" type="ThumbnailFile"/>
+            <xsd:element name="description" type="xsd:string"/>
+            <xsd:element name="timeout" type="xsd:double" minOccurs="0" maxOccurs="1" default="5"/>
+            <xsd:element name="configuration" type="Conf_File" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="maturity" type="MaturityType" minOccurs="0" maxOccurs="1" default="development"/>
+            <xsd:element name="environmentModel" type="EnvironmentModel"/>
+            <xsd:element name="visualModel" type="VisualModel" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="bibiConf" type="bibiConf"/>
+            <xsd:element name="experimentControl" type="ExperimentControl" minOccurs="0" maxOccurs="1">
+                <xsd:unique name="uniqueNameControl">
+                    <xsd:selector xpath="tns:stateMachine"/>
+                    <xsd:field xpath="tns:name"/>
+                </xsd:unique>
+            </xsd:element>
+            <xsd:element name="experimentEvaluation" type="ExperimentControl" minOccurs="0" maxOccurs="1">
+                <xsd:unique name="uniqueNameEvaluation">
+                    <xsd:selector xpath="tns:stateMachine"/>
+                    <xsd:field xpath="tns:name"/>
+                </xsd:unique>
+            </xsd:element>
+            <xsd:element name="cameraPose" type="CameraPose" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:group name="ExperimentControl.content">
+        <xsd:sequence>
+            <xsd:element name="stateMachine" type="StateMachine" minOccurs="1" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:group>
+    <xsd:complexType name="ExperimentControl">
+        <xsd:group ref="ExperimentControl.content" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="StateMachine" abstract="true">
+        <xsd:attribute name="id" type="xsd:string" use="required"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="SMACHStateMachine">
+        <xsd:complexContent>
+            <xsd:extension base="StateMachine">
+                <xsd:attribute name="src" type="xsd:string"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="SCXMLStateMachine">
+        <xsd:complexContent>
+            <xsd:extension base="StateMachine">
+              <xsd:sequence>
+                <xsd:element ref="sc:scxml" minOccurs="0" maxOccurs="1"/>
+              </xsd:sequence>
+              <xsd:attribute name="src" type="xsd:string"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+
+    <xsd:element name="ExD" type="ExD"/>
+</xsd:schema>

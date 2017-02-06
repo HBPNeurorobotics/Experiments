@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ExD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
+     xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
+    <name>Reinforcement-Learning for target reaching</name>
+    <thumbnail>ExDManipulationRL.png</thumbnail>
+    <description>
+    A simple learning experiment with a Gaussian-shaped input population encoding the current position of a single arm axis which is connected via a dopamine regulated STDP synapse to two motor neurons. The absolute error between current joint and target angle determines the dopamine level. Random motor babbling helps the learning mechanism to explore the joint space and to correlate input and output layer.
+    </description>
+    <timeout>840</timeout>
+    <configuration type="3d-settings" src="ExDManipulationRL.json"/>
+    <maturity>development</maturity>
+    <environmentModel src="virtual_room/virtual_room.sdf">
+        <robotPose x="0.0" y="0.0" z="0.025" ux="0.0" uy="0.0" uz="1.0" theta="0.0"/>
+    </environmentModel>
+    <bibiConf src="manipulation_reinforcement_learning.bibi"/>
+    <cameraPose>
+        <cameraPosition x="-1.05711" y="2.06968" z="2.08684"/>
+        <cameraLookAt x="0.0" y="0.231642" z="1.199802"/>
+    </cameraPose>
+</ExD>

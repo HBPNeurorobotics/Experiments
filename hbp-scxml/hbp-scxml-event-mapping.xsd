@@ -1,0 +1,23 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://schemas.humanbrainproject.eu/SP10/2015/ExDConfig/scxml"
+    xmlns="http://schemas.humanbrainproject.eu/SP10/2015/ExDConfig/scxml"
+    elementFormDefault="qualified">
+
+    <xsd:complexType name="scxml.eventmapper.restrict" abstract="true">
+        <xsd:complexContent>
+            <xsd:restriction base="scxml.invoke.type">
+                <xsd:group ref="scxml.invoke.content" minOccurs="0" maxOccurs="0"/>
+            </xsd:restriction>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="scxml.eventmapper" abstract="true">
+        <xsd:complexContent>
+            <xsd:extension base="scxml.eventmapper.restrict">
+                <xsd:attribute name="event" type="xsd:string"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <xsd:element name="registerEvent" type="scxml.eventmapper" substitutionGroup="invoke"/>
+
+</xsd:schema>
