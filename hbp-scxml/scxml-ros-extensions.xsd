@@ -1,0 +1,125 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:sc="http://schemas.humanbrainproject.eu/SP10/2015/ExDConfig/scxml"
+            xsi:schemaLocation="
+                       http://schemas.humanbrainproject.eu/SP10/2015/ExDConfig/scxml hbp-scxml.xsd"
+            targetNamespace="http://schemas.humanbrainproject.eu/SP10/2015/ExDConfig/SCXMLExt/ROS"
+            xmlns="http://schemas.humanbrainproject.eu/SP10/2015/ExDConfig/SCXMLExt/ROS"
+            elementFormDefault="qualified">
+
+    <xsd:import schemaLocation="hbp-scxml.xsd"
+                namespace="http://schemas.humanbrainproject.eu/SP10/2015/ExDConfig/scxml"/>
+
+
+    <xsd:simpleType name="ROS_Topic">
+        <xsd:annotation>
+		    <xsd:documentation>
+                ROS topics have to follow the naming conventions described on:
+                    http://wiki.ros.org/Names
+            </xsd:documentation>
+	    </xsd:annotation>
+        <xsd:restriction base="sc:URI.datatype">
+            <xsd:pattern value="/?[a-z][a-z0-9_/]*"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <!-- The MessageOnROSTopic type -->
+    <xsd:attributeGroup name="MessageOnROSTopic.attrs">
+        <xsd:attribute name="topic" type="ROS_Topic" use="required"/>
+        <xsd:attribute name="data_class" type="xsd:string" use="required"/>
+    </xsd:attributeGroup>
+    <xsd:complexType name="MessageOnROSTopic">
+        <xsd:annotation>
+		    <xsd:documentation>
+                The MessageOnROSTopic type specifies an event mapping between ROS messages received
+                on topic 'topic' which conform to the data class 'data_class'. The data class is
+                specified using the ROS directory notation, e.g. "std_msgs/String".
+            </xsd:documentation>
+	    </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:extension base="sc:scxml.eventmapper">
+                <xsd:attributeGroup ref="MessageOnROSTopic.attrs"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <!-- The Message type -->
+    <xsd:group name="Message.mix">
+        <xsd:choice>
+            <xsd:element ref="sc:param" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:choice>
+    </xsd:group>
+    <xsd:group name="Message.content">
+        <xsd:sequence>
+            <xsd:group ref="Message.mix" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:group>
+    <xsd:complexType name="Message.restrict">
+        <xsd:complexContent>
+            <xsd:restriction base="sc:scxml.send.type">
+                <xsd:group ref="Message.content"/>
+                <xsd:attribute name="type" type="xsd:string" fixed="ros-message"/>
+                <xsd:attribute name="target" type="ROS_Topic" use="required"/>
+                <xsd:attribute name="event" use="prohibited"/>
+                <xsd:attribute name="eventexpr" use="prohibited"/>
+            </xsd:restriction>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <xsd:complexType name="Message">
+        <xsd:annotation>
+		    <xsd:documentation>
+                The Message type allows to specify the sending of messages on ROS topics. As it
+                extends the SCXML Send type it can be used wherever the SCXML standard allows to
+                send events (in particular, on entry, on exit of states and during state
+                transitions). 'target' specifies the ROS topic to send to, 'data_type' the type of
+                ROS message.
+                As this is intended for communication with non-SCXML aware entities no event
+                identifier can be specified.
+            </xsd:documentation>
+	    </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:extension base="Message.restrict">
+                <xsd:attribute name="data_type" type="xsd:string" use="required"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <!-- The ServiceRequest type -->
+    <xsd:group name="ServiceRequest.mix">
+        <xsd:choice>
+            <xsd:element ref="sc:param" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:choice>
+    </xsd:group>
+    <xsd:group name="ServiceRequest.content">
+        <xsd:sequence>
+            <xsd:group ref="ServiceRequest.mix" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:group>
+    <xsd:complexType name="ServiceRequest.restrict">
+        <xsd:complexContent>
+            <xsd:restriction base="sc:scxml.send.type">
+                <xsd:group ref="ServiceRequest.content"/>
+                <xsd:attribute name="type" type="xsd:string" fixed="ros-service-request"/>
+                <xsd:attribute name="target" type="ROS_Topic"/>
+            </xsd:restriction>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <xsd:complexType name="ServiceRequest">
+        <xsd:annotation>
+		    <xsd:documentation>
+                The ServiceRequest type allows to specify the invokation of a ROS service. As it
+                extends the SCXML Send type it can be used wherever the SCXML standard allows to
+                send events (in particular, on entry, on exit of states and during state
+                transitions). 'target' specifies the ROS topic to send to, 'service_type' the ROS
+                service type (e.g. gazebo_msgs/SetModelStates).
+                Calls to ROS services are blocking. Results from service requests are raised
+                directly as internal event for immediate processing.
+            </xsd:documentation>
+	    </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:extension base="ServiceRequest.restrict">
+                <xsd:attribute name="service_type" type="xsd:string" use="required"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+</xsd:schema>

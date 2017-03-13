@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bibi xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.humanbrainproject.eu/SP10/2014/BIBI" xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/BIBI ../bibi_configuration.xsd">
+  <brainModel>
+    <file>brain_model/idle_brain.py</file>
+    <populations population="neurons" xsi:type="Range" from="0" to="2"/>
+  </brainModel>
+  <bodyModel>arm_robot/arm_robot.sdf</bodyModel>
+  <transferFunction xsi:type="PythonTransferFunction">
+    #<![CDATA[
+    # This specifies that the neurons 0 to 2 of the circuit population
+    # should be monitored. You can see them in the spike train widget
+    @nrp.NeuronMonitor(nrp.brain.neurons, nrp.spike_recorder)
+    def all_neurons_spike_monitor(t):
+        # Uncomment to log into the 'log-console' visible in the simulation
+        # clientLogger.info("Time: "+str(t))
+        return True
+    #]]>
+  </transferFunction>
+
+  <transferFunction xsi:type="PythonTransferFunction">
+    #<![CDATA[
+    @nrp.MapSpikeSink("output_neuron", nrp.brain.neurons[1], nrp.leaky_integrator_alpha)
+    @nrp.Neuron2Robot(Topic('/robot/hollie_real_left_arm_1_joint/cmd_pos', std_msgs.msg.Float64))
+    # Example TF: get output neuron voltage and actuate the arm with the current simulation time. You could do something with the voltage here and command the robot accordingly.
+    def turn_around(t, output_neuron):
+        voltage=output_neuron.voltage
+        return std_msgs.msg.Float64(t)
+    #]]>
+  </transferFunction>
+
+  <transferFunction xsi:type="PythonTransferFunction">
+    #<![CDATA[
+    @nrp.MapSpikeSource("input_neuron", nrp.brain.neurons[0], nrp.poisson)
+    @nrp.Robot2Neuron()
+    def set_neuron_rate(t, input_neuron):
+        input_neuron.rate = 10
+    #]]>
+  </transferFunction>
+
+</bibi>

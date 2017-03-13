@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ExD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
+     xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
+    <name>Force based joint control</name>
+    <thumbnail>ExDManipulationForce.png</thumbnail>
+    <description>The experiment shows a simple example of force based spiking interface for a Schunk SVH robotic hand. Two joints of the index finger are being controlled by two motor neurons (antagonist and synergist) to reach a desired position, which is adjustable in the transfer function. A simple muscle model converts activation dynamics to joint efforts and applies them in a physics simulator. The rest of the 8 joints (2 for each finger) are maintaining zero positions with traditional PID controllers and do not move at all. The experiment demonstrates one of the possible mechanisms for implementing force based control using existing Gazebo/ROS NRP platform architecture, opening the path to more complex muscle model simulations in the future.
+    </description>
+    <timeout>840</timeout>
+    <configuration type="3d-settings" src="ExDManipulationForce.json"/>
+    <maturity>production</maturity>
+    <environmentModel src="virtual_room/virtual_room.sdf">
+        <robotPose x="0.0" y="0.0" z="0.025" ux="0.0" uy="0.0" uz="1.0" theta="0.0"/>
+    </environmentModel>
+    <bibiConf src="manipulation_force.bibi"/>
+    <experimentControl>
+        <stateMachine xsi:type="SMACHStateMachine"
+                      id="IndexFingerForceControl"
+                      src="manipulation_arm_robot_force.py"/>
+    </experimentControl>
+    <cameraPose>
+        <cameraPosition x="-1.05711" y="2.06968" z="2.08684"/>
+        <cameraLookAt x="0.0" y="0.231642" z="1.199802"/>
+    </cameraPose>
+</ExD>

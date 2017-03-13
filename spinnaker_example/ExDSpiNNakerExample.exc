@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ExD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
+     xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
+    <name>Husky Braitenberg experiment with SpiNNaker</name>
+    <thumbnail>ExDSpiNNakerExample.png</thumbnail>
+    <description>This is a SpiNNaker compatible version of the Braitenberg Brain Husky Experiment.
+    </description>
+    <timeout>6000</timeout>
+    <maturity>development</maturity>
+    <environmentModel src="virtual_room/virtual_room.sdf">
+        <robotPose x="0.0" y="0.0" z="0.0" ux="0.0" uy="0.0" uz="1.0" theta="0.0"/>
+    </environmentModel>
+    <bibiConf src="milestone2_spinnaker_python_tf.bibi"/>
+    <cameraPose>
+        <cameraPosition x="4.5" y="0" z="1.8"/>
+        <cameraLookAt x="0" y="0" z="0.6"/>
+    </cameraPose>
+</ExD>

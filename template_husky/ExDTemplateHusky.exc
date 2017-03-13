@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ExD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
+     xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
+    <name>Empty Template Husky experiment</name>
+    <thumbnail>ExDTemplateHusky.png</thumbnail>
+    <description>This experiment loads the Husky robot in an empty world, with an idle brain and basic transfer functions. You are free to edit it.</description>
+    <timeout>840</timeout>
+    <configuration type="3d-settings" src="ExDTemplateHusky.json"/>
+    <maturity>production</maturity>
+    <environmentModel src="empty_world/empty_world.sdf">
+        <robotPose x="0.0" y="0.0" z="0.5" ux="0.0" uy="0.0" uz="0.0" theta="0.0"/>
+    </environmentModel>
+    <bibiConf src="template_husky.bibi"/>
+    <cameraPose>
+        <cameraPosition x="4.5" y="0" z="1.8"/>
+        <cameraLookAt x="0" y="0" z="0.6"/>
+    </cameraPose>
+</ExD>

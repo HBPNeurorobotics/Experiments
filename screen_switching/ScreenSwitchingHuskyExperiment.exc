@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ExD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
+     xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
+    <name>Husky Braitenberg experiment with automatically switching screens</name>
+    <thumbnail>ScreenSwitchingHuskyExperiment.png</thumbnail>
+    <description>This experiment is similar to the Husky Braitenberg one (Husky robot detecting red
+        colour and driving towards it).
+        In this experiment the right screen is turned red automatically after 20 seconds of
+        simulation time. Also, the robot reaching a red screen triggers on the opposite screen.
+        This is to demonstrate how, using the SMACH state machine script, the user can
+        automate the experiment events.
+    </description>
+    <timeout>840</timeout>
+    <configuration type="3d-settings" src="ScreenSwitchingHuskyExperiment.json"/>
+    <maturity>production</maturity>
+    <environmentModel src="virtual_room/virtual_room.sdf">
+        <robotPose x="0.0" y="0.0" z="0.0" ux="0.0" uy="0.0" uz="1.0" theta="0.0"/>
+    </environmentModel>
+    <bibiConf src="milestone2.bibi"/>
+    <experimentControl>
+        <stateMachine xsi:type="SMACHStateMachine"
+                      id="HuskyAwareScreenControlling"
+                      src="screen_switching_husky_aware_compatible.py"/>
+    </experimentControl>
+    <cameraPose>
+        <cameraPosition x="4.5" y="0" z="1.8"/>
+        <cameraLookAt x="0" y="0" z="0.6"/>
+    </cameraPose>
+</ExD>

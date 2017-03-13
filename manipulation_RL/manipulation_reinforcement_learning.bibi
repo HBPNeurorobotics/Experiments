@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bibi xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.humanbrainproject.eu/SP10/2014/BIBI" xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/BIBI ../bibi_configuration.xsd">
+  <brainModel>
+    <file>brain_model/arm_reinforcement_learning.py</file>
+    <populations population="sensors" xsi:type="Range" from="0" to="90"/>
+    <populations population="dopamine" xsi:type="Range" from="90" to="92"/>
+    <populations population="actors" xsi:type="Range" from="92" to="94"/>
+    <populations population="plot" xsi:type="Range" from="0" to="94"/>
+  </brainModel>
+  <bodyModel>arm_robot/arm_robot.sdf</bodyModel>
+
+
+  <transferFunction xsi:type="PythonTransferFunction">
+    #<![CDATA[
+    @nrp.MapVariable("target_angle", initial_value=0.2, scope=nrp.GLOBAL)
+    @nrp.Robot2Neuron()
+    def update_target_angle(t, target_angle):
+        return
+    #]]>
+  </transferFunction>
+
+
+  <transferFunction xsi:type="PythonTransferFunction">
+    #<![CDATA[
+    @nrp.MapVariable("old_joint_angle", scope=nrp.GLOBAL)
+    @nrp.MapVariable("joint_angle", scope=nrp.GLOBAL)
+    @nrp.MapVariable("target_angle", scope=nrp.GLOBAL)
+    @nrp.MapSpikeSource("dopamine_source_increase", nrp.brain.dopamine[1], nrp.poisson, weight=100.0)
+    @nrp.MapSpikeSource("dopamine_source_decrease", nrp.brain.dopamine[0], nrp.poisson, weight=100.0)
+    @nrp.Robot2Neuron()
+    def trigger_dopamine(t, old_joint_angle, joint_angle, target_angle, dopamine_source_increase, dopamine_source_decrease):
+        try:
+            if joint_angle.value and old_joint_angle.value:
+                is_reward_positive = abs(joint_angle.value - target_angle.value) < abs(old_joint_angle.value - target_angle.value)
+                if is_reward_positive:
+                    dopamine_source_increase.rate = 10.0
+                    dopamine_source_decrease.rate = 0.0
+                else:
+                    dopamine_source_increase.rate = 0.0
+                    dopamine_source_decrease.rate = 10.0
+
+        except Exception as e:
+            clientLogger.info(str(e))
+
+    #]]>
+  </transferFunction>
+
+  <transferFunction xsi:type="PythonTransferFunction">
+    #<![CDATA[
+
+    @nrp.MapVariable("old_joint_angle", scope=nrp.GLOBAL)
+    @nrp.MapVariable("joint_angle", scope=nrp.GLOBAL)
+    @nrp.MapVariable("is_random_movement", scope=nrp.GLOBAL)
+    @nrp.MapVariable("topic_index", initial_value=-1)
+    @nrp.MapSpikeSink("motor_contract", nrp.brain.actors[0], nrp.spike_recorder)
+    @nrp.MapSpikeSink("motor_extend", nrp.brain.actors[1], nrp.spike_recorder)
+    @nrp.MapSpikeSource("teaching_motor_contract", nrp.brain.actors[0], nrp.poisson, weight=100.0)
+    @nrp.MapSpikeSource("teaching_motor_extend", nrp.brain.actors[1], nrp.poisson, weight=100.0)
+    @nrp.MapRobotPublisher("topic_arm", Topic('/robot/hollie_real_left_arm_2_joint/cmd_pos', std_msgs.msg.Float64))
+    @nrp.MapRobotSubscriber("topic_joint_states", Topic('/joint_states', sensor_msgs.msg.JointState))
+    @nrp.Neuron2Robot()
+    def propagate_motor_commands(t, old_joint_angle, joint_angle, is_random_movement, topic_index, motor_contract, motor_extend, teaching_motor_contract, teaching_motor_extend, topic_arm, topic_joint_states):
+        try:
+            import random
+
+            movement_step = 0.5
+            random_chance = 1.0
+            teaching_rate = 0.0
+
+            if not topic_joint_states.value:
+                clientLogger.info("ROS topic /joint_states not found, skipping TF: propagate_motor_commands")
+                return
+
+            if topic_index.value == -1:
+                topic_index.value = topic_joint_states.value.name.index('hollie_real_left_arm_2_joint')
+            old_joint_angle.value = topic_joint_states.value.position[topic_index.value]
+
+            if is_random_movement or random.uniform(0,1) > random_chance:
+                rnd_num = random.uniform(0, 1)
+                joint_delta = movement_step if rnd_num <= 0.5 else -movement_step
+            else:
+                if motor_extend.spiked and not motor_contract.spiked:
+                    joint_delta = -movement_step
+                    teaching_motor_extend.rate = teaching_rate
+                    teaching_motor_contract.rate = 0.0
+                elif motor_contract.spiked and not motor_extend.spiked:
+                    joint_delta = movement_step
+                    teaching_motor_contract.rate = teaching_rate
+                    teaching_motor_extend.rate = 0.0
+                else:
+                    teaching_motor_extend.rate = 0.0
+                    teaching_motor_contract.rate = 0.0
+                    return
+
+            if joint_delta < 0.0:
+                joint_delta = joint_delta*1.5
+
+            # Clip joint angle to joint limits
+            joint_angle.value = min(3.14/2.0 , max(0, joint_delta + old_joint_angle.value))
+            topic_arm.send_message(std_msgs.msg.Float64(joint_angle.value))
+
+        except Exception as e:
+            clientLogger.info(str(e))
+    #]]>
+  </transferFunction>
+
+  <transferFunction xsi:type="PythonTransferFunction">
+    #<![CDATA[
+    import numpy as np
+
+    @nrp.MapVariable("topic_index", initial_value=-1)
+    @nrp.MapRobotSubscriber("topic_joint_states", Topic('/joint_states', sensor_msgs.msg.JointState))
+    @nrp.MapSpikeSource("input_layer", nrp.map_neurons(range(0, 90), lambda i: nrp.brain.sensors[i]), nrp.poisson, weight=100.0)
+    @nrp.Robot2Neuron()
+    def propagate_input_signal(t, topic_index, topic_joint_states, input_layer):
+        try:
+            if not topic_joint_states.value:
+                clientLogger.info("ROS topic /joint_states not found, skipping TF: propagate_input_signal")
+                return
+
+            def scale(x, L, input_range):
+                return float(x - input_range[0]) * L / (input_range[1] - input_range[0])
+
+            def gaussian(x, mu, sig):
+                return np.exp(-np.power(x - mu, 2.) / (2 * np.power(sig, 2.)))
+
+            def scalar_encoder(x, length, input_range, std_dev):
+                result = np.empty(length, dtype=float)
+                for i in xrange(length):
+                    result[i] = gaussian(i, scale(x, length, input_range), std_dev * length)
+                return result
+            if topic_index.value == -1:
+                topic_index.value = topic_joint_states.value.name.index('hollie_real_left_arm_2_joint')
+            joint_value = topic_joint_states.value.position[topic_index.value]
+
+            # encode
+            frequencies = scalar_encoder(joint_value, 90, [0, 3.14/2.0], 0.05) * 20.0
+
+            # set rates
+            input_layer.rate = frequencies
+        except Exception as e:
+            clientLogger.info(str(e))
+
+    #]]>
+  </transferFunction>
+
+
+  <transferFunction xsi:type="PythonTransferFunction">
+    #<![CDATA[
+    @nrp.NeuronMonitor(nrp.brain.plot, nrp.spike_recorder)
+    def all_neurons_spike_monitor(t):
+        return True
+    #]]>
+  </transferFunction>
+
+</bibi>
