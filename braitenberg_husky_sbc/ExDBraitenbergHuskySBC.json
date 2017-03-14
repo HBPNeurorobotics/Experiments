@@ -1,1 +1,84 @@
-{"shadows":true,"antiAliasing":true,"ssao":false,"ssaoDisplay":false,"ssaoClamp":0.8,"ssaoLumInfluence":0.7,"rgbCurve":{"red":[[0,0],[0.234619140625,0.2740478515625],[0.605712890625,0.7349853515625],[1,1]],"green":[[0,0],[0.324462890625,0.3560791015625],[0.644775390625,0.7232666015625],[1,1]],"blue":[[0,0],[0.332275390625,0.3599853515625],[0.61712646484375,0.65753173828125],[0.87103271484375,0.94268798828125],[1,1]]},"levelsInBlack":"0.12","levelsInGamma":1.29,"levelsInWhite":"1","levelsOutBlack":"0","levelsOutWhite":"1","skyBox":"img/3denv/sky/clouds/clouds","sun":"SIMPLELENSFLARE","bloom":true,"bloomStrength":"0.35","bloomRadius":0.37,"bloomThreshold":0.98,"fog":true,"fogDensity":"0.02","fogColor":"#d8ccb1","pbrMaterial":true}
+{
+    "shadows": true,
+    "antiAliasing": true,
+    "ssao": false,
+    "ssaoDisplay": false,
+    "ssaoClamp": 0.8,
+    "ssaoLumInfluence": 0.7,
+    "rgbCurve": {
+        "red": [
+            [
+                0,
+                0
+            ],
+            [
+                0.234619140625,
+                0.2740478515625
+            ],
+            [
+                0.605712890625,
+                0.7349853515625
+            ],
+            [
+                1,
+                1
+            ]
+        ],
+        "green": [
+            [
+                0,
+                0
+            ],
+            [
+                0.324462890625,
+                0.3560791015625
+            ],
+            [
+                0.644775390625,
+                0.7232666015625
+            ],
+            [
+                1,
+                1
+            ]
+        ],
+        "blue": [
+            [
+                0,
+                0
+            ],
+            [
+                0.332275390625,
+                0.3599853515625
+            ],
+            [
+                0.61712646484375,
+                0.65753173828125
+            ],
+            [
+                0.87103271484375,
+                0.94268798828125
+            ],
+            [
+                1,
+                1
+            ]
+        ]
+    },
+    "levelsInBlack": "0.12",
+    "levelsInGamma": 1.29,
+    "levelsInWhite": "1",
+    "levelsOutBlack": "0",
+    "levelsOutWhite": "1",
+    "skyBox": "img/3denv/sky/clouds/clouds",
+    "sun": "SIMPLELENSFLARE",
+    "bloom": true,
+    "bloomStrength": "0.35",
+    "bloomRadius": 0.37,
+    "bloomThreshold": 0.98,
+    "fog": true,
+    "fogDensity": "0.02",
+    "fogColor": "#d8ccb1",
+    "pbrMaterial": true,
+    "pbrAOMapIntensity": 3.0
+}

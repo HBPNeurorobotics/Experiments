@@ -1,1 +1,93 @@
-{"shadows":false,"antiAliasing":true,"ssao":false,"ssaoDisplay":false,"ssaoClamp":"1","ssaoLumInfluence":"1","rgbCurve":{"red":[[0,0],[1,1]],"green":[[0,0],[1,1]],"blue":[[0,0],[1,1]]},"levelsInBlack":"0.0","levelsInGamma":"1.0","levelsInWhite":"1.0","levelsOutBlack":0,"levelsOutWhite":1,"skyBox":"img/3denv/sky/blur/blur","sun":"","bloom":false,"bloomStrength":"0.3","bloomRadius":"0","bloomThreshold":"0.98","fog":false,"fogDensity":"0.04","fogColor":"#c7c0bc"}
+{
+    "shadows": true,
+    "antiAliasing": true,
+    "ssao": false,
+    "ssaoDisplay": false,
+    "ssaoClamp": "1",
+    "ssaoLumInfluence": "1",
+    "rgbCurve": {
+        "red": [
+            [
+                0,
+                0
+            ],
+            [
+                0.19696044921875,
+                0.2064208984375
+            ],
+            [
+                0.73992919921875,
+                0.7767333984375
+            ],
+            [
+                1,
+                1
+            ]
+        ],
+        "green": [
+            [
+                0,
+                0
+            ],
+            [
+                0.20867919921875,
+                0.2142333984375
+            ],
+            [
+                0.78289794921875,
+                0.8743896484375
+            ],
+            [
+                1,
+                1
+            ]
+        ],
+        "blue": [
+            [
+                0,
+                0
+            ],
+            [
+                0.2935791015625,
+                0.29132080078125
+            ],
+            [
+                0.8013916015625,
+                0.78350830078125
+            ],
+            [
+                1,
+                1
+            ]
+        ]
+    },
+    "levelsInBlack": "0.12",
+    "levelsInGamma": 0.77,
+    "levelsInWhite": "0.96",
+    "levelsOutBlack": 0,
+    "levelsOutWhite": "1.0",
+    "skyBox": "img/3denv/sky/clouds/clouds",
+    "sun": "",
+    "bloom": true,
+    "bloomStrength": "0.17",
+    "bloomRadius": "0.15",
+    "bloomThreshold": "0.53",
+    "fog": false,
+    "fogDensity": "0.04",
+    "fogColor": "#d8ccb1",
+    "pbrMaterial": true,
+    "shadowSettings": [
+        {
+            "lightName": "sunlight",
+            "cameraNear": 0.01,
+            "cameraFar": 6,
+            "mapSize": 4096,
+            "cameraBottom": -6,
+            "cameraLeft": -6,
+            "cameraRight": 6,
+            "cameraTop": 6,
+            "bias": 0.0001,
+            "radius": 1.2
+        }
+    ]
+}
