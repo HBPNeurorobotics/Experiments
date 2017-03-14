@@ -60,7 +60,7 @@
                 # we have enough spikes produced by the Poisson generator
                 red_left_eye.rate = 2 * 1000 * (red_left / float(image_size))
                 red_right_eye.rate = 2 * 1000 * (red_right / float(image_size))
-                green_blue_eye.rate = 1000 * ((image_size - (red_left + red_right)) / float(image_size))
+                green_blue_eye.rate = 75 * ((image_size - (red_left + red_right)) / float(image_size))
     #]]>
   </transferFunction>
 </bibi>
