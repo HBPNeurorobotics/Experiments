@@ -68,11 +68,11 @@ function copy_configuration_folders() {
     rm -rf ./$TMP_DIR_CONF/*
     mkdir -p ./$TMP_DIR_CONF
     log "Copy config folders"
-    FOLDERS=$(cat "./experiments.txt")
+    FOLDERS=$(ls -d ../* | egrep -v "_rpmbuild|hbp-scxml|*.xsd")
 
     for folder in ${FOLDERS[@]}; do
         log "Copying $folder"
-        cp -r ../$folder/ ./$TMP_DIR_CONF
+        cp -r $folder/ ./$TMP_DIR_CONF
     done
 }
 
