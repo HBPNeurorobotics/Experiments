@@ -6,7 +6,7 @@
     <thumbnail>ExDTemplateICub.png</thumbnail>
     <description>This experiment loads the iCub robot in an empty world, with an idle brain and basic transfer functions. You are free to edit it.</description>
     <timeout>840</timeout>
-    <configuration type="3d-settings" src="ExDTemplateICub.json"/>
+    <configuration type="3d-settings" src="ExDTemplateICub.3ds"/>
     <maturity>production</maturity>
     <environmentModel src="empty_world/empty_world.sdf">
         <robotPose x="0.0" y="0.0" z="0.8" ux="0.0" uy="0.0" uz="1.57" theta="0.70710689672598181"/>

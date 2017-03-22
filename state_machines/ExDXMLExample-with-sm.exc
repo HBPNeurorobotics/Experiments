@@ -19,7 +19,7 @@
     <experimentControl>
         <stateMachine xsi:type="SMACHStateMachine"
                       id="ControlSM1"
-                      src="state_machine_prototype.py"/>
+                      src="state_machine_prototype.exd"/>
     </experimentControl>
     <experimentEvaluation>
         <stateMachine xsi:type="SCXMLStateMachine"

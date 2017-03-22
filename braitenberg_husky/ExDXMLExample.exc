@@ -11,7 +11,7 @@
         and change the color of both screens by clicking on them with the right mouse button.
     </description>
     <timeout>840</timeout>
-    <configuration type="3d-settings" src="ExDXMLExample.json"/>
+    <configuration type="3d-settings" src="ExDXMLExample.3ds"/>
     <maturity>production</maturity>
     <environmentModel src="virtual_room/virtual_room.sdf">
         <robotPose x="0.0" y="0.0" z="0.5" ux="0.0" uy="0.0" uz="1.0" theta="0.0"/>

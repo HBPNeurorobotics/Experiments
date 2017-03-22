@@ -16,7 +16,7 @@
     <experimentControl>
         <stateMachine xsi:type="SMACHStateMachine"
                       id="TargetForceControl"
-                      src="StateMachines/move_target.py"/>
+                      src="StateMachines/move_target.exd"/>
     </experimentControl>
     <cameraPose>
         <cameraPosition x="4.5" y="0" z="1.8"/>

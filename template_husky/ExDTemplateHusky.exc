@@ -6,7 +6,7 @@
     <thumbnail>ExDTemplateHusky.png</thumbnail>
     <description>This experiment loads the Husky robot in an empty world, with an idle brain and basic transfer functions. You are free to edit it.</description>
     <timeout>840</timeout>
-    <configuration type="3d-settings" src="ExDTemplateHusky.json"/>
+    <configuration type="3d-settings" src="ExDTemplateHusky.3ds"/>
     <maturity>production</maturity>
     <environmentModel src="empty_world/empty_world.sdf">
         <robotPose x="0.0" y="0.0" z="0.5" ux="0.0" uy="0.0" uz="0.0" theta="0.0"/>

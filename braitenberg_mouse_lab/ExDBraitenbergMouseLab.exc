@@ -6,7 +6,7 @@
     <thumbnail>ExDBraitenbergMouseLab.png</thumbnail>
     <description>This experiment loads the soft-skin mouse model in a biology lab environment. If the user starts the experiment, the mouse will stay still, until its eyes detect a red color on one screen. Then, the mouse will move the head towards the colored object. In this experiment, the user can interact and change the color of both screens by clicking on them with the right mouse button.</description>
     <timeout>840</timeout>
-    <configuration type="3d-settings" src="ExDBraitenbergMouseLab.json"/>
+    <configuration type="3d-settings" src="ExDBraitenbergMouseLab.3ds"/>
     <maturity>production</maturity>
     <environmentModel src="biologylab_world/biologylab.sdf">
         <robotPose x="-1.0" y="-2.0" z="1.135" ux="0.0" uy="0.0" uz="0.75" theta="0.738"/>

@@ -6,7 +6,7 @@
     <thumbnail>ExDBraitenbergHuskySBC.png</thumbnail>
     <description>This experiment loads the Husky robot from Clearpath Robotics and the arena from the SpaceBotCup 2013. If the user starts the experiment, the Braitenberg vehicle network is executed and the robot will turn around itself in place, until the camera detects a red color. Then, the robot will move towards the colored object. In this experiment, the user can interact and change the color of both screens by clicking on them with the right mouse button.</description>
     <timeout>840</timeout>
-    <configuration type="3d-settings" src="ExDBraitenbergHuskySBC.json"/>
+    <configuration type="3d-settings" src="ExDBraitenbergHuskySBC.3ds"/>
     <maturity>production</maturity>
     <environmentModel src="spacebotcup_world/spacebotcup_world.sdf">
         <robotPose x="0.0" y="0.0" z="1.25" ux="0.0" uy="0.0" uz="0.0" theta="0.0"/>

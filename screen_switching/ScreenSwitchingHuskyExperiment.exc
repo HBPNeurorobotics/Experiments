@@ -12,7 +12,7 @@
         automate the experiment events.
     </description>
     <timeout>840</timeout>
-    <configuration type="3d-settings" src="ScreenSwitchingHuskyExperiment.json"/>
+    <configuration type="3d-settings" src="ScreenSwitchingHuskyExperiment.3ds"/>
     <maturity>production</maturity>
     <environmentModel src="virtual_room/virtual_room.sdf">
         <robotPose x="0.0" y="0.0" z="0.0" ux="0.0" uy="0.0" uz="1.0" theta="0.0"/>
@@ -21,7 +21,7 @@
     <experimentControl>
         <stateMachine xsi:type="SMACHStateMachine"
                       id="HuskyAwareScreenControlling"
-                      src="screen_switching_husky_aware_compatible.py"/>
+                      src="screen_switching_husky_aware_compatible.exd"/>
     </experimentControl>
     <cameraPose>
         <cameraPosition x="4.5" y="0" z="1.8"/>
