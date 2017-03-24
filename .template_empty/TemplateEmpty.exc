@@ -2,9 +2,9 @@
 <ExD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
      xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
-    <name>Empty Template experiment</name>
+    <name>Empty template experiment</name>
     <thumbnail>TemplateEmpty.png</thumbnail>
-    <description>This empty experiment is used by the backend to generate custom experiments. DO NOT EDIT.</description>
+    <description>This empty experiment is based on the models that you have selected. You are free to edit the description.</description>
     <timeout>840</timeout>
     <configuration type="3d-settings" src="TemplateEmpty.json"/>
     <maturity>development</maturity>
