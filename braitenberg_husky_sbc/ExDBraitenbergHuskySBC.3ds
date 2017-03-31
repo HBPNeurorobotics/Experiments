@@ -80,5 +80,13 @@
     "fogDensity": "0.02",
     "fogColor": "#d8ccb1",
     "pbrMaterial": true,
-    "pbrAOMapIntensity": 3.0
+    "pbrAOMapIntensity": 3.0,
+    "shadowSettings": [
+        {
+            "lightName": "sun",
+            "mapSize": 4096,
+            "bias": 0.0002,
+            "radius": 1.2
+        }
+        ]
 }
