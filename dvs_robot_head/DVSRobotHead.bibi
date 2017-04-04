@@ -4,8 +4,11 @@
     <file>brain_model/eye_movements_simple.py</file>
   </brainModel>
   <bodyModel>TUM_Head/RobotHead.sdf</bodyModel>
-  <transferFunction xsi:type="PythonTransferFunction" src="DVS_events_to_spikes.py"/>
+  <transferFunction xsi:type="PythonTransferFunction" src="grab_events.py"/>
+  <transferFunction xsi:type="PythonTransferFunction" src="display_events.py"/>
   <transferFunction xsi:type="PythonTransferFunction" src="head_control.py"/>
+  <transferFunction xsi:type="PythonTransferFunction" src="move_icub.py"/>
+  <transferFunction xsi:type="PythonTransferFunction" src="plot_input_activity_2d.py"/>
   <transferFunction xsi:type="PythonTransferFunction">
     #<![CDATA[
     import hbp_nrp_cle.tf_framework as nrp
