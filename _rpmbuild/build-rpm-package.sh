@@ -21,8 +21,14 @@ RPM_TARGET_DIR=target
 TMP_DIR_CONF=tmp/configs
 
 # The RPM package repositories
-TESTING_REPOSITORY=neurorobotics-testing
-RELEASE_REPOSITORY=neurorobotics
+KERNEL_RELEASE=`uname -r`
+RED_HAT_VERSION=""
+if [[ "$KERNEL_RELEASE" =~ ^.+\.el7\..*$ ]]; then
+  RED_HAT_VERSION="-el7"
+fi
+# If RED_HAT_VERSION is empty, we use the RHEL-6 repositories
+TESTING_REPOSITORY="neurorobotics-testing$RED_HAT_VERSION"
+RELEASE_REPOSITORY="neurorobotics$RED_HAT_VERSION"
 
 # Filter the arguments for the script. Also see:
 # http://stackoverflow.com/questions/192249/how-do-i-parse-command-line-arguments-in-bash
