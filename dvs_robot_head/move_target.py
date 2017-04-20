@@ -42,6 +42,7 @@ class GenerateRandomTargetForceState(State):
                                         GetModelState, persistent=True)
 
         self.model_name = model_name
+        self.sign = 1
         self._seed = random.seed(None)
         clientLogger.publish("GenerateRandomTargetForceState model_name={}"
                              .format(model_name))
@@ -50,7 +51,8 @@ class GenerateRandomTargetForceState(State):
         current_target_state = self.state_proxy(self.model_name, "world")
         current_x = current_target_state.pose.position.x
         # bias to keep the ball centered in x=0
-        force_x = - current_x * current_x * current_x + random.uniform(-30, 30)
+        force_x = self.sign * 30
+        self.sign = - self.sign
         force = Vector3(force_x, 0, 25)
         wrench = Wrench(force, Vector3(0.0, 0.0, 0.0))
 
@@ -71,7 +73,7 @@ class SleepState(State):
                              initialized".format(duration=duration))
 
     def execute(self, userdata):
-        time.sleep(self._duration)
+        rospy.sleep(self._duration)
         return 'success'
 
 
@@ -84,7 +86,7 @@ with sm:
     )
     StateMachine.add(
         "sleep_state",
-        SleepState(8.0),
+        SleepState(2.0),
         transitions = {'success': 'generate_target_force',
                        'aborted': ERROR,}
     )

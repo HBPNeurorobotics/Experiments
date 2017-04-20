@@ -13,11 +13,6 @@
         <robotPose x="0.0" y="0.0" z="0.0" ux="0.0" uy="0.0" uz="1.0" theta="0.0"/>
     </environmentModel>
     <bibiConf src="DVSRobotHead.bibi"/>
-    <experimentControl>
-        <stateMachine xsi:type="SMACHStateMachine"
-                      id="TargetForceControl"
-                      src="StateMachines/move_target.exd"/>
-    </experimentControl>
     <cameraPose>
         <cameraPosition x="4.5" y="0" z="1.8"/>
         <cameraLookAt x="0" y="0" z="0.6"/>
