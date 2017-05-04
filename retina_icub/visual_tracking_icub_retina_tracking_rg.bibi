@@ -242,12 +242,12 @@
       image = camera.value
 
       if image is not None:
-          retina.update(tf.bridge.imgmsg_to_cv2(image))
+          retina.Update(tf.bridge.imgmsg_to_cv2(image))
           # magic_row = 100
           magic_row = 73
           for i in xrange(320):
-              ganglion_OFF[i].amplitude = retina.getValue(magic_row, i, 'SNL_ganglion_OFF')
-              ganglion_ON[i].amplitude = retina.getValue(magic_row, i, 'SNL_ganglion_ON')
+              ganglion_OFF[i].amplitude = retina.GetValue(magic_row, i, 'SNL_ganglion_OFF')
+              ganglion_ON[i].amplitude = retina.GetValue(magic_row, i, 'SNL_ganglion_ON')
   #]]>
 </transferFunction>
 

@@ -65,10 +65,10 @@
 
         image = camera.value
         if image is not None:
-            retina.update(tf.bridge.imgmsg_to_cv2(image))
+            retina.Update(tf.bridge.imgmsg_to_cv2(image))
             magic_row = 70
             for i in xrange(320):
-                neurons[i].amplitude = retina.getValue(magic_row, i, 'Output')
+                neurons[i].amplitude = retina.GetValue(magic_row, i, 'Output')
     #]]>
   </transferFunction>
 
