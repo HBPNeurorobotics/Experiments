@@ -9,11 +9,11 @@
     <configuration type="3d-settings" src="ExDBraitenbergHuskySBC.3ds"/>
     <maturity>production</maturity>
     <environmentModel src="spacebotcup_world/spacebotcup_world.sdf">
-        <robotPose x="0.0" y="0.0" z="1.25" ux="0.0" uy="0.0" uz="0.0" theta="0.0"/>
+        <robotPose x="0.0" y="0.0" z="1.0" ux="0.0" uy="0.0" uz="0.0" theta="0.0"/>
     </environmentModel>
     <bibiConf src="milestone2.bibi"/>
     <cameraPose>
-        <cameraPosition x="-2.95" y="-17.30" z="3"/>
-        <cameraLookAt x="10" y="12" z="-5"/>
+        <cameraPosition x="-2.0234778231193573" y="1.2958129048076932" z="2.083016416394317"/>
+        <cameraLookAt x="0" y="0" z="1.24999"/>
     </cameraPose>
 </ExD>

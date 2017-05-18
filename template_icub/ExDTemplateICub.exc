@@ -13,7 +13,7 @@
     </environmentModel>
     <bibiConf src="template_icub.bibi"/>
     <cameraPose>
-        <cameraPosition x="2" y="0" z="1"/>
-        <cameraLookAt x="0" y="0" z="0.1"/>
+        <cameraPosition x="2.5" y="0" z="1.8"/>
+        <cameraLookAt x="0" y="0" z="0.6"/>
     </cameraPose>
 </ExD>
