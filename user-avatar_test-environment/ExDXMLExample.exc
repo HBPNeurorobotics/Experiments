@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ExD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
+     xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
+    <name>User Avatar - Test Environment</name>
+    <thumbnail>user-avatar-thumbnail.jpg</thumbnail>
+    <description>This is a test environment for implementations of user avatars.
+    </description>
+    <timeout>840</timeout>
+    <configuration type="3d-settings" src="ExDXMLExample.3ds"/>
+    <maturity>development</maturity>
+    <environmentModel src="empty_world/empty_world.sdf">
+        <robotPose x="0.0" y="0.0" z="1.0" ux="0.0" uy="0.0" uz="1.0" theta="0.0"/>
+    </environmentModel>
+    <bibiConf src="user-avatar_test-env.bibi"/>
+    <experimentControl>
+        <stateMachine xsi:type="SMACHStateMachine"
+                      id="AvatarTests"
+                      src="avatar_tests.exd"/>
+    </experimentControl>
+    <cameraPose>
+        <cameraPosition x="4.5" y="0" z="1.8"/>
+        <cameraLookAt x="0" y="0" z="0.6"/>
+    </cameraPose>
+</ExD>
