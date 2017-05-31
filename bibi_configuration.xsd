@@ -8,10 +8,10 @@
     <xs:element name="bibi" type="BIBIConfiguration"/>
     <xs:complexType name="BIBIConfiguration">
         <xs:sequence>
+            <xs:element name="timestep" type="TimeStep" minOccurs="0"/>
             <xs:element name="brainModel" type="BrainModel"/>
             <xs:element name="bodyModel" type="SDF_Filename"/>
-            <xs:element name="extRobotController" type="Script_Filename" minOccurs="0"
-                        maxOccurs="1"/>
+            <xs:element name="extRobotController" type="Script_Filename" minOccurs="0"/>
             <xs:element name="configuration" type="Conf_File" minOccurs="0"
                         maxOccurs="unbounded"/>
             <xs:element name="connectors" type="NeuronConnector" minOccurs="0"
@@ -22,6 +22,12 @@
                         maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
+
+    <xs:simpleType name="TimeStep">
+        <xs:restriction base="xs:positiveInteger">
+            <xs:maxInclusive value="1000"/>
+        </xs:restriction>
+    </xs:simpleType>
 
     <xs:complexType name="BrainModel">
         <xs:sequence>
