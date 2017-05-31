@@ -1,0 +1,65 @@
+#!/usr/bin/env python
+"""
+This state machine waits 2 seconds before displaying on the screen the description of the current
+experiment
+Fifteen seconds later, the state machine publishes the message "switch" on the topic /icub/notifications.
+The message can be read from within a transfer function which has subscribed to this topic.
+In our case, the iCub reverses its behavior after reading the message for the first time.
+"""
+
+import smach_ros
+import smach
+from smach import CBState
+from smach import StateMachine
+from hbp_nrp_excontrol.nrp_states import WaitToClockState
+import rospy
+from std_msgs.msg import String
+from hbp_nrp_excontrol.logs import clientLogger
+
+icub_notifier = rospy.Publisher('/icub/notifications', String, latch=True,
+                               queue_size=10)
+
+@smach.cb_interface(input_keys=[], output_keys=[], outcomes=['finished'])
+def notify_icub_cb(user_data):
+    icub_notifier.publish("switch")
+    clientLogger.advertise("The iCub robot on the left will reverse its behavior")
+    return 'finished'
+
+@smach.cb_interface(input_keys=[], output_keys=[], outcomes=['finished'])
+def notify_user_cb(user_data):
+    clientLogger.advertise("The iCub robot on the left will try "
+        "to replicate the hand motion of the icub on the right")
+    return 'finished'
+
+FINISHED = 'FINISHED'
+ERROR = 'ERROR'
+PREEMPTED = 'PREEMPTED'
+
+sm = StateMachine(outcomes=[FINISHED, ERROR, PREEMPTED])
+
+with sm:
+    StateMachine.add(
+        "initial_wait_condition",
+        WaitToClockState(2),
+        transitions = {'valid': 'initial_wait_condition', 
+            'invalid': 'display_description', 'preempted': PREEMPTED}
+    )
+    StateMachine.add(
+        "display_description",
+        CBState(notify_user_cb),
+        transitions = {'finished': 'wait_condition'}
+    )
+
+    StateMachine.add(
+        "wait_condition",
+        WaitToClockState(15),
+        transitions = {'valid': 'wait_condition',
+                       'invalid': 'notify_icub',
+                       'preempted': PREEMPTED}
+    )
+
+    StateMachine.add(
+        'notify_icub',
+        CBState(notify_icub_cb),
+        transitions = {'finished': FINISHED}
+    )
