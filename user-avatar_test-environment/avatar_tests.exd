@@ -1,0 +1,65 @@
+#!/usr/bin/env python
+"""
+This file is a state-machine prototype for the husky demo.
+In the future, this will be replaced with an auto-generated
+script from the experiment configuration.
+"""
+
+__author__ = 'Sandro Weber (webers@in.tum.de)'
+
+import rospy
+import smach
+from smach import CBState
+import smach_ros
+import hbp_nrp_excontrol.nrp_states as states
+from hbp_nrp_excontrol.logs import clientLogger
+
+#import gazebo_msgs
+from gazebo_msgs.srv import SpawnEntity
+from gazebo_msgs.srv import SpawnEntityRequest
+
+
+@smach.cb_interface(input_keys=[], output_keys=[], outcomes=['finished', 'aborted'])
+def action_spawn_avatars(user_data):
+    rospy.wait_for_service("/gazebo/spawn_sdf_entity")
+    service_spawn_entity = rospy.ServiceProxy('/gazebo/spawn_sdf_entity', SpawnEntity, persistent=True)
+
+    # spawn rayman avatar
+    msg = SpawnEntityRequest()
+
+    msg.entity_name = 'test_user_avatar_rayman'
+
+    avatar_rayman_file = open('/home/sandman/workspaces/hbp/nrp/Models/user_avatar_rayman/model.sdf','r')
+    msg.entity_xml = avatar_rayman_file.read()
+
+    msg.initial_pose.position.x = 5.0
+    msg.initial_pose.position.y = 10.0
+    msg.initial_pose.position.z = 1.0
+    msg.initial_pose.orientation.x = 0.0
+    msg.initial_pose.orientation.y = 0.0
+    msg.initial_pose.orientation.z = 0.0
+
+    msg.reference_frame = 'world'
+
+    #call service
+    response = service_spawn_entity(msg)
+    #check response
+    if not response.success:
+        clientLogger.info(response.status_message)
+        return 'aborted'
+
+    return 'finished'
+
+
+sm = smach.StateMachine(
+outcomes=['FINISHED', 'ERROR', 'CONDITION_SPAWN_AVATARS_PREEMPTED',
+          'ACTION_PREEMPTED', 'SPAWN_AVATARS_ERROR'])
+
+with sm:
+    smach.StateMachine.add('CONDITION_SPAWN_AVATARS',
+                           states.WaitToClockState(3),
+                           {'valid': 'CONDITION_SPAWN_AVATARS', 'invalid': 'ACTION_SPAWN_AVATARS',
+                            'preempted': 'CONDITION_SPAWN_AVATARS_PREEMPTED'})
+    smach.StateMachine.add('ACTION_SPAWN_AVATARS', 
+                           CBState(action_spawn_avatars),
+                           {'finished': 'FINISHED', 'aborted': 'SPAWN_AVATARS_ERROR'})
