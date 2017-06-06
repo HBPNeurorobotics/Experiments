@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ExD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
+     xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
+    <name>World Manipulation Experiment</name>
+    <thumbnail>ExDMouseLabExample.png</thumbnail>
+    <description>This demo shows how to manipulate the environment from a state machine.
+    Objects are created during the experiment and change the behaviour of the mouse.</description>
+    <timeout>840</timeout>
+    <configuration type="3d-settings" src="ExDMouseLabExample.3ds"/>
+    <maturity>development</maturity>
+    <environmentModel src="biologylab_world/biologylab.sdf">
+        <robotPose x="-1.0" y="-2.0" z="1.135" ux="0.0" uy="0.0" uz="0.75" theta="0.738"/>
+    </environmentModel>
+    <visualModel src="mouse_v2_model/meshes/mouse_v2_model_animated.dae" scale="0.01">
+        <visualPose x="-0.895" y="-1.9975" z="1.115" ux="0.0" uy="0.0" uz="1.5708" theta="0.0"/>
+    </visualModel>
+    <bibiConf src="ExDMouseLabExample.bibi"/>
+    <experimentControl>
+        <stateMachine xsi:type="SMACHStateMachine"
+                      id="SMACH_Example"
+                      src="mouse_smach_state.exd"/>
+    </experimentControl>
+    <cameraPose>
+        <cameraPosition x="-1.2" y="-1.7" z="1.4"/>
+        <cameraLookAt x="-0.3" y="-2.1" z="1.15"/>
+    </cameraPose>
+</ExD>
