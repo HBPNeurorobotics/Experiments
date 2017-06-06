@@ -8,7 +8,7 @@
     <populations population="ganglion_output_ON" xsi:type="Range" from="960" to="1280"/>
     <populations population="record" xsi:type="Range" from="960" to="1280"/>
   </brainModel>
-  <bodyModel>icub_model/model.sdf</bodyModel>
+  <bodyModel>icub_model/model_retina.sdf</bodyModel>
   <configuration src="green_tracking_retina.py" type="retina"/>
 
   <transferFunction xsi:type="PythonTransferFunction">
@@ -32,7 +32,7 @@
         if ns is None:
             ns = [0]*1280
         for q in all_neurons.times.tolist():
-            ns[int(q[0])-1] = q[1]
+            ns[int(q[0])-nrp.config.brain_root.circuit[0]] = q[1]
         nss = map(str, ns)
         brain_data.value = ns
     #]]>
@@ -95,14 +95,64 @@
     #]]>
   </transferFunction>
 
+ <transferFunction xsi:type="PythonTransferFunction">
+  #<![CDATA[
+  from std_msgs.msg import Float64
+
+  @nrp.MapVariable("eye_velocity", scope=nrp.GLOBAL)
+  @nrp.MapVariable("eye_position", scope=nrp.GLOBAL)
+  @nrp.MapVariable("lastballpos", initial_value=-1)
+  @nrp.MapSpikeSink("ganglion", nrp.brain.circuit[slice(0, 1280, 1)], nrp.spike_recorder)
+  @nrp.MapVariable("trajectory", initial_value="sinusoidal", scope=nrp.GLOBAL)
+  @nrp.Neuron2Robot(Topic('/robot/eye_version/pos', Float64))
+  def move_eye(t, eye_velocity, eye_position, lastballpos, ganglion, trajectory):
+      deg2rad = lambda deg: (float(deg) / 360.) * (2. * np.pi)
+      tf = hbp_nrp_cle.tf_framework.tf_lib
+
+      spike_counts_OFF = [0]*320
+      spike_counts_ON = [0]*320
+      for ev in ganglion.times:
+          if ev[0] > 640 and ev[0] <= 960:
+              spike_counts_OFF[int(ev[0]-641)] = spike_counts_OFF[int(ev[0]-641)] + 1
+          elif ev[0] > 960 and ev[0] <= 1280:
+              spike_counts_ON[int(ev[0]-961)] = spike_counts_ON[int(ev[0]-961)] + 1
+
+      highest_spiking_count_OFF = max(spike_counts_OFF)
+      highest_spiking_count_ON = max(spike_counts_ON)
+
+      most_spiking_neuron_OFF = spike_counts_OFF.index(highest_spiking_count_OFF)
+      most_spiking_neuron_ON = spike_counts_ON.index(highest_spiking_count_ON)
+
+      # This is the current ball position estimation
+      ball_pos = (most_spiking_neuron_ON + most_spiking_neuron_OFF) / 2.
+
+      # Waiting some time for the robot to stabilize
+      if t < 2:
+          return eye_position.value
+
+      if highest_spiking_count_OFF == 0 or highest_spiking_count_ON == 0:
+          return eye_position.value
+
+      if abs(ball_pos - lastballpos.value) > 20 and lastballpos.value != -1.:
+          return eye_position.value
+
+      ret = tf.cam.pixel2angle(ball_pos, 0)[0]
+
+      lastballpos.value = ball_pos
+
+      k = 0.2
+      return eye_position.value + k*deg2rad(ret)
+  #]]>
+  </transferFunction>
 
   <transferFunction xsi:type="PythonTransferFunction">
     #<![CDATA[
     @nrp.MapVariable("target_freq",scope=nrp.GLOBAL)
     @nrp.MapVariable("target_ampl", scope=nrp.GLOBAL)
     @nrp.MapVariable("target_delta", scope=nrp.GLOBAL)
+    @nrp.MapVariable("trajectory", scope=nrp.GLOBAL)
     @nrp.Robot2Neuron()
-    def compute_target_position_sine(t, target_freq, target_ampl, target_delta):
+    def compute_target_position_sine(t, target_freq, target_ampl, target_delta, trajectory):
         if trajectory != "sinusoidal":
             return
 
@@ -178,78 +228,29 @@
     #]]>
   </transferFunction>
 
- <transferFunction xsi:type="PythonTransferFunction">
-  #<![CDATA[
-  from std_msgs.msg import Float64
+  <transferFunction xsi:type="PythonTransferFunction">
+    #<![CDATA[
+    import std_msgs.msg
+    from rospy.numpy_msg import numpy_msg
+    @nrp.MapRobotSubscriber("ganglion_ON_data",Topic('/icub_model/left_eye_camera/retina/SNL_ganglion_ON/data', numpy_msg(std_msgs.msg.Float64MultiArray)))
+    @nrp.MapRobotSubscriber("ganglion_OFF_data",Topic('/icub_model/left_eye_camera/retina/SNL_ganglion_OFF/data', numpy_msg(std_msgs.msg.Float64MultiArray)))
+    @nrp.MapSpikeSource("ganglion_OFF", nrp.map_neurons(range(0, 320), lambda i: nrp.brain.ganglion_input_OFF[i]), nrp.dc_source)
+    @nrp.MapSpikeSource("ganglion_ON", nrp.map_neurons(range(0, 320), lambda i: nrp.brain.ganglion_input_ON[i]), nrp.dc_source)
+    @nrp.Robot2Neuron()
+    def grab_image(t, ganglion_OFF, ganglion_ON, ganglion_ON_data, ganglion_OFF_data):
 
-  @nrp.MapVariable("eye_velocity", scope=nrp.GLOBAL)
-  @nrp.MapVariable("eye_position", scope=nrp.GLOBAL)
-  @nrp.MapVariable("lastballpos", initial_value=-1)
-  @nrp.MapSpikeSink("ganglion", nrp.brain.circuit[slice(0, 1280, 1)], nrp.spike_recorder)
-  @nrp.MapVariable("trajectory", initial_value="sinusoidal", scope=nrp.GLOBAL)
-  @nrp.Neuron2Robot(Topic('/robot/eye_version/pos', Float64))
-  def move_eye(t, eye_velocity, eye_position, lastballpos, ganglion, trajectory):
-      deg2rad = lambda deg: (float(deg) / 360.) * (2. * np.pi)
-      tf = hbp_nrp_cle.tf_framework.tf_lib
+        getValue = hbp_nrp_cle.tf_framework.tf_lib.getValueFromFloat64MultiArray
 
-      spike_counts_OFF = [0]*320
-      spike_counts_ON = [0]*320
-      for ev in ganglion.times:
-          if ev[0] > 640 and ev[0] <= 960:
-              spike_counts_OFF[int(ev[0]-641)] = spike_counts_OFF[int(ev[0]-641)] + 1
-          elif ev[0] > 960 and ev[0] <= 1280:
-              spike_counts_ON[int(ev[0]-961)] = spike_counts_ON[int(ev[0]-961)] + 1
-
-      highest_spiking_count_OFF = max(spike_counts_OFF)
-      highest_spiking_count_ON = max(spike_counts_ON)
-
-      most_spiking_neuron_OFF = spike_counts_OFF.index(highest_spiking_count_OFF)
-      most_spiking_neuron_ON = spike_counts_ON.index(highest_spiking_count_ON)
-
-      # This is the current ball position estimation
-      ball_pos = (most_spiking_neuron_ON + most_spiking_neuron_OFF) / 2.
-
-      # Waiting some time for the robot to stabilize
-      if t < 2:
-          return eye_position.value
-
-      if highest_spiking_count_OFF == 0 or highest_spiking_count_ON == 0:
-          return eye_position.value
-
-      if abs(ball_pos - lastballpos.value) > 20 and lastballpos.value != -1.:
-          return eye_position.value
-
-      ret = tf.cam.pixel2angle(ball_pos, 0)[0]
-
-      lastballpos.value = ball_pos
-
-      k = 0.2
-      return eye_position.value + k*deg2rad(ret)
-  #]]>
-</transferFunction>
-
-<transferFunction xsi:type="PythonTransferFunction">
-  #<![CDATA[
-  from sensor_msgs.msg import Image
-
-  @nrp.MapRetina("retina", "green_tracking_retina.py")
-  @nrp.MapRobotSubscriber("camera", Topic('/icub_model/left_eye_camera/image_raw', Image))
-  @nrp.MapSpikeSource("ganglion_OFF", nrp.map_neurons(range(0, 320), lambda i: nrp.brain.ganglion_input_OFF[i]), nrp.dc_source)
-  @nrp.MapSpikeSource("ganglion_ON", nrp.map_neurons(range(0, 320), lambda i: nrp.brain.ganglion_input_ON[i]), nrp.dc_source)
-  @nrp.Robot2Neuron()
-  def grab_image(t, retina, camera, ganglion_OFF, ganglion_ON):
-      tf = hbp_nrp_cle.tf_framework.tf_lib
-      image = camera.value
-
-      if image is not None:
-          retina.Update(tf.bridge.imgmsg_to_cv2(image))
-          # magic_row = 100
-          magic_row = 73
-          for i in xrange(320):
-              ganglion_OFF[i].amplitude = retina.GetValue(magic_row, i, 'SNL_ganglion_OFF')
-              ganglion_ON[i].amplitude = retina.GetValue(magic_row, i, 'SNL_ganglion_ON')
-  #]]>
-</transferFunction>
+        msg_ON = ganglion_ON_data.value
+        msg_OFF = ganglion_OFF_data.value
+        if msg_ON is not None and msg_OFF is not None :
+            # magic_row = 100
+            magic_row = 73
+            for column in xrange(320):
+                ganglion_OFF[column].amplitude = getValue(msg_OFF, magic_row, column)
+                ganglion_ON[column].amplitude = getValue(msg_ON, magic_row, column)
+    #]]>
+  </transferFunction>
 
 <transferFunction xsi:type="PythonTransferFunction">
   #<![CDATA[
