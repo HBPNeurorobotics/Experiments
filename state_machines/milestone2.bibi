@@ -78,21 +78,21 @@
     <device name="red_left_eye" type="Poisson">
       <neurons xsi:type="Range" population="sensors" from="0" to="3" step="2"/>
       <!--body xsi:type="Scale" factor="0.002"-->
-      <body xsi:type="Scale" factor="1000.0">
+      <body xsi:type="Scale" factor="2000.0">
         <inner xsi:type="ArgumentReference" name="image_results" property="left"/>
       </body>
     </device>
     <device name="red_right_eye" type="Poisson">
       <neurons xsi:type="Range" population="sensors" from="1" to="4" step="2"/>
       <!--body xsi:type="Scale" factor="0.002"-->
-      <body xsi:type="Scale" factor="1000.0">
+      <body xsi:type="Scale" factor="2000.0">
         <inner xsi:type="ArgumentReference" name="image_results" property="right"/>
       </body>
     </device>
     <device name="green_blue_eye" type="Poisson">
       <neurons xsi:type="Index" population="sensors" index="4"/>
       <!--body xsi:type="Scale" factor="0.00025"-->
-      <body xsi:type="Scale" factor="1000.0">
+      <body xsi:type="Scale" factor="75.0">
         <inner xsi:type="ArgumentReference" name="image_results" property="go_on"/>
       </body>
     </device>
