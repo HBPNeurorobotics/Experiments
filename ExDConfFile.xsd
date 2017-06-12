@@ -95,15 +95,9 @@
     </xsd:complexType>
 
     <!-- Contains brain configuration and number of processes -->
-    <xsd:simpleType name="BrainProcesses">
-        <xsd:restriction base="xsd:integer">
-            <xsd:minInclusive value="1"/>
-        </xsd:restriction>
-    </xsd:simpleType>
-
     <xsd:complexType name="bibiConf">
         <xsd:attribute name="src" type="xsd:string"/>
-        <xsd:attribute name="processes" type="BrainProcesses" use="optional" default="1"/>
+        <xsd:attribute name="processes" type="xsd:positiveInteger" use="optional" default="1"/>
     </xsd:complexType>
 
     <!-- Contains roslaunch file to be launched prior to Gazebo -->
@@ -137,6 +131,7 @@
             </xsd:element>
             <xsd:element name="cameraPose" type="CameraPose" minOccurs="0" maxOccurs="1"/>
             <xsd:element name="rosLaunch" type="RosLaunch" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="rngSeed" type="xsd:positiveInteger" minOccurs="0" maxOccurs="1"/>
         </xsd:sequence>
     </xsd:complexType>
 
