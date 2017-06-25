@@ -29,42 +29,37 @@
     </xsd:simpleType>
 
     <!--Contains a pose -->
-    <xsd:attributeGroup name="RobotPose.attrs">
-        <xsd:attribute name="x" type="xsd:double"/>
-        <xsd:attribute name="y" type="xsd:double"/>
-        <xsd:attribute name="z" type="xsd:double"/>
-        <xsd:attribute name="ux" type="xsd:double"/>
-        <xsd:attribute name="uy" type="xsd:double"/>
-        <xsd:attribute name="uz" type="xsd:double"/>
-        <xsd:attribute name="theta" type="xsd:double"/>
-    </xsd:attributeGroup>
     <xsd:complexType name="RobotPose">
-        <xsd:attributeGroup ref="RobotPose.attrs"/>
+        <xsd:attribute name="x" type="xsd:double" use="required"/>
+        <xsd:attribute name="y" type="xsd:double" use="required"/>
+        <xsd:attribute name="z" type="xsd:double" use="required"/>
+        <xsd:attribute name="ux" type="xsd:double" use="required"/>
+        <xsd:attribute name="uy" type="xsd:double" use="required"/>
+        <xsd:attribute name="uz" type="xsd:double" use="required"/>
+        <xsd:attribute name="theta" type="xsd:double" use="required"/>
     </xsd:complexType>
 
-    <xsd:complexType name="Conf_File">
-        <xsd:attribute name="src" type="xsd:string"/>
-        <xsd:attribute name="type" type="Conf_Type"/>
+    <!-- Generic configuration file -->
+    <xsd:complexType name="ConfFile">
+        <xsd:attribute name="src" type="xsd:string" use="required"/>
+        <xsd:attribute name="type" type="ConfType" use="required"/>
     </xsd:complexType>
 
-    <xsd:simpleType name="Conf_Type">
-        <xsd:union memberTypes="Conf_Type_Enumeration xsd:string"/>
+    <xsd:simpleType name="ConfType">
+        <xsd:union memberTypes="ConfTypeEnumeration xsd:string"/>
     </xsd:simpleType>
 
-    <xsd:simpleType name="Conf_Type_Enumeration">
+    <xsd:simpleType name="ConfTypeEnumeration">
         <xsd:restriction base="xsd:string">
             <xsd:enumeration value="3d-settings"/>
         </xsd:restriction>
     </xsd:simpleType>
 
     <!--Contains a position -->
-    <xsd:attributeGroup name="Position.attrs">
-        <xsd:attribute name="x" type="xsd:double"/>
-        <xsd:attribute name="y" type="xsd:double"/>
-        <xsd:attribute name="z" type="xsd:double"/>
-    </xsd:attributeGroup>
     <xsd:complexType name="Position">
-        <xsd:attributeGroup ref="Position.attrs"/>
+        <xsd:attribute name="x" type="xsd:double" use="required"/>
+        <xsd:attribute name="y" type="xsd:double" use="required"/>
+        <xsd:attribute name="z" type="xsd:double" use="required"/>
     </xsd:complexType>
 
     <!--Contains the Three.JS camera pose configuration -->
@@ -75,14 +70,12 @@
         </xsd:sequence>
     </xsd:complexType>
 
-
-
     <!--Contains an environmentModel -->
     <xsd:complexType name="EnvironmentModel">
         <xsd:sequence>
             <xsd:element name="robotPose" type="RobotPose"/>
         </xsd:sequence>
-        <xsd:attribute name="src" type="xsd:string"/>
+        <xsd:attribute name="src" type="xsd:string" use="required"/>
     </xsd:complexType>
 
     <!-- Contains a visualModel with pose and scale for the frontend -->
@@ -90,20 +83,28 @@
         <xsd:sequence>
             <xsd:element name="visualPose" type="RobotPose"/>
         </xsd:sequence>
-        <xsd:attribute name="src" type="xsd:string"/>
+        <xsd:attribute name="src" type="xsd:string" use="required"/>
         <xsd:attribute name="scale" type="xsd:double"/>
     </xsd:complexType>
 
-    <!-- Contains brain configuration and number of processes -->
-    <xsd:complexType name="bibiConf">
-        <xsd:attribute name="src" type="xsd:string"/>
-        <xsd:attribute name="processes" type="xsd:positiveInteger" use="optional" default="1"/>
+    <!-- Contains brain configuration and number of processes, default set for frontend -->
+    <xsd:complexType name="BibiConf">
+        <xsd:attribute name="src" type="xsd:string" use="required"/>
+        <xsd:attribute name="processes" type="xsd:positiveInteger" default="1"/>
     </xsd:complexType>
 
     <!-- Contains roslaunch file to be launched prior to Gazebo -->
     <xsd:complexType name="RosLaunch">
-        <xsd:attribute name="src" type="xsd:string"/>
+        <xsd:attribute name="src" type="xsd:string" use="required"/>
     </xsd:complexType>
+
+    <!-- Supported physics engines -->
+    <xsd:simpleType name="PhysicsEngine">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="ode"/>
+            <xsd:enumeration value="opensim"/>
+        </xsd:restriction>
+    </xsd:simpleType>
 
     <!--Root element of the ExD file -->
     <xsd:complexType name="ExD">
@@ -111,39 +112,35 @@
             <xsd:element name="name" type="xsd:string"/>
             <xsd:element name="thumbnail" type="ThumbnailFile"/>
             <xsd:element name="description" type="xsd:string"/>
-            <xsd:element name="timeout" type="xsd:double" minOccurs="0" maxOccurs="1" default="5"/>
-            <xsd:element name="configuration" type="Conf_File" minOccurs="0" maxOccurs="unbounded"/>
-            <xsd:element name="maturity" type="MaturityType" minOccurs="0" maxOccurs="1" default="development"/>
+            <xsd:element name="timeout" type="xsd:double" minOccurs="0"/>
+            <xsd:element name="configuration" type="ConfFile" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="maturity" type="MaturityType" minOccurs="0"/>
             <xsd:element name="environmentModel" type="EnvironmentModel"/>
-            <xsd:element name="visualModel" type="VisualModel" minOccurs="0" maxOccurs="1"/>
-            <xsd:element name="bibiConf" type="bibiConf"/>
-            <xsd:element name="experimentControl" type="ExperimentControl" minOccurs="0" maxOccurs="1">
-                <xsd:unique name="uniqueNameControl">
+            <xsd:element name="visualModel" type="VisualModel" minOccurs="0"/>
+            <xsd:element name="bibiConf" type="BibiConf"/>
+            <xsd:element name="experimentControl" type="ExperimentControl" minOccurs="0">
+                <xsd:unique name="uniqueExperimentControl">
                     <xsd:selector xpath="tns:stateMachine"/>
-                    <xsd:field xpath="tns:name"/>
+                    <xsd:field xpath="@id"/>
                 </xsd:unique>
             </xsd:element>
-            <xsd:element name="experimentEvaluation" type="ExperimentControl" minOccurs="0" maxOccurs="1">
-                <xsd:unique name="uniqueNameEvaluation">
+            <xsd:element name="experimentEvaluation" type="ExperimentControl" minOccurs="0">
+                <xsd:unique name="uniqueExperimentEvaluation">
                     <xsd:selector xpath="tns:stateMachine"/>
-                    <xsd:field xpath="tns:name"/>
+                    <xsd:field xpath="@id"/>
                 </xsd:unique>
             </xsd:element>
-            <xsd:element name="cameraPose" type="CameraPose" minOccurs="0" maxOccurs="1"/>
-            <xsd:element name="rosLaunch" type="RosLaunch" minOccurs="0" maxOccurs="1"/>
-            <xsd:element name="rngSeed" type="xsd:positiveInteger" minOccurs="0" maxOccurs="1"/>
-            <!-- Physics engine to use with gazebo. Relevant valid options: ode (default if not set), opensim -->
-            <xsd:element name="physicsEngine" type="xsd:string" minOccurs="0" maxOccurs="1" default="ode"/>
+            <xsd:element name="cameraPose" type="CameraPose" minOccurs="0"/>
+            <xsd:element name="rosLaunch" type="RosLaunch" minOccurs="0"/>
+            <xsd:element name="rngSeed" type="xsd:positiveInteger" minOccurs="0"/>
+            <xsd:element name="physicsEngine" type="PhysicsEngine" minOccurs="0"/>
         </xsd:sequence>
     </xsd:complexType>
 
-    <xsd:group name="ExperimentControl.content">
-        <xsd:sequence>
-            <xsd:element name="stateMachine" type="StateMachine" minOccurs="1" maxOccurs="unbounded"/>
-        </xsd:sequence>
-    </xsd:group>
     <xsd:complexType name="ExperimentControl">
-        <xsd:group ref="ExperimentControl.content" minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:sequence>
+              <xsd:element name="stateMachine" type="StateMachine" maxOccurs="unbounded"/>
+          </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="StateMachine" abstract="true">
@@ -153,7 +150,7 @@
     <xsd:complexType name="SMACHStateMachine">
         <xsd:complexContent>
             <xsd:extension base="StateMachine">
-                <xsd:attribute name="src" type="xsd:string"/>
+                <xsd:attribute name="src" type="xsd:string" use="required"/>
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>
@@ -162,7 +159,7 @@
         <xsd:complexContent>
             <xsd:extension base="StateMachine">
               <xsd:sequence>
-                <xsd:element ref="sc:scxml" minOccurs="0" maxOccurs="1"/>
+                <xsd:element ref="sc:scxml" minOccurs="0"/>
               </xsd:sequence>
               <xsd:attribute name="src" type="xsd:string"/>
             </xsd:extension>

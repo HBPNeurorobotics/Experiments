@@ -10,16 +10,12 @@
         <xs:sequence>
             <xs:element name="timestep" type="TimeStep" minOccurs="0"/>
             <xs:element name="brainModel" type="BrainModel"/>
-            <xs:element name="bodyModel" type="SDF_Filename"/>
-            <xs:element name="extRobotController" type="Script_Filename" minOccurs="0"/>
-            <xs:element name="configuration" type="Conf_File" minOccurs="0"
-                        maxOccurs="unbounded"/>
-            <xs:element name="connectors" type="NeuronConnector" minOccurs="0"
-                        maxOccurs="unbounded"/>
-            <xs:element name="synapseDynamics" type="SynapseDynamics" minOccurs="0"
-                        maxOccurs="unbounded"/>
-            <xs:element name="transferFunction" type="TransferFunction" minOccurs="0"
-                        maxOccurs="unbounded"/>
+            <xs:element name="bodyModel" type="SDFFilename"/>
+            <xs:element name="extRobotController" type="ScriptFilename" minOccurs="0"/>
+            <xs:element name="configuration" type="ConfFile" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="connectors" type="NeuronConnector" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="synapseDynamics" type="SynapseDynamics" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="transferFunction" type="TransferFunction" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
 
@@ -31,50 +27,50 @@
 
     <xs:complexType name="BrainModel">
         <xs:sequence>
-            <xs:element name="file" type="Brain_Filename"/>
+            <xs:element name="file" type="BrainFilename"/>
             <xs:element name="populations" type="MultiNeuronSelector" minOccurs="0"
                         maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
 
-    <xs:simpleType name="Brain_Filename">
-        <xs:union memberTypes="H5_Filename Python_Filename"/>
+    <xs:simpleType name="BrainFilename">
+        <xs:union memberTypes="H5Filename PythonFilename"/>
     </xs:simpleType>
 
-    <xs:simpleType name="SDF_Filename">
+    <xs:simpleType name="SDFFilename">
         <xs:restriction base="xs:string">
             <xs:pattern value="[a-zA-Z0-9\._/]*\.(sdf|zip)"/>
         </xs:restriction>
     </xs:simpleType>
 
-    <xs:simpleType name="H5_Filename">
+    <xs:simpleType name="H5Filename">
         <xs:restriction base="xs:string">
             <xs:pattern value="[a-zA-Z0-9\._/]*\.h5"/>
         </xs:restriction>
     </xs:simpleType>
 
-    <xs:simpleType name="Python_Filename">
+    <xs:simpleType name="PythonFilename">
         <xs:restriction base="xs:string">
             <xs:pattern value="[a-zA-Z0-9\._/]*\.py"/>
         </xs:restriction>
     </xs:simpleType>
 
-    <xs:simpleType name="Script_Filename">
+    <xs:simpleType name="ScriptFilename">
         <xs:restriction base="xs:string">
             <xs:pattern value="[a-zA-Z0-9\._/]*\.sh"/>
         </xs:restriction>
     </xs:simpleType>
 
-    <xs:complexType name="Conf_File">
-        <xs:attribute name="src" type="xs:string"/>
-        <xs:attribute name="type" type="Conf_Type"/>
+    <xs:complexType name="ConfFile">
+        <xs:attribute name="src" type="xs:string" use="required"/>
+        <xs:attribute name="type" type="ConfType" use="required"/>
     </xs:complexType>
 
-    <xs:simpleType name="Conf_Type">
-        <xs:union memberTypes="Conf_Type_Enumeration xs:string"/>
+    <xs:simpleType name="ConfType">
+        <xs:union memberTypes="ConfTypeEnumeration xs:string"/>
     </xs:simpleType>
 
-    <xs:simpleType name="Conf_Type_Enumeration">
+    <xs:simpleType name="ConfTypeEnumeration">
         <xs:restriction base="xs:string">
             <xs:enumeration value="retina"/>
             <xs:enumeration value="brainvisualizer"/>
@@ -82,8 +78,7 @@
     </xs:simpleType>
 
 
-    <xs:complexType name="TransferFunction" abstract="true">
-    </xs:complexType>
+    <xs:complexType name="TransferFunction" abstract="true"/>
 
     <xs:complexType name="PythonTransferFunction">
         <xs:complexContent mixed="true">
@@ -93,7 +88,7 @@
                             minOccurs="0"
                             maxOccurs="unbounded"/>
                 </xs:sequence>
-                <xs:attribute name="src" type="Python_Filename"/>
+                <xs:attribute name="src" type="PythonFilename" use="optional"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -108,10 +103,9 @@
                         <xs:element name="device" type="DeviceChannel"/>
                         <xs:element name="deviceGroup" type="DeviceGroupChannel"/>
                     </xs:choice>
-                    <xs:element name="topic" type="TopicChannel" minOccurs="0"
-                                maxOccurs="unbounded"/>
+                    <xs:element name="topic" type="TopicChannel" minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
-                <xs:attribute name="name" type="xs:string"/>
+                <xs:attribute name="name" type="xs:string" use="required"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -120,8 +114,7 @@
         <xs:complexContent>
             <xs:extension base="BIBITransferFunction">
                 <xs:sequence>
-                    <xs:element name="returnValue" type="DeviceChannel" maxOccurs="1"
-                                minOccurs="0"/>
+                    <xs:element name="returnValue" type="DeviceChannel" minOccurs="0"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -132,11 +125,11 @@
             <xs:restriction base="BIBITransferFunction">
                 <xs:sequence>
                     <xs:element name="local" type="Local" minOccurs="0" maxOccurs="unbounded"/>
-                    <xs:choice minOccurs="0" maxOccurs="1">
+                    <xs:choice minOccurs="0">
                         <xs:element name="device" type="DeviceChannel"/>
                     </xs:choice>
                 </xs:sequence>
-                <xs:attribute name="name" type="xs:string"/>
+                <xs:attribute name="name" type="xs:string" use="required"/>
             </xs:restriction>
         </xs:complexContent>
     </xs:complexType>
@@ -145,7 +138,7 @@
         <xs:complexContent>
             <xs:extension base="BIBITransferFunction">
                 <xs:sequence>
-                    <xs:element name="returnValue" type="TopicChannel" maxOccurs="1" minOccurs="0"/>
+                    <xs:element name="returnValue" type="TopicChannel" minOccurs="0"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -187,7 +180,7 @@
     <xs:complexType name="FixedNumberPreConnector">
         <xs:complexContent>
             <xs:extension base="NeuronConnector">
-                <xs:attribute name="count" type="xs:positiveInteger"/>
+                <xs:attribute name="count" type="xs:positiveInteger" use="required"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -207,29 +200,26 @@
     <xs:complexType name="TsodyksMarkramMechanism">
         <xs:complexContent>
             <xs:extension base="SynapseDynamics">
-                <xs:attribute name="u" type="xs:double"/>
-                <xs:attribute name="tau_rec" type="xs:double"/>
-                <xs:attribute name="tau_facil" type="xs:double"/>
+                <xs:attribute name="u" type="xs:double" use="required"/>
+                <xs:attribute name="tau_rec" type="xs:double" use="required"/>
+                <xs:attribute name="tau_facil" type="xs:double" use="required"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
 
     <xs:complexType name="DeviceChannel">
         <xs:sequence>
-            <xs:element name="neurons" type="NeuronSelector" minOccurs="1"/>
-            <xs:choice minOccurs="0" maxOccurs="1">
-                <xs:element name="connector" type="NeuronConnector" minOccurs="1" maxOccurs="1"/>
-                <xs:element name="connectorRef" type="NeuronConnectorRef" minOccurs="1"
-                            maxOccurs="1"/>
+            <xs:element name="neurons" type="NeuronSelector"/>
+            <xs:choice minOccurs="0">
+                <xs:element name="connector" type="NeuronConnector"/>
+                <xs:element name="connectorRef" type="NeuronConnectorRef"/>
             </xs:choice>
-            <xs:choice minOccurs="0" maxOccurs="1">
-                <xs:element name="synapseDynamics" type="SynapseDynamics" minOccurs="1"
-                            maxOccurs="1"/>
-                <xs:element name="synapseDynamicsRef" type="SynapseDynamicsRef" minOccurs="1"
-                            maxOccurs="1"/>
+            <xs:choice minOccurs="0">
+                <xs:element name="synapseDynamics" type="SynapseDynamics"/>
+                <xs:element name="synapseDynamicsRef" type="SynapseDynamicsRef"/>
             </xs:choice>
-            <xs:element name="target" type="NeuronTarget" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="body" type="FlowExpression" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="target" type="NeuronTarget" minOccurs="0"/>
+            <xs:element name="body" type="FlowExpression" minOccurs="0"/>
         </xs:sequence>
         <xs:attribute name="name" type="xs:string" use="required"/>
         <xs:attribute name="type" type="DeviceType" use="required"/>
@@ -237,36 +227,30 @@
 
     <xs:complexType name="DeviceGroupChannel">
         <xs:sequence>
-            <xs:element name="neurons" type="NeuronGroupSelector" minOccurs="1" maxOccurs="1"/>
-            <xs:choice minOccurs="0" maxOccurs="1">
-                <xs:element name="connector" type="NeuronConnector" minOccurs="1" maxOccurs="1"/>
-                <xs:element name="connectorRef" type="NeuronConnectorRef" minOccurs="1"
-                            maxOccurs="1"/>
+            <xs:element name="neurons" type="NeuronGroupSelector"/>
+            <xs:choice minOccurs="0">
+                <xs:element name="connector" type="NeuronConnector"/>
+                <xs:element name="connectorRef" type="NeuronConnectorRef"/>
             </xs:choice>
-            <xs:choice minOccurs="0" maxOccurs="1">
-                <xs:element name="synapseDynamics" type="SynapseDynamics" minOccurs="1"
-                            maxOccurs="1"/>
-                <xs:element name="synapseDynamicsRef" type="SynapseDynamicsRef" minOccurs="1"
-                            maxOccurs="1"/>
+            <xs:choice minOccurs="0">
+                <xs:element name="synapseDynamics" type="SynapseDynamics"/>
+                <xs:element name="synapseDynamicsRef" type="SynapseDynamicsRef"/>
             </xs:choice>
-            <xs:element name="target" type="NeuronTarget" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="body" type="FlowExpression" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="target" type="NeuronTarget" minOccurs="0"/>
+            <xs:element name="body" type="FlowExpression" minOccurs="0"/>
         </xs:sequence>
         <xs:attribute name="name" type="xs:string" use="required"/>
         <xs:attribute name="type" type="DeviceType" use="required"/>
     </xs:complexType>
 
-    <xs:complexType name="NeuronGroupSelector" abstract="true">
-    </xs:complexType>
+    <xs:complexType name="NeuronGroupSelector" abstract="true"/>
 
     <xs:complexType name="ChainSelector">
         <xs:complexContent>
             <xs:extension base="NeuronGroupSelector">
                 <xs:sequence>
-                    <xs:element name="neurons" minOccurs="0" maxOccurs="unbounded"
-                                type="NeuronSelector"/>
-                    <xs:element name="connectors" minOccurs="0" maxOccurs="unbounded"
-                                type="NeuronGroupSelector"/>
+                    <xs:element name="neurons" type="NeuronSelector" minOccurs="0" maxOccurs="unbounded"/>
+                    <xs:element name="connectors" type="NeuronGroupSelector" minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -276,17 +260,15 @@
         <xs:complexContent>
             <xs:extension base="NeuronGroupSelector">
                 <xs:sequence>
-                    <xs:element name="source" minOccurs="1" maxOccurs="1"
-                                type="MultiNeuronSelector"/>
-                    <xs:element name="pattern" minOccurs="1" maxOccurs="1"
-                                type="NeuronSelectorTemplate"/>
+                    <xs:element name="source" type="MultiNeuronSelector"/>
+                    <xs:element name="pattern" type="NeuronSelectorTemplate"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
 
     <xs:complexType name="NeuronSelector" abstract="true">
-        <xs:attribute name="population" type="xs:string"/>
+        <xs:attribute name="population" type="xs:string" use="required"/>
     </xs:complexType>
 
     <xs:complexType name="Index">
@@ -308,7 +290,7 @@
             <xs:extension base="MultiNeuronSelector">
                 <xs:attribute name="from" type="xs:nonNegativeInteger" use="required"/>
                 <xs:attribute name="to" type="xs:nonNegativeInteger" use="required"/>
-                <xs:attribute name="step" type="xs:nonNegativeInteger" use="optional"/>
+                <xs:attribute name="step" type="xs:positiveInteger" use="optional"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -326,7 +308,7 @@
     <xs:complexType name="Population">
         <xs:complexContent>
             <xs:extension base="MultiNeuronSelector">
-                <xs:attribute name="count" type="xs:nonNegativeInteger"/>
+                <xs:attribute name="count" type="xs:positiveInteger" use="required"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -337,8 +319,7 @@
         </xs:restriction>
     </xs:simpleType>
 
-    <xs:complexType name="NeuronSelectorTemplate" abstract="true">
-    </xs:complexType>
+    <xs:complexType name="NeuronSelectorTemplate" abstract="true"/>
 
     <xs:complexType name="IndexTemplate">
         <xs:complexContent>
@@ -384,11 +365,11 @@
 
     <xs:complexType name="TopicChannel">
         <xs:sequence>
-            <xs:element name="body" type="FlowExpression" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="body" type="FlowExpression" minOccurs="0"/>
         </xs:sequence>
-        <xs:attribute name="name" type="xs:string"/>
-        <xs:attribute name="topic" type="RobotTopicAddress"/>
-        <xs:attribute name="type" type="xs:string"/>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="topic" type="RobotTopicAddress" use="required"/>
+        <xs:attribute name="type" type="xs:string" use="required"/>
     </xs:complexType>
 
     <xs:simpleType name="RobotTopicAddress">
@@ -397,8 +378,7 @@
         </xs:restriction>
     </xs:simpleType>
 
-    <xs:complexType name="FlowExpression" abstract="true">
-    </xs:complexType>
+    <xs:complexType name="FlowExpression" abstract="true"/>
 
     <xs:complexType name="Scale">
         <xs:complexContent>
@@ -406,7 +386,7 @@
                 <xs:sequence>
                     <xs:element name="inner" type="FlowExpression"/>
                 </xs:sequence>
-                <xs:attribute name="factor" type="xs:double"/>
+                <xs:attribute name="factor" type="xs:double" use="required"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -417,7 +397,7 @@
                 <xs:sequence>
                     <xs:element name="argument" type="Argument" maxOccurs="unbounded"/>
                 </xs:sequence>
-                <xs:attribute name="type" type="xs:string"/>
+                <xs:attribute name="type" type="xs:string" use="required"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -426,8 +406,7 @@
         <xs:complexContent>
             <xs:extension base="FlowExpression">
                 <xs:sequence>
-                    <xs:element name="operand" type="FlowExpression" minOccurs="2"
-                                maxOccurs="unbounded"/>
+                    <xs:element name="operand" type="FlowExpression" minOccurs="2" maxOccurs="unbounded"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -471,22 +450,21 @@
 
     <xs:complexType name="Argument">
         <xs:sequence>
-            <xs:element name="value" type="FlowExpression" minOccurs="1"/>
+            <xs:element name="value" type="FlowExpression"/>
         </xs:sequence>
         <xs:attribute name="name" type="xs:string" use="required"/>
     </xs:complexType>
 
     <xs:complexType name="Local">
         <xs:sequence>
-            <xs:element name="body" type="FlowExpression" minOccurs="1"/>
+            <xs:element name="body" type="FlowExpression"/>
         </xs:sequence>
         <xs:attribute name="name" type="xs:string" use="required"/>
     </xs:complexType>
 
     <xs:complexType name="SimulationStep">
         <xs:complexContent>
-            <xs:extension base="FlowExpression">
-            </xs:extension>
+            <xs:extension base="FlowExpression"/>
         </xs:complexContent>
     </xs:complexType>
 
@@ -507,7 +485,7 @@
         </xs:complexContent>
     </xs:complexType>
 
-    <xs:complexType name="ConstantString"> <!--SU-->
+    <xs:complexType name="ConstantString">
         <xs:complexContent>
             <xs:extension base="FlowExpression">
                 <xs:attribute name="value" type="xs:string" use="required"/>
