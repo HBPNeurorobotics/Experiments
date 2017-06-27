@@ -111,6 +111,8 @@ class ExperimentsLauncher(object):
                 self.__sim.register_status_callback(self.__on_status)
                 # give it some time to get a status callback
                 self.__wait_condition(10, lambda x: x is not None)
+                self.__sim.pause()
+                time.sleep(10)
                 self.__sim.start()
                 self.__wait_condition(10, lambda x: x['state'] == 'started')
                 while self.__launched:
