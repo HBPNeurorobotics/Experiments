@@ -1,7 +1,4 @@
 {
-    "HuskySpaceBoot":"ExDBraitenbergHuskySBC",
-    "BraitenbergMouse":"ExDBraitenbergMouseLab",
-    "SchunkHand":"ExDManipulationForce",
-    "VisualTrackingICub":"ExDVisualTrackingICub"
+    "HuskyLabyrinth":"ExDDemoHuskySBC",
+    "TwoICubsWaving":"ExDDvsIcub"
 }
-
