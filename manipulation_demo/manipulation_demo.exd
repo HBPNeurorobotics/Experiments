@@ -1,0 +1,371 @@
+#!/usr/bin/env python
+"""
+This state machine waits 2 seconds before displaying on the screen the description of the current
+experiment.
+After that, it initiates an infinite loop of picking and placing of the two cylindrical objects placed on the table.
+The interaction with the arm and hand TFs is performed through ROS topics to which commands are published.
+"""
+
+import smach_ros
+import smach
+from smach import CBState
+from smach import StateMachine
+from smach_ros import ServiceState
+from hbp_nrp_excontrol.nrp_states import WaitToClockState, ClockDelayState, LinkPoseMonitorState
+import rospy
+from std_msgs.msg import String
+from gazebo_msgs.srv import SetModelState
+from gazebo_msgs.msg import ModelState
+from hbp_nrp_excontrol.logs import clientLogger
+
+arm_state = rospy.Publisher('/arm_robot/arm_commands', String, latch=True, queue_size=10)
+hand_state = rospy.Publisher('/arm_robot/hand_commands', String, latch=True, queue_size=10)
+
+def notify_user_cb(adv_message):
+    @smach.cb_interface(input_keys=[], output_keys=[], outcomes=['finished'])
+    def fun(user_data):
+        clientLogger.advertise(adv_message)
+        return 'finished'
+    return fun
+
+
+# Sends commands to the arm advertising a message to the user.
+# returns a callback for CBState.
+def send_arm_command(command, color=None, adv_message=None):
+    @smach.cb_interface(input_keys=[], output_keys=[], outcomes=['finished', 'preempted'])
+    def fun(user_data):
+        if adv_message is not None:
+            clientLogger.advertise(adv_message)
+        if color is not None:
+            arm_state.publish('{}_{}'.format(command, color))
+        else:
+            arm_state.publish(command)
+        return 'finished'
+    return fun
+
+
+def approach_color_cb(color):
+    user_notification_message = "Let's remove the {} object from the table.".format(color)
+    return send_arm_command('APPROACH', 'RED', user_notification_message)
+
+
+def grasp_move_color_cb(color, adv_message=None):
+    return send_arm_command('GRASP', color, adv_message)
+
+
+def dispose_color_cb(color):
+    user_notification_message = "Disposing of the {} object.".format(color)
+    return send_arm_command('DISPOSE', color, user_notification_message)
+
+
+def reset_arm_cb():
+    return send_arm_command('RESET')
+
+
+def send_hand_command(command):
+    @smach.cb_interface(input_keys=[], output_keys=[], outcomes=['finished', 'preempted'])
+    def fun(user_data):
+        hand_state.publish(command)
+        return 'finished'
+    return fun
+
+
+def open_hand_cb():
+    return send_hand_command("RELEASE")
+
+
+def close_hand_cb():
+    return send_hand_command("GRASP")
+
+
+def link_pose_motitor_cb(x, y, z, epsilon):
+    eps_x = epsilon[0]
+    eps_y = epsilon[1]
+    eps_z = epsilon[2]
+
+    return lambda ud, p: not ((x - eps_x < p.position.x < x + eps_x) and
+                              (y - eps_y < p.position.y < y + eps_y) and 
+                              (z - eps_z < p.position.z < z + eps_z))
+
+# link used as a reference for checking the arm position
+PALM_LINK = "robot::COL_COL_COL_VIS_VIS_VIS_VIS_VIS_VIS_VIS_VIS_VIS_hollie_real.007"
+
+epsilon = (0.002, 0.002, 0.01)  # (x,y,z) error range for link position checking
+
+# Callbacks for LinkPoseMonitorState
+# APPROACH
+cb_approach_red = link_pose_motitor_cb(0.38848934741, -0.108695219197, 1.1385, epsilon)
+link_pose_monitor_approach_red = LinkPoseMonitorState(cb_approach_red, PALM_LINK)
+
+# GRASP
+cb_grasp_move_red = link_pose_motitor_cb(0.361675980386, -0.128106639108, 1.13859611942, epsilon)
+link_pose_monitor_grasp_move_red = LinkPoseMonitorState(cb_grasp_move_red, PALM_LINK)
+
+cb_grasp_move_blue = link_pose_motitor_cb(-0.269, -0.181, 1.138, epsilon)
+link_pose_monitor_grasp_move_blue = LinkPoseMonitorState(cb_grasp_move_blue, PALM_LINK)
+
+# DISPOSE
+cb_dispose_red = link_pose_motitor_cb(0.63518, 0.32965, 1.1363, epsilon)
+link_pose_monitor_dispose_red = LinkPoseMonitorState(cb_dispose_red, PALM_LINK)
+
+cb_dispose_blue = link_pose_motitor_cb(0.523, 0.03675, 1.16237, epsilon)
+link_pose_monitor_dispose_blue = LinkPoseMonitorState(cb_dispose_blue, PALM_LINK)
+
+# ModelState message factory which are used for resetting the cylinders to the original position
+def model_state_msg(color):
+    ms_msg = ModelState()
+    ms_msg.model_name = color + '_cylinder'
+    # set orientation RYP axes
+    ms_msg.pose.orientation.x = 0
+    ms_msg.pose.orientation.y = 0
+    ms_msg.pose.orientation.z = 0
+    # reference frame
+    ms_msg.reference_frame = 'world'
+    # pose
+    if color is 'RED':
+        ms_msg.pose.position.x = 0.37797
+        ms_msg.pose.position.y = -0.25321
+        ms_msg.pose.position.z = 1.12015
+    elif color is 'BLUE':
+        ms_msg.pose.position.x = -0.37797
+        ms_msg.pose.position.y = -0.25321
+        ms_msg.pose.position.z = 1.12015
+    # scale
+    ms_msg.scale.x = ms_msg.scale.y = ms_msg.scale.z = 1.0
+    return ms_msg
+
+gazebo_set_model_state_service = '/gazebo/set_model_state'
+
+
+# SM DEFINITION
+
+# FINAL STATES
+FINISHED = 'FINISHED'
+ERROR = 'ERROR'
+PREEMPTED = 'PREEMPTED'
+
+sm = StateMachine(outcomes=[FINISHED, ERROR, PREEMPTED])
+
+with sm:
+    StateMachine.add(
+        "initial_wait_condition",
+        WaitToClockState(2),
+        transitions={'valid': 'initial_wait_condition',
+                     'invalid': 'display_description',
+                     'preempted': PREEMPTED}
+    )
+
+    StateMachine.add(
+        "display_description",
+        CBState(notify_user_cb("In this demo, the Hollie arm robot will clear the table, "
+                               "disposing of the objects into the appropriate container.")),
+        transitions={'finished': 'reset_arm'}
+    )
+
+    # loops start here
+    StateMachine.add(
+        'reset_arm',
+        CBState(reset_arm_cb()),
+        transitions={'finished': 'wait_reset',
+                     'preempted': PREEMPTED}
+    )
+
+    StateMachine.add(
+        'wait_reset',
+        ClockDelayState(3),
+        transitions={'valid': 'wait_reset',
+                     'invalid': 'reposition_red',
+                     'preempted': PREEMPTED}
+    )
+
+    # Reset objects pos
+    StateMachine.add(
+        'reposition_red',
+        ServiceState(gazebo_set_model_state_service, SetModelState, request=model_state_msg("RED")),
+        transitions={'succeeded': 'reposition_blue',
+                     'preempted': PREEMPTED,
+                     'aborted': ERROR})
+
+    StateMachine.add(
+        'reposition_blue',
+        ServiceState(gazebo_set_model_state_service, SetModelState, request=model_state_msg("BLUE")),
+        transitions={'succeeded': 'wait_condition',
+                     'preempted': PREEMPTED,
+                     'aborted': ERROR})
+
+
+
+    StateMachine.add(
+        "wait_condition",
+        ClockDelayState(3),
+        transitions={'valid': 'wait_condition',
+                     'invalid': 'approach_red',
+                     'preempted': PREEMPTED}
+    )
+
+    StateMachine.add(
+        'approach_red',
+        CBState(approach_color_cb('RED')),
+        transitions={'finished': 'approaching_position_red',
+                     'preempted': PREEMPTED}
+    )
+
+    StateMachine.add(
+        'approaching_position_red',
+        link_pose_monitor_approach_red,
+        transitions={'valid': 'approaching_position_red',
+                     'invalid': 'grasp_move_red',
+                     'preempted': PREEMPTED}
+    )
+
+    StateMachine.add(
+        "wait_approach_red",
+        ClockDelayState(2),
+        transitions={'valid': 'wait_approach_red',
+                     'invalid': 'grasp_move_red',
+                     'preempted': PREEMPTED}
+    )
+
+    StateMachine.add(
+        'grasp_move_red',
+        CBState(grasp_move_color_cb('RED')),
+        transitions={'finished': 'grasping_position_red',
+                     'preempted': PREEMPTED}
+    )
+
+    StateMachine.add(
+        'grasping_position_red',
+        link_pose_monitor_grasp_move_red,
+        transitions={'valid': 'grasping_position_red',
+                     'invalid': 'wait_grasping_position_red',
+                     'preempted': PREEMPTED}
+    )
+
+    StateMachine.add(
+        "wait_grasping_position_red",
+        ClockDelayState(1),
+        transitions={'valid': 'wait_grasping_position_red',
+                     'invalid': 'close_hand_red',
+                     'preempted': PREEMPTED}
+    )
+
+    StateMachine.add(
+        'close_hand_red',
+        CBState(close_hand_cb()),
+        transitions={'finished': 'wait_close_hand_red',
+                     'preempted': PREEMPTED}
+    )
+
+    StateMachine.add(
+        "wait_close_hand_red",
+        ClockDelayState(2),
+        transitions={'valid': 'wait_close_hand_red',
+                     'invalid': 'dispose_red',
+                     'preempted': PREEMPTED}
+    )
+
+    StateMachine.add(
+        'dispose_red',
+        CBState(dispose_color_cb('RED')),
+        transitions={'finished': 'disposing_position_red',
+                     'preempted': PREEMPTED}
+    )
+
+    StateMachine.add(
+        'disposing_position_red',
+        link_pose_monitor_dispose_red,
+        transitions={'valid': 'disposing_position_red',
+                     'invalid': 'open_hand_red',
+                     'preempted': PREEMPTED}
+    )
+
+    StateMachine.add(
+        'open_hand_red',
+        CBState(open_hand_cb()),
+        transitions={'finished': 'wait_start_blue_phase',
+                     'preempted': PREEMPTED}
+    )
+
+
+    # --- BLUE PHASE ---
+
+    StateMachine.add(
+        "wait_start_blue_phase",
+        ClockDelayState(3),
+        transitions={'valid': 'wait_start_blue_phase',
+                     'invalid': 'grasp_move_blue',
+                     'preempted': PREEMPTED}
+    )
+
+    StateMachine.add(
+        'grasp_move_blue',
+        CBState(grasp_move_color_cb('BLUE', "Let's remove the BLUE object.")),
+        transitions={'finished': 'grasping_position_blue',
+                     'preempted': PREEMPTED}
+    )
+
+    StateMachine.add(
+        'grasping_position_blue',
+        link_pose_monitor_grasp_move_blue,
+        transitions={'valid': 'grasping_position_blue',
+                     'invalid': 'wait_grasping_position_blue',
+                     'preempted': PREEMPTED}
+    )
+
+    StateMachine.add(
+        "wait_grasping_position_blue",
+        ClockDelayState(1.5),
+        transitions={'valid': 'wait_grasping_position_blue',
+                     'invalid': 'close_hand_blue',
+                     'preempted': PREEMPTED}
+    )
+
+    StateMachine.add(
+        'close_hand_blue',
+        CBState(close_hand_cb()),
+        transitions={'finished': 'wait_close_hand_blue',
+                     'preempted': PREEMPTED}
+    )
+
+    StateMachine.add(
+        "wait_close_hand_blue",
+        ClockDelayState(3),
+        transitions={'valid': 'wait_close_hand_blue',
+                     'invalid': 'dispose_blue',
+                     'preempted': PREEMPTED}
+    )
+
+    StateMachine.add(
+        'dispose_blue',
+        CBState(dispose_color_cb('BLUE')),
+        transitions={'finished': 'disposing_position_blue', 'preempted': PREEMPTED}
+    )
+
+    StateMachine.add(
+        'disposing_position_blue',
+        link_pose_monitor_dispose_blue,
+        transitions={'valid': 'disposing_position_blue',
+                     'invalid': 'open_hand_blue',
+                     'preempted': PREEMPTED}
+    )
+
+    StateMachine.add(
+        'open_hand_blue',
+        CBState(open_hand_cb()),
+        transitions={'finished': 'wait_open_hand_blue',
+                     'preempted': PREEMPTED}
+    )
+    StateMachine.add(
+        'wait_open_hand_blue',
+        ClockDelayState(4),
+        transitions={'valid': 'wait_open_hand_blue',
+                     'invalid': 'display_clear_message',
+                     'preempted': PREEMPTED}
+    )
+
+    StateMachine.add(
+        "display_clear_message",
+        CBState(notify_user_cb("The Table is clear! Getting back into resting position...")),
+        transitions={'finished': 'reset_arm'}
+    )
+

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ExD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
+     xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
+    <name>HoLLie arm manipulation demo experiment</name>
+    <thumbnail>ExDDemoManipulation.png</thumbnail>
+    <description>
+        The experiment shows the HoLLie arm performing an infinite grasping task controlled by a SMACH state machine.
+        The robot clears the table of the two cylindrical objects placed on it, disposing of them in the container beside.
+    </description>
+    <timeout>180</timeout>
+    <configuration type="3d-settings" src="ExDDemoManipulation.3ds"/>
+    <maturity>development</maturity>
+    <environmentModel src="empty_world/world_manipulation.sdf">
+        <robotPose x="0.0" y="0.0" z="0.04" ux="0.0" uy="0.0" uz="1.0" theta="0.0"/>
+    </environmentModel>
+    <bibiConf src="manipulation_demo.bibi"/>
+    <experimentControl>
+        <stateMachine xsi:type="SMACHStateMachine"
+                      id="ArmBehavior"
+                      src="manipulation_demo.exd"/>
+    </experimentControl>
+    <cameraPose>
+            <cameraPosition x="0.84782" y="-2.38183" z="2.4"/>
+        <cameraLookAt x="0" y="0" z="1"/>
+    </cameraPose>
+</ExD>
