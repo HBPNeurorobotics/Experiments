@@ -7,4 +7,16 @@
   <transferFunction xsi:type="PythonTransferFunction" src="icub_control.py"/>
   <transferFunction xsi:type="PythonTransferFunction" src="move_insider_icub.py"/>
   <transferFunction xsi:type="PythonTransferFunction" src="narrow_events_view.py"/>
+  <!-- temporary solution to forward all joints since the frontend only monitors /joint_states -->
+  <transferFunction xsi:type="PythonTransferFunction">
+    #<![CDATA[
+    from sensor_msgs.msg import JointState
+
+    @nrp.MapRobotSubscriber("joints", Topic("/robot/joints", JointState))
+    @nrp.Neuron2Robot(Topic('/joint_states', JointState))
+    def joint_states_passthrough(t, joints):
+        return joints.value
+    #]]>
+  </transferFunction>
+
 </bibi>
