@@ -15,6 +15,7 @@
   <transferFunction xsi:type="PythonTransferFunction" src="braitenberg_husky_linear_twist.py"/>
   <transferFunction xsi:type="PythonTransferFunction" src="csv_spike_monitor.py"/>
   <transferFunction xsi:type="PythonTransferFunction" src="csv_joint_state_monitor.py"/>
+  <transferFunction xsi:type="PythonTransferFunction" src="csv_robot_position.py"/>
   <transferFunction xsi:type="PythonTransferFunction">
     #<![CDATA[
     @nrp.MapRobotSubscriber("camera", Topic('/husky/camera', sensor_msgs.msg.Image))
