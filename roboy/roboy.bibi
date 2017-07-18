@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bibi xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.humanbrainproject.eu/SP10/2014/BIBI" xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/BIBI ../bibi_configuration.xsd">
+  <brainModel>
+    <file>brain_model/idle_brain.py</file>
+    <populations population="neurons" xsi:type="Range" from="0" to="2"/>
+    <populations population="record" xsi:type="Range" from="0" to="2"/>
+  </brainModel>
+  <bodyModel>roboy/model.sdf</bodyModel>
+
+</bibi>
