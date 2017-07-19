@@ -8,6 +8,4 @@
   <transferFunction xsi:type="PythonTransferFunction" src="monitor_population.py"/>
   <transferFunction xsi:type="PythonTransferFunction" src="grab_image.py"/>
   <transferFunction xsi:type="PythonTransferFunction" src="swing.py"/>
-  <transferFunction xsi:type="PythonTransferFunction" src="record_ball_velocity.py"/>
-  <transferFunction xsi:type="PythonTransferFunction" src="record_joint_state.py"/>
 </bibi>
