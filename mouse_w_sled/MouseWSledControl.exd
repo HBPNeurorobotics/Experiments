@@ -1,0 +1,45 @@
+﻿#!/usr/bin/env python
+"""
+This file is a state-machine prototype for the OpenSim-based CDP1 V1 Mouse experiment MVP.
+"""
+
+__author__ = 'FabianAichele'
+
+import smach_ros
+from smach import StateMachine
+from hbp_nrp_excontrol.nrp_states import WaitToClockState
+
+from hbp_nrp_excontrol.logs import clientLogger
+
+clientLogger.info("Starting MVP state machine")
+
+FINISHED = 'FINISHED'
+ERROR = 'ERROR'
+PREEMPTED = 'PREEMPTED'
+
+sm = StateMachine(outcomes=[FINISHED, ERROR, PREEMPTED])
+
+with sm:
+    StateMachine.add(
+        "initial_timeline_condition",
+        WaitToClockState(5),
+        transitions = {'valid': 'initial_timeline_condition',
+                       'invalid': 'set_msled_begin',
+                       'preempted': PREEMPTED}
+    )
+
+    StateMachine.add(
+        "set_msled_begin",
+        WaitToClockState(5),
+        transitions = {'succeeded': 'set_msled_end',
+                       'aborted': ERROR,
+                       'preempted': PREEMPTED}
+    )
+
+    StateMachine.add(
+        "set_msled_end",
+        WaitToClockState(5),
+        transitions = {'succeeded': 'sed_msled_begin',
+                       'aborted': ERROR,
+                       'preempted': PREEMPTED}
+    )
