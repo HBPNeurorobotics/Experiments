@@ -1,0 +1,193 @@
+#!/usr/bin/env python
+"""
+A state-machine that deletes, spawns and moves objects in the 3D scenes.
+"""
+
+__author__ = 'Sven Liedtke (liedtke@in.tum.de)'
+
+import math
+import time
+import rospy
+import smach
+from smach import StateMachine
+from smach import CBState
+from hbp_nrp_excontrol.nrp_states import WaitToClockState, RobotPoseMonitorState, \
+    SetMaterialColorServiceState, ClockDelayState, SpawnSphere, DestroyModel, SetModelPose
+from hbp_nrp_excontrol.logs import clientLogger
+from geometry_msgs.msg import Pose, Point, Quaternion, Twist, Vector3
+from gazebo_msgs.srv import SetModelState
+from gazebo_msgs.msg import ModelState
+
+
+@smach.cb_interface(input_keys=[''], output_keys=[''], outcomes=['succeeded'])
+def init(userdata):
+    time.sleep(1)
+    clientLogger.advertise('Welcome to this mouse lab example.')
+    time.sleep(5)
+    clientLogger.advertise('Here we show you how a mouse is able to follow a specific color...')
+    time.sleep(5)
+    clientLogger.advertise('... and how it is possible to manipulate the environment.')
+    return 'succeeded'
+
+
+set_model_state = rospy.ServiceProxy('/gazebo/set_model_state', SetModelState)
+
+
+def move_object_cb(name, pointPosition, qOrientation=Quaternion(0, 0, 0, 0)):
+    @smach.cb_interface(input_keys=[], output_keys=[], outcomes=['succeeded', 'aborted'])
+    def move_object(userdata):
+        msg = ModelState();
+
+        msg.model_name = name
+        msg.scale = Vector3(1, 1, 1)
+        msg.pose.position = pointPosition
+        msg.pose.orientation = qOrientation
+        msg.reference_frame = 'world'
+
+        # call service
+        response = set_model_state(msg)
+
+        if not response.success:
+            return 'aborted'
+        return 'succeeded'
+
+    return move_object
+
+
+def notify_user_cb(msg):
+    @smach.cb_interface(input_keys=[], output_keys=[], outcomes=['succeeded'])
+    def notify_user(userdata):
+        clientLogger.advertise(msg)
+        return 'succeeded'
+
+    return notify_user
+
+
+def moveAlongPath(model, pointFrom, pointTo, stepSize=0.1):
+    @smach.cb_interface(input_keys=['counter'],
+                        output_keys=['counter'],
+                        outcomes=['succeeded', 'ongoing'])
+    def move_along(userdata):
+        direction = Vector3(pointTo.x - pointFrom.x, pointTo.y - pointFrom.y,
+                            pointTo.z - pointFrom.z)
+        step = stepSize * userdata.counter
+        newPos = Point(pointFrom.x + direction.x * step,
+                       pointFrom.y + direction.y * step,
+                       pointFrom.z + direction.z * step)
+        move_object_cb(model, newPos)(userdata)
+
+        if (userdata.counter < math.fabs(1 / stepSize)):
+            userdata.counter = userdata.counter + 1
+            return 'ongoing'
+        else:
+            userdata.counter = 0
+            return 'succeeded'
+
+    return move_along
+
+################################################################
+################################################################
+
+FINISHED = 'FINISHED'
+ERROR = 'ERROR'
+PREEMPTED = 'PREEMPTED'
+
+sm = StateMachine(outcomes=[FINISHED, ERROR, PREEMPTED])
+sm.userdata.counter = 0
+
+mousePosition = Point(-0.895, -1.9975, 1.115)
+
+initialSpherePos = Point(mousePosition.x + 0.5, mousePosition.y - 0.25, mousePosition.z + 0.05)
+targetSpherePos = Point(mousePosition.x + 0.5, mousePosition.y + 0.25, mousePosition.z + 0.05)
+
+with sm:
+    StateMachine.add('INIT',
+                     CBState(init),
+                     transitions={'succeeded': 'INITIAL_WAITING'})
+    StateMachine.add('INITIAL_WAITING',
+                     WaitToClockState(1),
+                     {'valid': 'INITIAL_WAITING', 'invalid': 'DELETE_MAZE',
+                      'preempted': PREEMPTED})
+    StateMachine.add('DELETE_MAZE',
+                     DestroyModel('ymaze'),
+                     transitions={'succeeded': 'DELETE_SCREEN1',
+                                  'preempted': PREEMPTED,
+                                  'aborted': ERROR})
+    StateMachine.add('DELETE_SCREEN1',
+                     DestroyModel('left_vr_screen'),
+                     transitions={'succeeded': 'DELETE_SCREEN2',
+                                  'preempted': PREEMPTED,
+                                  'aborted': ERROR})
+    StateMachine.add('DELETE_SCREEN2',
+                     DestroyModel('right_vr_screen'),
+                     transitions={'succeeded': 'SPAWN_OBJECT',
+                                  'preempted': PREEMPTED,
+                                  'aborted': ERROR})
+    StateMachine.add('SPAWN_OBJECT',
+                     SpawnSphere(model_name="tracked_sphere", radius=0.05,
+                                 position=initialSpherePos, use_gravity=False),
+                     transitions={'succeeded': 'DELAY_ON_RED_SWITCHING', 'aborted': ERROR,
+                                  'preempted': PREEMPTED})
+    StateMachine.add('DELAY_ON_RED_SWITCHING',
+                     ClockDelayState(4),
+                     {'valid': 'DELAY_ON_RED_SWITCHING', 'invalid': 'SWITCH_TO_RED_MSG',
+                      'preempted': PREEMPTED})
+    StateMachine.add('SWITCH_TO_RED_MSG',
+                     CBState(notify_user_cb('The color of the sphere is set to red.')),
+                     {'succeeded': 'SWITCH_TO_RED'})
+    StateMachine.add('SWITCH_TO_RED',
+                     SetMaterialColorServiceState('tracked_sphere',
+                                                  'body',
+                                                  'visual',
+                                                  'Gazebo/RedGlow'),
+                     transitions={'succeeded': 'DELAY_ON_POS_CHANGE',
+                                  'aborted': FINISHED,
+                                  'preempted': PREEMPTED})
+
+    StateMachine.add('DELAY_ON_POS_CHANGE',
+                     ClockDelayState(2),
+                     transitions={'valid': 'DELAY_ON_POS_CHANGE', 'invalid': 'TRANSLATE_OBJECT_MSG',
+                                  'preempted': PREEMPTED})
+    StateMachine.add('TRANSLATE_OBJECT_MSG',
+                     CBState(notify_user_cb('The sphere is moved in front of the mouse.')),
+                     {'succeeded': 'TRANSLATE_OBJECT'})
+    StateMachine.add('TRANSLATE_OBJECT',
+                     CBState(
+                         moveAlongPath('tracked_sphere', initialSpherePos, targetSpherePos, 0.005)),
+                     transitions={'succeeded': 'DELAY_ON_BLUE_SWITCHING',
+                                  'ongoing': 'TRANSLATE_OBJECT'})
+    StateMachine.add('DELAY_ON_BLUE_SWITCHING',
+                     ClockDelayState(4),
+                     {'valid': 'DELAY_ON_BLUE_SWITCHING', 'invalid': 'SWITCH_TO_BLUE_MSG',
+                      'preempted': PREEMPTED})
+    StateMachine.add('SWITCH_TO_BLUE_MSG',
+                     CBState(notify_user_cb('Now the sphere color is set to blue.')),
+                     transitions={'succeeded': 'SWITCH_TO_BLUE'})
+    StateMachine.add('SWITCH_TO_BLUE',
+                     SetMaterialColorServiceState('tracked_sphere', 'body', 'visual',
+                                                  'Gazebo/BlueGlow'),
+                     transitions={'succeeded': 'DELAY_ON_POS_CHANGE_2',
+                                  'aborted': FINISHED,
+                                  'preempted': PREEMPTED})
+    StateMachine.add('DELAY_ON_POS_CHANGE_2',
+                     ClockDelayState(2),
+                     transitions={'valid': 'DELAY_ON_POS_CHANGE_2', 'invalid': 'TRANSLATE_OBJECT_MSG_2',
+                                  'preempted': PREEMPTED})
+    StateMachine.add('TRANSLATE_OBJECT_MSG_2',
+                     CBState(notify_user_cb('The sphere is moved again in front of the mouse.')),
+                     {'succeeded': 'DELAY_ON_POS_CHANGE_3'})
+    StateMachine.add('DELAY_ON_POS_CHANGE_3',
+                     ClockDelayState(2),
+                     transitions={'valid': 'DELAY_ON_POS_CHANGE_3', 'invalid': 'TRANSLATE_OBJECT_MSG_3',
+                                  'preempted': PREEMPTED})
+    StateMachine.add('TRANSLATE_OBJECT_MSG_3',
+                     CBState(notify_user_cb('But this time the mouse will not track it.')),
+                     {'succeeded': 'TRANSLATE_OBJECT_2'})
+    StateMachine.add('TRANSLATE_OBJECT_2',
+                     CBState(
+                         moveAlongPath('tracked_sphere', targetSpherePos, initialSpherePos, 0.005)),
+                     transitions={'succeeded': 'CONCLUSION_MSG',
+                                  'ongoing': 'TRANSLATE_OBJECT_2'})
+    StateMachine.add('CONCLUSION_MSG',
+                     CBState(notify_user_cb('The demo is over. It is your turn to play!')),
+                     {'succeeded': 'FINISHED'})
