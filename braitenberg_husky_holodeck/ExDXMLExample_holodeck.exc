@@ -2,7 +2,7 @@
 <ExD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
      xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
-    <name>Distributed Brain Husky Braitenberg experiment in holodeck</name>
+    <name>Husky Braitenberg experiment in holodeck</name>
     <thumbnail>ExDXMLExample.png</thumbnail>
     <description>This experiment loads the Husky robot from Clearpath Robotics and the virtual room
         environment. If the user starts the experiment, the Braitenberg vehicle network is executed
@@ -16,9 +16,9 @@
     <environmentModel src="virtual_room/virtual_room.sdf">
         <robotPose x="0.0" y="0.0" z="0.5" ux="0.0" uy="0.0" uz="1.0" theta="0.0"/>
     </environmentModel>
-    <bibiConf src="milestone2_python_tf.bibi" processes="2"/>
+    <bibiConf src="milestone2_python_tf.bibi"/>
     <cameraPose>
-        <cameraPosition x="4.5" y="0" z="1.8"/>
-        <cameraLookAt x="0" y="0" z="0.6"/>
+        <cameraPosition x="5.056825994369357" y="-1.0210998541555323" z="2.697598759953974"/>
+        <cameraLookAt x="0" y="0" z="0.49999"/>
     </cameraPose>
 </ExD>
