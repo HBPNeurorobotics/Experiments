@@ -1,45 +1,207 @@
 ﻿#!/usr/bin/env python
 """
-This file is a state-machine prototype for the OpenSim-based CDP1 V1 Mouse experiment MVP.
+A state-machine that deletes, spawns and moves objects in the 3D scenes.
 """
 
 __author__ = 'FabianAichele'
 
+import math
+import time
+import rospy
+import smach
+import Queue
 import smach_ros
+
+
 from smach import StateMachine
-from hbp_nrp_excontrol.nrp_states import WaitToClockState
-
+from smach import CBState
+from hbp_nrp_excontrol.nrp_states import WaitToClockState, RobotPoseMonitorState, \
+    SetMaterialColorServiceState, ClockDelayState, SpawnSphere, DestroyModel, SetModelPose
 from hbp_nrp_excontrol.logs import clientLogger
+from std_msgs.msg import Float64
+from geometry_msgs.msg import Pose, Point, Quaternion, Twist, Vector3
+from gazebo_msgs.srv import SetModelState
+from gazebo_msgs.msg import ModelState
+from gazebo_ros_muscle_interface.srv import GetMuscleActivations, SetMuscleActivations, GetMuscleStates
+from generic_controller_plugin.srv import SetPIDParameters
+from sensor_msgs.msg import JointState
 
-clientLogger.info("Starting MVP state machine")
+# from gazebo_msgs.msg import JointState
+
+
+# model_name = "mouse_and_sled"
+model_name = "robot"
+currentJointState = JointState()
+
+
+
+class JointPoseMonitorState(smach_ros.MonitorState):
+    """
+    This state monitors a Link pose
+    """
+
+    def __callback(self, user_data, states):
+        """
+        The callback when a new model state message arrives
+
+        :param user_data: The state machine user data
+        :param states: The link states
+        """
+        for name, pose in zip(states.name, states.pose):
+            if name == self.__joint_name:
+                return self.__position_cb(user_data, pose)
+        return True
+
+    def __init__(self, position_cb, joint_name):
+        """
+        Creates a new state that monitors the link position
+
+        :param position_cb: A callback that should be executed when a new pose is available
+         for the link
+        """
+        super(JointPoseMonitorState, self).__init__('sensor_msgs/JointState', JointStates,
+                                                    self.__callback)
+        self.__link_name = link_name
+        self.__position_cb = position_cb
+        return JointStates
+        
+
+class ExperimentControl(object):
+  def __init__(self, model_name):
+    self._model_name = model_name
+  #  self._init_muscle_processing()
+  #  self._init_sled_controller()
+  ##############################
+  ### joint states listening ###
+  ##############################
+ # def _init_joint_states_processing(self):
+    # Here we use a queue because we are interested in the entire history because we want to do filtering to remove noise.
+    # The Queue class is already thread safe so no external locking is required.
+   # self._jointstates_queue = Queue.Queue(100)
+  def _joint_states_callback(jointstates):
+    global currentJointState
+    currentJointState = jointstates
+  #  self.sub_jointstates = rospy.Subscriber("/joint_states", JointState, _joint_states_callback, queue_size=1)
+
+  @staticmethod
+  def _transform_joint_state_into_nice_repr(js):
+    ret = {}
+    for name, p, v, f in zip(js.name, js.position, js.velocity, js.effort):
+      ret[name] = {
+        'position' : p,
+        'velocity' : v,
+        'effort'   : f,
+      }
+    return ret
+
+  def get_joint_states(self):
+    '''Return last received joint states. Returns list of dicts indexed by joint name.
+       Dict values are dicts indexed by data name: position, velocity and effort.'''
+    n = self._jointstates_queue.qsize()
+    ret = []
+    # Quickly fetch all the stuff from the queue
+    for i in xrange(n):
+      ret.append(self._jointstates_queue.get(block = False))
+    # Then put it in a nice format
+    ret = map(self._transform_joint_state_into_nice_repr, ret)
+    return ret
+
+
+##############################
+  ##  generic controller      ##
+  ##############################
+  @smach.cb_interface(input_keys=[], output_keys=[], outcomes=['succeeded'])  
+  def _init_sled_controller(self, userdata):
+    self.sub_jointstates = rospy.Subscriber("/joint_states", JointState, _joint_states_callback, queue_size=1)
+
+    service_name = '/%s/set_pid_parameters' % self.model_name
+   # service_name = '/mouse_and_sled/set_pid_parameters'
+    print 'Waiting for service %s' % service_name
+    rospy.wait_for_service(service_name)
+    self._set_pid_parameters = rospy.ServiceProxy(service_name, SetPIDParameters)
+ #   publisher_name = '/%s/world_sled/cmd_pos' % self.model_name
+ #   print 'Publishing sled commands to %s' % publisher_name
+#    self._sled_pid_pub = rospy.Publisher(publisher_name, Float64, queue_size=1)
+  #  self.set_sled_pid_parameters(0, 0, 0)
+    self._set_pid_parameters(0, 0, 0)
+    return 'succeeded'
+
+  @smach.cb_interface(input_keys=[], output_keys=[], outcomes=['succeeded'])  
+  def getJointsLimit(self, userdata, limit):
+      service_name = '/%s/joint_properties' % self.model_name
+      rospy.wait_for_service(service_name)
+      self._joint_properties = rospy.ServiceProxy(service_name, jointProperties)
+      if limit == "upper":
+        limit = self._joint_properties.upper_limit
+      else:
+        limit = self._joint_properties.lower_limit
+      return limit
+
+def set_sled_pid_parameters(self, kp, ki, kd):
+    self._set_pid_parameters(joint = '%s::world_sled' % self._model_name, kp = kp, ki = ki, kd = kd)
+
+def command_sled_position(self, p):
+    self._sled_pid_pub.publish(Float64(data=p))
+
+
+
+def notify_user_cb(msg):
+    @smach.cb_interface(input_keys=[], output_keys=[], outcomes=['succeeded'])
+    def notify_user(userdata):
+        clientLogger.info(msg)
+        return 'succeeded'
+
+    return notify_user
+
+
+exp_control = ExperimentControl(model_name)
+
+
+def joint_pose_motitor_cb( limit ):
+    if limit == "upper":
+      return currentJointState.position < exp_control.getJointsLimit(limit) + ( exp_control.getJointsLimit(limit) * 0.1)
+    else:
+      print 'TODO lower limit'
+
+cb_sled_limit = joint_pose_motitor_cb('upper')
+joint_pose_monitor_sled_limit = JointPoseMonitorState(cb_sled_limit)
+
+
+################################################################
+################################################################
+
+
 
 FINISHED = 'FINISHED'
 ERROR = 'ERROR'
 PREEMPTED = 'PREEMPTED'
 
 sm = StateMachine(outcomes=[FINISHED, ERROR, PREEMPTED])
+sm.userdata.counter = 0
+
 
 with sm:
-    StateMachine.add(
-        "initial_timeline_condition",
-        WaitToClockState(5),
-        transitions = {'valid': 'initial_timeline_condition',
-                       'invalid': 'set_msled_begin',
-                       'preempted': PREEMPTED}
-    )
+    StateMachine.add('INIT',
+                     CBState(notify_user_cb('INIT')),
+                     transitions={'succeeded': 'INITIAL_WAITING'})
 
-    StateMachine.add(
-        "set_msled_begin",
-        WaitToClockState(5),
-        transitions = {'succeeded': 'set_msled_end',
-                       'aborted': ERROR,
-                       'preempted': PREEMPTED}
-    )
+    StateMachine.add('INITIAL_WAITING',
+                    WaitToClockState(5),
+                    transitions = {'valid': 'END_SLED',
+                                   'invalid': ERROR,
+                                   'preempted': PREEMPTED})
 
-    StateMachine.add(
-        "set_msled_end",
-        WaitToClockState(5),
-        transitions = {'succeeded': 'sed_msled_begin',
-                       'aborted': ERROR,
-                       'preempted': PREEMPTED}
-    )
+    StateMachine.add('END_SLED',
+                    joint_pose_monitor_sled_limit,
+                    transitions = {'succeeded': 'STOP_PID_MSG',
+                                   'aborted': 'terminate_demo',
+                                   'preempted': PREEMPTED})
+   
+    StateMachine.add('STOP_PID_MSG',
+                     CBState(notify_user_cb('PID set to 0')),
+                     transitions={'succeeded': 'STOP_PID'})
+  
+    StateMachine.add('STOP_PID',
+                    CBState(exp_control._init_sled_controller),
+                    transitions={'succeeded': 'INITIAL_WAITING'})
+    

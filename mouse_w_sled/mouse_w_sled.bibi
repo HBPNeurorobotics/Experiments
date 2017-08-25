@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bibi xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.humanbrainproject.eu/SP10/2014/BIBI" xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/BIBI ../bibi_configuration.xsd">
   <brainModel>
-    <file>brain_model/idle_brain.py</file>
+    <file>brain_model/CDP1_brain.py</file>
     <!--<populations population="neurons" xsi:type="Range" from="0" to="2"/>-->
     <!--<populations population="record" xsi:type="Range" from="0" to="2"/>-->
   </brainModel>
@@ -83,18 +83,18 @@
           b = nnData['LEFT_LG']
           # "Multiplexed" outputs. The activation values are "compatible" between Shravan's controller
           # and the Opensim Models. That is, they range from 0 to 1 where 1 is maximal excitation.
-          activateHumerus1.send_message(a)
+          #activateHumerus1.send_message(a)
           activateHumerus2.send_message(b)
           activateFoot2.send_message(a)
-          activateFoot1.send_message(b)
-          activateRadius1.send_message(a)
+          #activateFoot1.send_message(b)
+          #activateRadius1.send_message(a)
           activateRadius2.send_message(b)
           # Finally log some info.
-          clientLogger.info("-------------------------------")
-          clientLogger.info("Length=%f,%f" % (muscle_states['Humerus1'].length, muscle_states['Humerus2'].length))
-          clientLogger.info("Stretches=LG=%f, TA=%f" % (mmData['stretch']['LEFT_LG'], mmData['stretch']['LEFT_TA']))
-          clientLogger.info("Activations=LG=%f, TA=%f" % (nnData['LEFT_LG'], nnData['LEFT_TA']))
-          clientLogger.info("Forces="+str([m.force for m in muscle_states.values()]))
+          #clientLogger.info("-------------------------------")
+          #clientLogger.info("Length=%f,%f" % (muscle_states['Humerus1'].length, #muscle_states['Humerus2'].length))
+          #clientLogger.info("Stretches=LG=%f, TA=%f" % (mmData['stretch']['LEFT_LG'], mmData['stretch']#['LEFT_TA']))
+          #clientLogger.info("Activations=LG=%f, TA=%f" % (nnData['LEFT_LG'], nnData['LEFT_TA']))
+          #clientLogger.info("Forces="+str([m.force for m in muscle_states.values()]))
   #]]>
   </transferFunction>
 </bibi>
