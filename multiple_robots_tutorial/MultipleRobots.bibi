@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bibi xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.humanbrainproject.eu/SP10/2014/BIBI" xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/BIBI bibi_configuration.xsd">
+  <brainModel>
+    <file>brain_model/multi_robots_network.py</file>
+    <populations population="icub_input_left" xsi:type="Range" from="0" to="1"/>
+    <populations population="icub_input_right" xsi:type="Range" from="1" to="2"/>
+    <populations population="icub_output_left" xsi:type="Range" from="2" to="3"/>
+    <populations population="icub_output_right" xsi:type="Range" from="3" to="4"/>
+
+    <populations population="green_laser_on" xsi:type="Range" from="4" to="49"/>
+    <populations population="green_laser_off" xsi:type="Range" from="49" to="94"/>
+    <populations population="green_fw" xsi:type="Range" from="94" to="95"/>
+    <populations population="green_bw" xsi:type="Range" from="95" to="96"/>
+    <populations population="green_left" xsi:type="Range" from="96" to="97"/>
+    <populations population="green_right" xsi:type="Range" from="97" to="98"/>
+
+    <populations population="red_laser_on" xsi:type="Range" from="98" to="143"/>
+    <populations population="red_laser_off" xsi:type="Range" from="143" to="188"/>
+    <populations population="red_fw" xsi:type="Range" from="188" to="189"/>
+    <populations population="red_bw" xsi:type="Range" from="189" to="190"/>
+    <populations population="red_left" xsi:type="Range" from="190" to="191"/>
+    <populations population="red_right" xsi:type="Range" from="191" to="192"/>
+
+    <populations population="record" xsi:type="Range" from="0" to="192"/>
+  </brainModel>
+  <bodyModel>icub_model/model.sdf</bodyModel>
+  <transferFunction xsi:type="PythonTransferFunction">
+    #<![CDATA[
+    @nrp.NeuronMonitor(nrp.brain.record, nrp.spike_recorder)
+    def all_neurons_monitor(t):
+        return True
+    #]]>
+  </transferFunction>
+</bibi>

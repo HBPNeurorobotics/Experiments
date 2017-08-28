@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ExD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
+     xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ExDConfFile.xsd">
+    <name>Multiple robots tutorial</name>
+    <thumbnail>MultipleRobots.png</thumbnail>
+    <description>This experiment contains one iCub robot and two Pioneer 3DX equipped with brain models.
+    </description>
+    <timeout>1800</timeout>
+    <configuration type="3d-settings" src="MultipleRobots.3ds"/>
+    <maturity>production</maturity>
+    <environmentModel src="multi_robots_environment/multi_robots_environment.sdf">
+        <robotPose x="0.0" y="-0.5" z="0.63" ux="0.0" uy="0.0" uz="-0.707106781" theta="0.707106781"/>
+    </environmentModel>
+    <bibiConf src="MultipleRobots.bibi"/>
+    <cameraPose>
+        <cameraPosition x="2.5" y="2.5" z="1.8"/>
+        <cameraLookAt x="0" y="0" z="0.6"/>
+    </cameraPose>
+    <rosLaunch src="robot_description.launch"/>
+</ExD>
