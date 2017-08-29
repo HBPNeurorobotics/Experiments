@@ -3,18 +3,18 @@
      xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
      xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
     <name>CDP1 Mouse experiment</name>
-    <thumbnail>ExDMouseWSled.png</thumbnail>
+    <thumbnail>ExDMouseCDP1.png</thumbnail>
     <description>CDP-1 mouse experiment MVP</description>
     <timeout>1000000000</timeout>
     <maturity>development</maturity>
-    <environmentModel src="empty_world_cdp1_mouse/empty_world_cdp1_mouse.sdf">
+    <environmentModel src="cdp1_world/cdp1_world.sdf">
         <robotPose x="0.0" y="0.0" z="0.0" ux="0.0" uy="0.0" uz="0.0" theta="0.0"/>
     </environmentModel>
-    <bibiConf src="mouse_w_sled.bibi"/>
+    <bibiConf src="MouseCDP1.bibi"/>
     <experimentControl>
         <stateMachine xsi:type="SMACHStateMachine"
-                      id="MouseWSledControl_SMACH"
-                      src="MouseWSledControl.exd"/>
+                      id="MouseCDP1Control_SMACH"
+                      src="MouseCDP1Control.exd"/>
     </experimentControl>
     <cameraPose>
         <cameraPosition x="4.5" y="0" z="1.8"/>
