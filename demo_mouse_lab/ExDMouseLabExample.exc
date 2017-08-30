@@ -2,11 +2,11 @@
 <ExD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
      xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
-    <name>World Manipulation Experiment</name>
+    <name>Mouse demo experiment in biology lab</name>
     <thumbnail>ExDMouseLabExample.png</thumbnail>
     <description>This demo shows how to manipulate the environment from a state machine.
     Objects are created during the experiment and change the behaviour of the mouse.</description>
-    <timeout>840</timeout>
+    <timeout>180</timeout>
     <configuration type="3d-settings" src="ExDMouseLabExample.3ds"/>
     <maturity>development</maturity>
     <environmentModel src="biologylab_world/biologylab.sdf">
@@ -22,7 +22,7 @@
                       src="mouse_smach_state.exd"/>
     </experimentControl>
     <cameraPose>
-        <cameraPosition x="-1.2" y="-1.7" z="1.4"/>
+        <cameraPosition x="-1.02" y="-1.7" z="1.35"/>
         <cameraLookAt x="-0.3" y="-2.1" z="1.15"/>
     </cameraPose>
 </ExD>

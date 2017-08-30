@@ -25,9 +25,9 @@
     },
     "levelsInBlack": "0.08",
     "levelsInGamma": 0.95,
-    "levelsInWhite": "0.95",
-    "levelsOutBlack": 0,
-    "levelsOutWhite": 1,
+    "levelsInWhite": "0.65",
+    "levelsOutBlack": "0.07",
+    "levelsOutWhite": "0.98",
     "skyBox": "img/3denv/sky/clouds/clouds",
     "sun": "",
     "bloom": false,
@@ -37,5 +37,6 @@
     "fog": false,
     "fogDensity": "0.03",
     "fogColor": "#c7c0bc",
-    "pbrMaterial": true
+    "pbrMaterial": true,
+    "dynamicEnvMap": false
 }

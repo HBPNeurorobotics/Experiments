@@ -24,7 +24,7 @@ def init(userdata):
     time.sleep(1)
     clientLogger.advertise('Welcome to this mouse lab example.')
     time.sleep(5)
-    clientLogger.advertise('Here we show you how a mouse is able to follow a specific color...')
+    clientLogger.advertise('Here we show how a mouse is able to follow a specific color...')
     time.sleep(5)
     clientLogger.advertise('... and how it is possible to manipulate the environment.')
     return 'succeeded'
@@ -143,7 +143,6 @@ with sm:
                      transitions={'succeeded': 'DELAY_ON_POS_CHANGE',
                                   'aborted': FINISHED,
                                   'preempted': PREEMPTED})
-
     StateMachine.add('DELAY_ON_POS_CHANGE',
                      ClockDelayState(2),
                      transitions={'valid': 'DELAY_ON_POS_CHANGE', 'invalid': 'TRANSLATE_OBJECT_MSG',
@@ -189,5 +188,55 @@ with sm:
                      transitions={'succeeded': 'CONCLUSION_MSG',
                                   'ongoing': 'TRANSLATE_OBJECT_2'})
     StateMachine.add('CONCLUSION_MSG',
-                     CBState(notify_user_cb('The demo is over. It is your turn to play!')),
-                     {'succeeded': 'FINISHED'})
+                     CBState(notify_user_cb('The sphere will become red again and will move back and forth.')),
+                     {'succeeded': 'DELAY_ON_CONCLUSION_MSG_2'})
+    StateMachine.add('DELAY_ON_CONCLUSION_MSG_2',
+                     ClockDelayState(4),
+                     transitions={'valid': 'CONCLUSION_MSG_2', 'invalid': 'CONCLUSION_MSG_2',
+                                  'preempted': PREEMPTED})
+    StateMachine.add('CONCLUSION_MSG_2',
+                     CBState(notify_user_cb('Meanwhile, you can ...')),
+                     {'succeeded': 'DELAY_ON_SPIKE_MSG'})
+    StateMachine.add('DELAY_ON_SPIKE_MSG',
+                     ClockDelayState(2),
+                     transitions={'valid': 'DELAY_ON_SPIKE_MSG', 'invalid': 'SPIKE_MSG',
+                                  'preempted': PREEMPTED})
+    StateMachine.add('SPIKE_MSG',
+                     CBState(notify_user_cb('Open the spike monitor widget to watch spike trains.')),
+                     {'succeeded': 'DELAY_ON_JOINT_MSG'})
+    StateMachine.add('DELAY_ON_JOINT_MSG',
+                     ClockDelayState(3),
+                     transitions={'valid': 'DELAY_ON_JOINT_MSG', 'invalid': 'JOINT_MSG',
+                                  'preempted': PREEMPTED})
+    StateMachine.add('JOINT_MSG',
+                     CBState(notify_user_cb('Open the joint monitor widget and select neck_joint to track mouse\'s head position.')),
+                     {'succeeded': 'DELAY_ON_CODE_MSG'})
+    StateMachine.add('DELAY_ON_CODE_MSG',
+                     ClockDelayState(3),
+                     transitions={'valid': 'DELAY_ON_CODE_MSG', 'invalid': 'CODE_MSG',
+                                  'preempted': PREEMPTED})
+    StateMachine.add('CODE_MSG',
+                     CBState(notify_user_cb('Open the code editors to see the code of the transfer functions, the brain model and the state-machine.')),
+                     {'succeeded': 'DELAY_ON_RED_SWITCHING_2'})
+    StateMachine.add('DELAY_ON_RED_SWITCHING_2',
+                     ClockDelayState(3),
+                     transitions={'valid': 'DELAY_ON_RED_SWITCHING_2', 'invalid': 'SWITCH_BACK_TO_RED',
+                                  'preempted': PREEMPTED})
+    StateMachine.add('SWITCH_BACK_TO_RED',
+                     SetMaterialColorServiceState('tracked_sphere',
+                                                  'body',
+                                                  'visual',
+                                                  'Gazebo/RedGlow'),
+                     transitions={'succeeded': 'TRANSLATE_OBJECT_FORWARD',
+                                  'aborted': FINISHED,
+                                  'preempted': PREEMPTED})
+    StateMachine.add('TRANSLATE_OBJECT_FORWARD',
+                     CBState(
+                         moveAlongPath('tracked_sphere', initialSpherePos, targetSpherePos, 0.005)),
+                     transitions={'succeeded': 'TRANSLATE_OBJECT_BACKWARD',
+                                  'ongoing': 'TRANSLATE_OBJECT_FORWARD'})
+    StateMachine.add('TRANSLATE_OBJECT_BACKWARD',
+                     CBState(
+                         moveAlongPath('tracked_sphere', targetSpherePos, initialSpherePos, 0.005)),
+                     transitions={'succeeded': 'TRANSLATE_OBJECT_FORWARD',
+                                  'ongoing': 'TRANSLATE_OBJECT_BACKWARD'})
