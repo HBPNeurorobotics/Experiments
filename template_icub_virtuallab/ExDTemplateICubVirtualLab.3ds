@@ -62,9 +62,9 @@
             ]
         ]
     },
-    "levelsInBlack": "0.09",
-    "levelsInGamma": 0.52,
-    "levelsInWhite": "0.8",
+    "levelsInBlack": "0.08",
+    "levelsInGamma": 0.71,
+    "levelsInWhite": "0.75",
     "levelsOutBlack": 0,
     "levelsOutWhite": 1,
     "skyBox": "img/3denv/sky/country/country",
