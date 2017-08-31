@@ -77,7 +77,7 @@ function copy_configuration_folders() {
 
     for folder in ${FOLDERS[@]}; do
         log "Copying $folder"
-        cp -r $folder/ ./$TMP_DIR_CONF
+        cp -r ../$folder/ ./$TMP_DIR_CONF
     done
 }
 
