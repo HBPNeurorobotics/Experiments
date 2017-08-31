@@ -68,13 +68,12 @@ function clean_up() {
 # The copying is done in order to keep the .spec file's file section clean
 # and simple. We have hardcoded values here which may change, but the .spec
 # file should not be affected!
-# Note furthermore that the large blender folders are removed.
 function copy_configuration_folders() {
     log "Establish a clean directory"
     rm -rf ./$TMP_DIR_CONF/*
     mkdir -p ./$TMP_DIR_CONF
     log "Copy config folders"
-    FOLDERS=$(ls -d ../* | egrep -v "_rpmbuild|hbp-scxml|*.xsd")
+    FOLDERS=$(cat "./folders.txt")
 
     for folder in ${FOLDERS[@]}; do
         log "Copying $folder"
