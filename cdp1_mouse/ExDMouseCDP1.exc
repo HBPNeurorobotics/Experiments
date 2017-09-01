@@ -17,8 +17,8 @@
                       src="MouseCDP1Control.exd"/>
     </experimentControl>
     <cameraPose>
-        <cameraPosition x="4.5" y="0" z="1.8"/>
-        <cameraLookAt x="0" y="0" z="0.6"/>
+        <cameraPosition x="0.20881767737668355" y="-0.26" z="0.07452707557551946"/>
+        <cameraLookAt x="-0.527092211"   y="0.839239426"   z="-0.133607597"/>   
     </cameraPose>
     <physicsEngine>opensim</physicsEngine>
 </ExD>

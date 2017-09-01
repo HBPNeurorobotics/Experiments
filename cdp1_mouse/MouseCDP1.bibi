@@ -37,7 +37,6 @@
             import sys
             import os
 
-        clientLogger.info("t = " + str(t))
 
         #from datetime import datetime
         #from time import time
