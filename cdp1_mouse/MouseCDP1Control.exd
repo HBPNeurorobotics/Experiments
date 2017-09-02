@@ -174,7 +174,7 @@ class ExperimentControl(object):
     ##############################
     ##  Spinal cord             ##
     ##############################
-    def stepSpinalCord(self):
+    def stepSpinalCord(self, over_limit_upper, over_limit_lower):
         if self._muscle_state == None:
             return
 
@@ -221,18 +221,59 @@ class ExperimentControl(object):
         a = a * 2.2  # Determined by a fair dice roll
         b = b * 4.4  # Determined by a fair dice roll
 
-        #print "Activation values to OpenSim muscles: a = " + str(a) + ", b = " + str(b)
+        print "Activation values to OpenSim muscles: a = " + str(a) + ", b = " + str(b)
 
         # "Multiplexed" outputs. The activation values are "compatible" between Shravan's controller
         # and the Opensim Models. That is, they range from 0 to 1 where 1 is maximal excitation.
-        if a == 0.0 and b > 0.0:
-            self.activateHumerus1.publish(b)
-            self.activateFoot2.publish(b)
-            self.activateRadius1.publish(b)
-        else:
-            self.activateHumerus1.publish(a)
+        # if a == 0.0 and b > 0.0:
+        #self.activateHumerus2.publish(a)
+        #self.activateFoot2.publish(a)
+        #self.activateRadius2.publish(a)
+        # else:
+        #self.activateHumerus1.publish(b)
+        #self.activateFoot1.publish(b)
+        #self.activateRadius1.publish(b)
+
+        if over_limit_lower == True:
+            print "Lower limit case: Activate muscle_set 2"
+            activation_value = a
+            if a == 0:
+                activation_value = b
+
+            activation_value *= 3.0
+
+            self.activateHumerus2.publish(activation_value)
+            self.activateFoot2.publish(activation_value)
+            self.activateRadius2.publish(activation_value)
+
+            self.activateHumerus1.publish(0.0)
+            self.activateFoot1.publish(0.0)
+            self.activateRadius1.publish(0.0)
+
+        if over_limit_upper == True:
+            print "Upper limit case: Activate muscle_set 1"
+            activation_value = b
+            if b == 0:
+                activation_value = a
+
+            activation_value *= 3.0
+
+            self.activateHumerus1.publish(activation_value)
+            self.activateFoot1.publish(activation_value)
+            self.activateRadius1.publish(activation_value)
+
+            self.activateHumerus2.publish(0.0)
+            self.activateFoot2.publish(0.0)
+            self.activateRadius2.publish(0.0)
+
+        if over_limit_lower == False and over_limit_upper == False:
+            print "Default case: Activating both muscle_sets"
+            self.activateHumerus2.publish(a)
             self.activateFoot2.publish(a)
-            self.activateRadius1.publish(a)
+            self.activateRadius2.publish(a)
+            self.activateHumerus1.publish(b)
+            self.activateFoot1.publish(b)
+            self.activateRadius1.publish(b)
 
 
         # Finally log some info.
@@ -266,7 +307,8 @@ class ExperimentControl(object):
         #print 'Publishing sled commands to %s' % publisher_name
         self._sled_pid_pub = rospy.Publisher(publisher_name, Float64, queue_size=1)
 
-        self.set_sled_pid_parameters(10.0, 5.0, 1.0)
+        # self.set_sled_pid_parameters(10.0, 5.0, 1.0)
+        self.set_sled_pid_parameters(0.0, 0.0, 0.0)
 
     def getJointsLimit(self, limit):
         joint_property_data = self._joint_properties()
@@ -277,15 +319,21 @@ class ExperimentControl(object):
             joint_idx = -1
             idx = 0
             for joint_name in joint_property_data.joint:
+                # print "Joint name: " + joint_name + " == " + self._joint_name
                 if joint_name == self._joint_name:
                     joint_idx = idx
+                    # print "Found at index " + str(joint_idx)
                     break
+
+                idx += 1
 
             if joint_idx >= 0:
                 if limit == "upper":
                     limit_value = joint_property_data.upper_limit[joint_idx]
+                    # print "Upper limit: " + str(limit_value)
                 else:
                     limit_value = joint_property_data.lower_limit[joint_idx]
+                    # print "Lower limit: " + str(limit_value)
 
         except ValueError:
             pass
@@ -326,17 +374,20 @@ def joint_pose_monitor_cb(arg1, joint_position, experiment_control):
     upper_limit = experiment_control.getJointsLimit('upper')
     lower_limit = experiment_control.getJointsLimit('lower')
 
-    #print "joint_pose_monitor_cb: joint_position = " + str(joint_position) + ", lower_limit = " + str(
-    #    lower_limit) + ", upper_limit = " + str(upper_limit)
-    if joint_position > 0.009:  # hitting 'lower' limit
-        print "Went over 'lower' limit"
+    # print "joint_pose_monitor_cb: joint_position = " + str(joint_position) + ", lower_limit = " + str(lower_limit) + ", upper_limit = " + str(upper_limit)
+    over_lower = False
+    if joint_position >= (0.9 * lower_limit):  # hitting 'lower' limit
+        print "Went over 'lower' limit: " + str(joint_position) + " >= " + str(0.9 * lower_limit)
+        over_lower = True
 
-    if joint_position < -0.009:  # hitting 'upper' limit
-        print "Went over 'upper' limit"
+    over_upper = False
+    if joint_position <= (0.9 * upper_limit):  # hitting 'upper' limit
+        print "Went over 'upper' limit: " + str(joint_position) + " <= " + str(0.9 * upper_limit)
+        over_upper = True
 
     #print "Stepping spinal cord controller..."
     timestep_begin = datetime.datetime.now()
-    experiment_control.stepSpinalCord()
+    experiment_control.stepSpinalCord(over_upper, over_lower)
     timestep_end = datetime.datetime.now()
 
     timestep_delta = timestep_end - timestep_begin
@@ -346,8 +397,8 @@ def joint_pose_monitor_cb(arg1, joint_position, experiment_control):
         #print "Messing with the PID controller"
         if experiment_control._pid_control_on == False:
             #print "Switch on"
-            experiment_control.set_sled_pid_parameters(60.0, 10.0,
-                                                  5.0)
+            experiment_control.set_sled_pid_parameters(8.0, 4.0,
+                                                  2.0)
             if joint_position >= 0.0:
                 experiment_control.command_sled_position(0.008)
             else:
