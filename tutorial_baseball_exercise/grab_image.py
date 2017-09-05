@@ -12,9 +12,9 @@ def grab_image(t, camera, sensors, last_mean_green):
         img = CvBridge().imgmsg_to_cv2(image_msg, "rgb8")
         # img is a numpy array representing an OpenCV RGB 8 image
 
-        #################################################
-        # Insert code here:
-        #################################################
+        ####################################################################################################
+        # Insert code here: change this line to get the green pixles from the cv image (this is easily googleable)
+        ####################################################################################################
         mean_green = 0.
 
         # You can use last_mean_green variable for persistenty accross calls
