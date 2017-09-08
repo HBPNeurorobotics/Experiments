@@ -108,12 +108,14 @@
 
     <!--Root element of the ExD file -->
     <xsd:complexType name="ExD">
-        <xsd:sequence>
+        <xsd:all>
             <xsd:element name="name" type="xsd:string"/>
             <xsd:element name="thumbnail" type="ThumbnailFile"/>
             <xsd:element name="description" type="xsd:string"/>
             <xsd:element name="timeout" type="xsd:double" minOccurs="0"/>
+            <xsd:sequence>
             <xsd:element name="configuration" type="ConfFile" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
             <xsd:element name="maturity" type="MaturityType" minOccurs="0"/>
             <xsd:element name="environmentModel" type="EnvironmentModel"/>
             <xsd:element name="visualModel" type="VisualModel" minOccurs="0"/>
@@ -134,7 +136,7 @@
             <xsd:element name="rosLaunch" type="RosLaunch" minOccurs="0"/>
             <xsd:element name="rngSeed" type="xsd:positiveInteger" minOccurs="0"/>
             <xsd:element name="physicsEngine" type="PhysicsEngine" minOccurs="0"/>
-        </xsd:sequence>
+        </xsd:all>
     </xsd:complexType>
 
     <xsd:complexType name="ExperimentControl">
