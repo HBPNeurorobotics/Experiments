@@ -6,5 +6,5 @@
         if laser.value is not None:
             weights = [x != float('inf') and x < 0.5 for x in laser.value.ranges]
             for i in xrange(45):
-                red_laser_on[i].amplitude = 0.5 * weights[4*i:4*(i+1)].count(True)
-                red_laser_off[i].amplitude = 0.5 * weights[4*i:4*(i+1)].count(False)
+                red_laser_on[i].amplitude = 0.5 * weights[8*i:8*(i+1)].count(True)
+                red_laser_off[i].amplitude = 0.5 * weights[8*i:8*(i+1)].count(False)
