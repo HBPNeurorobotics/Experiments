@@ -12,160 +12,347 @@
                        http://schemas.humanbrainproject.eu/SP10/2015/ExDConfig/scxml hbp-scxml/hbp-scxml.xsd"
             attributeFormDefault="unqualified" elementFormDefault="qualified">
 
-    <xsd:import namespace="http://schemas.humanbrainproject.eu/SP10/2015/ExDConfig/scxml"
-                schemaLocation="hbp-scxml/hbp-scxml.xsd"/>
+  <xsd:import namespace="http://schemas.humanbrainproject.eu/SP10/2015/ExDConfig/scxml"
+              schemaLocation="hbp-scxml/hbp-scxml.xsd"/>
 
-    <xsd:simpleType name="ThumbnailFile">
-        <xsd:restriction base="xsd:string">
-            <xsd:pattern value="[a-zA-Z0-9\._\-/]*\.(png|gif|jp[e]?g)"/>
-        </xsd:restriction>
-    </xsd:simpleType>
+  <xsd:simpleType name="ThumbnailFile">
+    <xsd:annotation>
+      <xsd:documentation>This type denotes a path to an image file. The supported extensions are .png, .jpg, .jpeg and .gif. The file name must not contain whitespaces.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="[a-zA-Z0-9\._\-/]*\.(png|gif|jp[e]?g)"/>
+    </xsd:restriction>
+  </xsd:simpleType>
 
-    <xsd:simpleType name="MaturityType">
-        <xsd:restriction base="xsd:string">
-            <xsd:enumeration value="development"/>
-            <xsd:enumeration value="production"/>
-        </xsd:restriction>
-    </xsd:simpleType>
+  <xsd:simpleType name="MaturityType">
+    <xsd:annotation>
+      <xsd:documentation>This type denotes a maturity of an experiment. It can either be development or production.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="development"/>
+      <xsd:enumeration value="production"/>
+    </xsd:restriction>
+  </xsd:simpleType>
 
-    <!--Contains a pose -->
-    <xsd:complexType name="RobotPose">
-        <xsd:attribute name="x" type="xsd:double" use="required"/>
-        <xsd:attribute name="y" type="xsd:double" use="required"/>
-        <xsd:attribute name="z" type="xsd:double" use="required"/>
-        <xsd:attribute name="ux" type="xsd:double" use="required"/>
-        <xsd:attribute name="uy" type="xsd:double" use="required"/>
-        <xsd:attribute name="uz" type="xsd:double" use="required"/>
-        <xsd:attribute name="theta" type="xsd:double" use="required"/>
-    </xsd:complexType>
+  <!--Contains a pose -->
+  <xsd:complexType name="RobotPose">
+    <xsd:annotation>
+      <xsd:documentation>This type represents a robot pose. It consists of a position part (x, y and z coordinates) and a rotation part (ux, uy, uz and theta). All fields are double precision values.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="x" type="xsd:double" use="required">
+      <xsd:annotation>
+        <xsd:documentation>The x coordinate of the robot position</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="y" type="xsd:double" use="required">
+      <xsd:annotation>
+        <xsd:documentation>The y coordinate of the robot position</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="z" type="xsd:double" use="required">
+      <xsd:annotation>
+        <xsd:documentation>The z coordinate of the robot position</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="ux" type="xsd:double" use="required"/>
+    <xsd:attribute name="uy" type="xsd:double" use="required"/>
+    <xsd:attribute name="uz" type="xsd:double" use="required"/>
+    <xsd:attribute name="theta" type="xsd:double" use="required"/>
+  </xsd:complexType>
 
-    <!-- Generic configuration file -->
-    <xsd:complexType name="ConfFile">
-        <xsd:attribute name="src" type="xsd:string" use="required"/>
-        <xsd:attribute name="type" type="ConfType" use="required"/>
-    </xsd:complexType>
+  <!-- Generic configuration file -->
+  <xsd:complexType name="ConfFile">
+    <xsd:annotation>
+      <xsd:documentation>This type denotes a configuration entry. Configuration entries are used for multiple purposes, therefore the type of the configuration entry is set explicitly in an attribute called type. The actual configuration is referenced as a file through the src attribute.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="src" type="xsd:string" use="required">
+      <xsd:annotation>
+        <xsd:documentation>The path to the file that acts as configuration. Files specified as configuration are automatically considered whe an experiment is deployed.</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="type" type="ConfType" use="required">
+      <xsd:annotation>
+        <xsd:documentation>The type of the configuration entry describes what this entry is used for. The NRP allows both predefined and custom entries.</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
 
-    <xsd:simpleType name="ConfType">
-        <xsd:union memberTypes="ConfTypeEnumeration xsd:string"/>
-    </xsd:simpleType>
+  <xsd:simpleType name="ConfType">
+    <xsd:annotation>
+      <xsd:documentation>This type denotes a configuration type which can be a standard configuration type or a custom type. The latter is just any string.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:union memberTypes="ConfTypeEnumeration xsd:string"/>
+  </xsd:simpleType>
 
-    <xsd:simpleType name="ConfTypeEnumeration">
-        <xsd:restriction base="xsd:string">
-            <xsd:enumeration value="3d-settings"/>
-        </xsd:restriction>
-    </xsd:simpleType>
+  <xsd:simpleType name="ConfTypeEnumeration">
+    <xsd:annotation>
+      <xsd:documentation>This enumeration lists the standard configuration types used in the NRP.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="3d-settings"/>
+    </xsd:restriction>
+  </xsd:simpleType>
 
-    <!--Contains a position -->
-    <xsd:complexType name="Position">
-        <xsd:attribute name="x" type="xsd:double" use="required"/>
-        <xsd:attribute name="y" type="xsd:double" use="required"/>
-        <xsd:attribute name="z" type="xsd:double" use="required"/>
-    </xsd:complexType>
+  <!--Contains a position -->
+  <xsd:complexType name="Position">
+    <xsd:annotation>
+      <xsd:documentation>This type denotes a position with x, y and z coordinates.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="x" type="xsd:double" use="required">
+      <xsd:annotation>
+        <xsd:documentation>The x coordinate of the position</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="y" type="xsd:double" use="required">
+      <xsd:annotation>
+        <xsd:documentation>The y coordinate of the position</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="z" type="xsd:double" use="required">
+      <xsd:annotation>
+        <xsd:documentation>The z coordinate of the position</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
 
-    <!--Contains the Three.JS camera pose configuration -->
-    <xsd:complexType name="CameraPose">
+  <!--Contains the Three.JS camera pose configuration -->
+  <xsd:complexType name="CameraPose">
+    <xsd:annotation>
+      <xsd:documentation>This type denotes a camera pose. Unlike the robot pose, a camera pose is specified using a position of the camera and a point to which the camera looks at. The camera is always rotated with the up vector z (0,0,1).</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="cameraPosition" type="Position">
+        <xsd:annotation>
+          <xsd:documentation>The position of the camera</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="cameraLookAt" type="Position">
+        <xsd:annotation>
+          <xsd:documentation>The position to which the camera should look at</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <!--Contains an environmentModel -->
+  <xsd:complexType name="EnvironmentModel">
+    <xsd:annotation>
+      <xsd:documentation>This type defines the necessary configuration for an environment. It combines the specification of an environment model through the src attribute and a robot pose using the element robotPose.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="robotPose" type="RobotPose">
+        <xsd:annotation>
+          <xsd:documentation>The position of the robot</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="src" type="xsd:string" use="required">
+      <xsd:annotation>
+        <xsd:documentation>A path to an SDF file that specifies the scene</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+
+  <!-- Contains a visualModel with pose and scale for the frontend -->
+  <xsd:complexType name="VisualModel">
+    <xsd:annotation>
+      <xsd:documentation>This type defines a visual model (for example for the robot) as used in the frontend.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="visualPose" type="RobotPose"/>
+    </xsd:sequence>
+    <xsd:attribute name="src" type="xsd:string" use="required"/>
+    <xsd:attribute name="scale" type="xsd:double"/>
+  </xsd:complexType>
+
+  <!-- Contains brain configuration and number of processes, default set for frontend -->
+  <xsd:complexType name="BibiConf">
+    <xsd:annotation>
+      <xsd:documentation>This type denotes the BIBI configuration used for this experiment. It is described using a reference to the BIBI model in the src attribute and an attribute processes to specify the number of processes that should be used to run the experiment. The default value for processes is 1.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="src" type="xsd:string" use="required">
+      <xsd:annotation>
+        <xsd:documentation>The path to the BIBI configuration that specifies the model, the neural network and the connection between those.</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="processes" type="xsd:positiveInteger" default="1">
+      <xsd:annotation>
+        <xsd:documentation>The number of processes that should be used to run the neural network simulation. If this value is larger than 1, a dedicated simulation setup for distributed simulation of the neural network is used.</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+
+  <!-- Contains roslaunch file to be launched prior to Gazebo -->
+  <xsd:complexType name="RosLaunch">
+    <xsd:annotation>
+      <xsd:documentation>This type denotes a Ros Launchfile configuration.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="src" type="xsd:string" use="required">
+      <xsd:annotation>
+        <xsd:documentation>The path to a ROSLaunch file</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+
+  <!-- Supported physics engines -->
+  <xsd:simpleType name="PhysicsEngine">
+    <xsd:annotation>
+      <xsd:documentation>This enumeration contains the physics engines supported by the NRP. This includes the standard physics engine ODE and OpenSim.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="ode"/>
+      <xsd:enumeration value="opensim"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <!--Root element of the ExD file -->
+  <xsd:complexType name="ExD">
+    <xsd:annotation>
+      <xsd:documentation>This type is the root type for an experiment configuration.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="name" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>This element denotes the name of the experiment as it appears in the experiment list.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="thumbnail" type="ThumbnailFile">
+        <xsd:annotation>
+          <xsd:documentation>This element references a path to a thumbnail that is used to give the user a forecast to the experiment.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="description" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>This description will appear in the experiment description and provide a short description explaining what the experiment is all about.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="timeout" type="xsd:double" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>The timeout of an experiment is the time an experiment is allowed to run by default, specified in seconds. If that time has elapsed, the users are asked whether they want to extend the runtime of the simulation. On the servers, this will only be allowed if the timeout fits within the cluster allocation.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="configuration" type="ConfFile" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>An experiment may have multiple configuration entries. Despite configuration entries can be specified in anywhere in the ExD element, they must appear together.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="maturity" type="MaturityType" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>The maturity of an experiment determines whether it is shown by default to the user or only browsable in dev mode.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="environmentModel" type="EnvironmentModel">
+        <xsd:annotation>
+          <xsd:documentation>The environment model of an experiment specifies the used world file for a simulation and the pose where the robot should be spawned.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="visualModel" type="VisualModel" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>With the visual model, an experiment can specify an alternatively used model for the frontend visualization. This is helpful in case the robot model used in gazebo is very detailed and thus hard to visualize on the client. On the server, there may be more resources available to simulate more complex models.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="bibiConf" type="BibiConf">
+        <xsd:annotation>
+          <xsd:documentation>The bibiConf element of an experiment configuration specifies the </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="experimentControl" type="ExperimentControl" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>The experiment control lists all state machines that control the experiment.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:unique name="uniqueExperimentControl">
+          <xsd:selector xpath="tns:stateMachine"/>
+          <xsd:field xpath="@id"/>
+        </xsd:unique>
+      </xsd:element>
+      <xsd:element name="experimentEvaluation" type="ExperimentControl" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>The experiment evaluation element lists all state machines that evaluate the success of a simulated experiment.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:unique name="uniqueExperimentEvaluation">
+          <xsd:selector xpath="tns:stateMachine"/>
+          <xsd:field xpath="@id"/>
+        </xsd:unique>
+      </xsd:element>
+      <xsd:element name="cameraPose" type="CameraPose" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>The camera pose specifies the initial position of the camera when a simulation is started.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="rosLaunch" type="RosLaunch" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>The roslaunch element species the path to a ROSLaunch file that is executed when the experiment is simulated. If no file is specified, no ROSLaunch file is executed at the beginning of an experiment.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="rngSeed" type="xsd:positiveInteger" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>If specified, this element specifies the random number generator seed. If this field is left blank, a seed is generated and therefore, the simulation is not 100% deterministic. If a seed is specified here, this seed is used for the robot and neural simulation, making the simulation much more deterministic.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="physicsEngine" type="PhysicsEngine" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>If specified, this element denotes the physics simulator that should be used. We currently support either ODE or OpenSim.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="ExperimentControl">
+    <xsd:annotation>
+      <xsd:documentation>This type depicts a list of state machines</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="stateMachine" type="StateMachine" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>The actual state machines of this list of state machines</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="StateMachine" abstract="true">
+    <xsd:annotation>
+      <xsd:documentation>This abstract type depicts a state machine. Currently, State Machines in SMACH or SCXML are supported, though state machines in SCXML are currently ignored.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="id" type="xsd:string" use="required">
+      <xsd:annotation>
+        <xsd:documentation>Any state machine must have an identifier. This identifier is used to communicate with the state machine and therefore must be an identifier.</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+
+  <xsd:complexType name="SMACHStateMachine">
+    <xsd:annotation>
+      <xsd:documentation>This type depicts a SMACH state machine. It is specified using a path to the source code of the state machine.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="StateMachine">
+        <xsd:attribute name="src" type="xsd:string" use="required">
+          <xsd:annotation>
+            <xsd:documentation>The path to an Python script that describes the state machine. This script has to have a variable with global scope that must have the name sm or stateMachine.</xsd:documentation>
+          </xsd:annotation>
+        </xsd:attribute>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="SCXMLStateMachine">
+    <xsd:annotation>
+      <xsd:documentation>This type denotes an SCXML state machine. SCXML is a W3C standard for state charts. However, state machines in this format are currently not run. State machines in SCXML are currently not interpreted.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="StateMachine">
         <xsd:sequence>
-            <xsd:element name="cameraPosition" type="Position"/>
-            <xsd:element name="cameraLookAt" type="Position"/>
+          <xsd:element ref="sc:scxml" minOccurs="0"/>
         </xsd:sequence>
-    </xsd:complexType>
+        <xsd:attribute name="src" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
 
-    <!--Contains an environmentModel -->
-    <xsd:complexType name="EnvironmentModel">
-        <xsd:sequence>
-            <xsd:element name="robotPose" type="RobotPose"/>
-        </xsd:sequence>
-        <xsd:attribute name="src" type="xsd:string" use="required"/>
-    </xsd:complexType>
-
-    <!-- Contains a visualModel with pose and scale for the frontend -->
-    <xsd:complexType name="VisualModel">
-        <xsd:sequence>
-            <xsd:element name="visualPose" type="RobotPose"/>
-        </xsd:sequence>
-        <xsd:attribute name="src" type="xsd:string" use="required"/>
-        <xsd:attribute name="scale" type="xsd:double"/>
-    </xsd:complexType>
-
-    <!-- Contains brain configuration and number of processes, default set for frontend -->
-    <xsd:complexType name="BibiConf">
-        <xsd:attribute name="src" type="xsd:string" use="required"/>
-        <xsd:attribute name="processes" type="xsd:positiveInteger" default="1"/>
-    </xsd:complexType>
-
-    <!-- Contains roslaunch file to be launched prior to Gazebo -->
-    <xsd:complexType name="RosLaunch">
-        <xsd:attribute name="src" type="xsd:string" use="required"/>
-    </xsd:complexType>
-
-    <!-- Supported physics engines -->
-    <xsd:simpleType name="PhysicsEngine">
-        <xsd:restriction base="xsd:string">
-            <xsd:enumeration value="ode"/>
-            <xsd:enumeration value="opensim"/>
-        </xsd:restriction>
-    </xsd:simpleType>
-
-    <!--Root element of the ExD file -->
-    <xsd:complexType name="ExD">
-        <xsd:sequence>
-            <xsd:element name="name" type="xsd:string"/>
-            <xsd:element name="thumbnail" type="ThumbnailFile"/>
-            <xsd:element name="description" type="xsd:string"/>
-            <xsd:element name="timeout" type="xsd:double" minOccurs="0"/>
-            <xsd:element name="configuration" type="ConfFile" minOccurs="0" maxOccurs="unbounded"/>
-            <xsd:element name="maturity" type="MaturityType" minOccurs="0"/>
-            <xsd:element name="environmentModel" type="EnvironmentModel"/>
-            <xsd:element name="visualModel" type="VisualModel" minOccurs="0"/>
-            <xsd:element name="bibiConf" type="BibiConf"/>
-            <xsd:element name="experimentControl" type="ExperimentControl" minOccurs="0">
-                <xsd:unique name="uniqueExperimentControl">
-                    <xsd:selector xpath="tns:stateMachine"/>
-                    <xsd:field xpath="@id"/>
-                </xsd:unique>
-            </xsd:element>
-            <xsd:element name="experimentEvaluation" type="ExperimentControl" minOccurs="0">
-                <xsd:unique name="uniqueExperimentEvaluation">
-                    <xsd:selector xpath="tns:stateMachine"/>
-                    <xsd:field xpath="@id"/>
-                </xsd:unique>
-            </xsd:element>
-            <xsd:element name="cameraPose" type="CameraPose" minOccurs="0"/>
-            <xsd:element name="rosLaunch" type="RosLaunch" minOccurs="0"/>
-            <xsd:element name="rngSeed" type="xsd:positiveInteger" minOccurs="0"/>
-            <xsd:element name="physicsEngine" type="PhysicsEngine" minOccurs="0"/>
-        </xsd:sequence>
-    </xsd:complexType>
-
-    <xsd:complexType name="ExperimentControl">
-          <xsd:sequence>
-              <xsd:element name="stateMachine" type="StateMachine" maxOccurs="unbounded"/>
-          </xsd:sequence>
-    </xsd:complexType>
-
-    <xsd:complexType name="StateMachine" abstract="true">
-        <xsd:attribute name="id" type="xsd:string" use="required"/>
-    </xsd:complexType>
-
-    <xsd:complexType name="SMACHStateMachine">
-        <xsd:complexContent>
-            <xsd:extension base="StateMachine">
-                <xsd:attribute name="src" type="xsd:string" use="required"/>
-            </xsd:extension>
-        </xsd:complexContent>
-    </xsd:complexType>
-
-    <xsd:complexType name="SCXMLStateMachine">
-        <xsd:complexContent>
-            <xsd:extension base="StateMachine">
-              <xsd:sequence>
-                <xsd:element ref="sc:scxml" minOccurs="0"/>
-              </xsd:sequence>
-              <xsd:attribute name="src" type="xsd:string"/>
-            </xsd:extension>
-        </xsd:complexContent>
-    </xsd:complexType>
-
-
-    <xsd:element name="ExD" type="ExD"/>
+  <xsd:element name="ExD" type="ExD">
+    <xsd:annotation>
+      <xsd:documentation>The root element of a experiment configuration model must be an ExD object.</xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
 </xsd:schema>
