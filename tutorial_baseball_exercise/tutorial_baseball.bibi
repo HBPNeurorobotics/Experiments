@@ -4,6 +4,7 @@
     <file>brain_model/tutorial_baseball.py</file>
   </brainModel>
   <bodyModel>icub_model/model.sdf</bodyModel>
+  <transferFunction xsi:type="PythonTransferFunction" src="welcome.py"/>
   <transferFunction xsi:type="PythonTransferFunction" src="simple_move_robot.py"/>
   <transferFunction xsi:type="PythonTransferFunction" src="monitor_population.py"/>
   <transferFunction xsi:type="PythonTransferFunction" src="grab_image.py"/>
