@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
            targetNamespace="http://schemas.humanbrainproject.eu/SP10/2014/BIBI"
            xmlns="http://schemas.humanbrainproject.eu/SP10/2014/BIBI"
            attributeFormDefault="unqualified" elementFormDefault="qualified">
@@ -7,24 +7,16 @@
     <!--Root element of the bibi file -->
     <xs:element name="bibi" type="BIBIConfiguration"/>
     <xs:complexType name="BIBIConfiguration">
-        <xs:all>
+        <xs:sequence>
             <xs:element name="timestep" type="TimeStep" minOccurs="0"/>
             <xs:element name="brainModel" type="BrainModel"/>
             <xs:element name="bodyModel" type="SDFFilename"/>
             <xs:element name="extRobotController" type="ScriptFilename" minOccurs="0"/>
-            <xs:sequence>
             <xs:element name="configuration" type="ConfFile" minOccurs="0" maxOccurs="unbounded"/>
-            </xs:sequence>
-            <xs:sequence>
             <xs:element name="connectors" type="NeuronConnector" minOccurs="0" maxOccurs="unbounded"/>
-            </xs:sequence>
-            <xs:sequence>
             <xs:element name="synapseDynamics" type="SynapseDynamics" minOccurs="0" maxOccurs="unbounded"/>
-            </xs:sequence>
-            <xs:sequence>
             <xs:element name="transferFunction" type="TransferFunction" minOccurs="0" maxOccurs="unbounded"/>
-            </xs:sequence>
-        </xs:all>
+        </xs:sequence>
     </xs:complexType>
 
     <xs:simpleType name="TimeStep">
@@ -34,13 +26,11 @@
     </xs:simpleType>
 
     <xs:complexType name="BrainModel">
-        <xs:all>
+        <xs:sequence>
             <xs:element name="file" type="BrainFilename"/>
-            <xs:sequence>
             <xs:element name="populations" type="MultiNeuronSelector" minOccurs="0"
                         maxOccurs="unbounded"/>
-            </xs:sequence>
-        </xs:all>
+        </xs:sequence>
     </xs:complexType>
 
     <xs:simpleType name="BrainFilename">
