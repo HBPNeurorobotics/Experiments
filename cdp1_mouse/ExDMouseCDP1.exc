@@ -6,6 +6,7 @@
     <thumbnail>ExDMouseCDP1.png</thumbnail>
     <description>CDP-1 mouse experiment MVP</description>
     <timeout>1000000000</timeout>
+    <configuration type="3d-settings" src="ExDMouseCDP1.3ds"/>
     <configuration type="brainvisualizer" src="MouseCDP1NeuronCoords.json"/>
     <maturity>development</maturity>
     <environmentModel src="cdp1_world/cdp1_world.sdf">
@@ -19,7 +20,7 @@
     </experimentControl>
     <cameraPose>
         <cameraPosition x="0.20881767737668355" y="-0.26" z="0.07452707557551946"/>
-        <cameraLookAt x="-0.527092211" y="0.839239426" z="-0.133607597"/>   
+        <cameraLookAt x="-0.527092211" y="0.839239426" z="-0.133607597"/>
     </cameraPose>
     <physicsEngine>opensim</physicsEngine>
 </ExD>
