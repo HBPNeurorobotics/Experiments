@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<bibi xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.humanbrainproject.eu/SP10/2014/BIBI" xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/BIBI ../bibi_configuration.xsd">
+
+  <!-- increase the integration timestep to every 250ms for performance -->
+  <timestep>250</timestep>
+
+  <!-- standard configuration with braitenberg brain -->
+  <brainModel>
+    <file>brain_model/braitenberg.py</file>
+    <populations population="sensors" xsi:type="Range" from="0" to="5"/>
+    <populations population="actors" xsi:type="Range" from="5" to="8"/>
+    <populations population="record" xsi:type="Range" from="0" to="8"/>
+  </brainModel>
+  <bodyModel>husky_model/model.sdf</bodyModel>
+
+  <transferFunction xsi:type="Neuron2Monitor" name="all_neurons_spike_monitor">
+    <device name="all_neurons" type="SpikeRecorder">
+      <neurons xsi:type="Range" population="record" from="0" to="8" step="1"/>
+    </device>
+  </transferFunction>
+
+  <!-- tutorial specific transfer functions -->
+  <transferFunction xsi:type="PythonTransferFunction" src="tensorflow_husky_linear_twist.py"/>
+  <transferFunction xsi:type="PythonTransferFunction" src="color_input_detector.py"/>
+  <transferFunction xsi:type="PythonTransferFunction" src="tensorflow_object_detector.py"/>
+
+</bibi>
