@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bibi xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.humanbrainproject.eu/SP10/2014/BIBI" xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/BIBI ../bibi_configuration.xsd">
+  <brainModel>
+    <file>brain_model/CDP1_brain.py</file>
+    <!--<populations population="neurons" xsi:type="Range" from="0" to="2"/>-->
+    <!--<populations population="record" xsi:type="Range" from="0" to="2"/>-->
+  </brainModel>
+  <bodyModel>cdp1_mouse_w_sled/model.sdf</bodyModel>
+
+  <transferFunction xsi:type="PythonTransferFunction">
+    #<![CDATA[
+    # Adapted Python TF from Hind-Limb Experiment.
+    from std_msgs.msg import Header
+    from sensor_msgs.msg import Image
+    from std_msgs.msg import Float64
+    from gazebo_ros_muscle_interface.msg import MuscleStates
+
+    @nrp.MapVariable('clm', initial_value=None)
+    @nrp.MapVariable('runningSimulation', initial_value=None)
+    @nrp.MapRobotPublisher("activateFoot1", Topic("/gazebo_muscle_interface/robot/Foot1/cmd_activation", Float64))
+    @nrp.MapRobotPublisher("activateFoot2", Topic("/gazebo_muscle_interface/robot/Foot2/cmd_activation", Float64))
+    @nrp.MapRobotPublisher("activateRadius1", Topic("/gazebo_muscle_interface/robot/Radius1/cmd_activation", Float64))
+    @nrp.MapRobotPublisher("activateRadius2", Topic("/gazebo_muscle_interface/robot/Radius2/cmd_activation", Float64))
+    @nrp.MapRobotPublisher("activateHumerus1", Topic("/gazebo_muscle_interface/robot/Humerus1/cmd_activation", Float64))
+    @nrp.MapRobotPublisher("activateHumerus2", Topic("/gazebo_muscle_interface/robot/Humerus2/cmd_activation", Float64))
+    @nrp.MapRobotSubscriber("muscle_states_msg", Topic("/gazebo_muscle_interface/robot/muscle_states", MuscleStates))
+    @nrp.MapRobotPublisher("spindlePlot", Topic("/mouse_locomotion/muscle_spindles_network", Image))
+    @nrp.Robot2Neuron()
+    def transferfunction( t, clm, runningSimulation,
+                          activateFoot1, activateFoot2,
+                          activateRadius1, activateRadius2,
+                          activateHumerus1, activateHumerus2,
+                          muscle_states_msg,
+                          spindlePlot):
+
+        if clm.value is None:
+            import sys
+            import os
+
+
+        #from datetime import datetime
+        #from time import time
+
+        #if clm.value is None:
+        #    import sys
+        #    import os
+
+        #    clientLogger.info("Initializing Spinal Cord")
+        #    path_to_code = os.path.join(os.environ['HBP'],'Experiments','cdp1_mouse','code')
+        #    sys.path.append(path_to_code)
+        #    os.environ['NN_CODE'] = path_to_code
+        #    # WARNING: Any code changes in imported modules after initial import are ignored.
+        #    # And that counts since the launch of the plattform .
+        #    # NOTE: The simulations module is imported from Shravan's MouseLocomotion project!
+        #    # Its source files reside in the neuralnetwork/code folder.
+        #    import simulations
+        #    eesFreq = 40
+        #    eesAmp = 235
+        #    species = "mouse"
+        #    figName  = "videoNetwrokActivity"
+        #    # The nnStructFile defines the NN configuration.
+        #    # Network in 'closedLoopMouse.txt' is designed to actuate the two muscles
+        #    # of the hind-foot in such a way that the hind foot tilts back and forth like a pendulum.
+        #    nnStructFile = "closedLoopMouse.txt"
+        #    # Instantiate the NN controller and internal transfer functions.
+        #    # Note  that the internal transfer functions are derived from experimental data
+        #    # of the hind limb. See MouseLocomotion/neuralnetwork/code/tools/afferents_tools.py
+        #    clm.value = simulations.ClosedLoopSimulation(nnStructFile, species , eesAmp , eesFreq, figName)
+        #    runningSimulation = True
+        #    clientLogger.info("Initializing Spinal Cord - Done")
+        #else:
+        #  # Obtain muscle states, in a dict, indexed by name.
+        #  muscle_states = dict((m.name, m) for m in muscle_states_msg.value.muscles)
+        #  # Prepare argument dict for input to the NN.
+        #  mmData = {'t':t*1000+20, 'stretch':{}}
+        #  # The following are reference lengths for muscles used in NN control.
+        #  # We use only the humerus muscles because the NN has only two inputs and outputs each.
+        #  # These numbers are approximately the initial lengths at t=0. Obtain from rostopic echo for instance.
+        #  l_REF_HUMERUS1 = 0.0132
+        #  l_REF_HUMERUS2 = 0.0067
+        #  # Now compute relative change in length w.r.t. initial length.
+        #  lTA = (muscle_states['Humerus1'].length - l_REF_HUMERUS1)/l_REF_HUMERUS1
+        #  lLG = (muscle_states['Humerus2'].length - l_REF_HUMERUS2)/l_REF_HUMERUS2
+        #  # Map relative length change to suitable input to the NN.
+        #  # These are basically magic numbers that map the relative lengths to
+        #  # the value ranges that one finds on the muscles of the hind-foot-experiment.
+        #  l_CE_LG = lLG * 0.03 + 0.0048
+        #  l_CE_TA = lTA * 0.03 + 0.0051
+        #  # The names l_CE_LG and l_CE_TA refer to the meaning of the corresponding
+        #  # values in the hind-limb experiment, namely the lengths of the contractile
+        #  # elements of the 'LG' and 'TA' muscles.
+        #  # Now finish setting the argument dict for the NN.
+        #  mmData['stretch']['LEFT_LG'] = l_CE_LG
+        #  mmData['stretch']['LEFT_TA'] = l_CE_TA
+        #  # Advance the neural simulation.
+
+        #  timestep_begin = time.clock()
+        #  nnData = clm.value.run_step(mmData)
+        #  timestep_end = time.clock()
+
+        #  timestep_delta = timestep_end - timestep_begin
+        #  clientLogger.info("Spinal cord runtime: " + str(timestep_delta))
+
+        #  # There are only two outputs. We use them for three muscles each.
+        #  a = nnData['LEFT_TA']
+        #  b = nnData['LEFT_LG']
+
+        #  # A stronger muscle activation, please.
+        #  a = a * 2.2 # Determined by a fair dice roll
+        #  b = b * 2.2 # Determined by a fair dice roll
+
+        #  # "Multiplexed" outputs. The activation values are "compatible" between Shravan's controller
+        #  # and the Opensim Models. That is, they range from 0 to 1 where 1 is maximal excitation.
+        #  activateHumerus1.send_message(a)
+        #  activateHumerus2.send_message(b)
+        #  activateFoot2.send_message(a)
+        #  activateFoot1.send_message(b)
+        #  activateRadius1.send_message(a)
+        #  activateRadius2.send_message(b)
+        #  # Finally log some info.
+        #  #clientLogger.info("-------------------------------")
+        #  #clientLogger.info("Length=%f,%f" % (muscle_states['Humerus1'].length, #muscle_states['Humerus2'].length))
+        #  #clientLogger.info("Stretches=LG=%f, TA=%f" % (mmData['stretch']['LEFT_LG'], mmData['stretch']#['LEFT_TA']))
+        #  #clientLogger.info("Activations=LG=%f, TA=%f" % (nnData['LEFT_LG'], nnData['LEFT_TA']))
+        #  #clientLogger.info("Forces="+str([m.force for m in muscle_states.values()]))
+  #]]>
+  </transferFunction>
+</bibi>

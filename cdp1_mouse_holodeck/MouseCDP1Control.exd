@@ -1,0 +1,474 @@
+﻿#!/usr/bin/env python
+"""
+A state-machine that deletes, spawns and moves objects in the 3D scenes.
+"""
+
+__author__ = 'FabianAichele'
+
+import math
+import time
+import rospy
+import smach
+import Queue
+import smach_ros
+import traceback
+
+import sys
+import os
+import datetime
+
+from smach import StateMachine
+from smach import CBState
+from hbp_nrp_excontrol.nrp_states import ClockMonitorState
+from hbp_nrp_excontrol.logs import clientLogger
+from std_msgs.msg import Float64, String
+from geometry_msgs.msg import Pose, Point, Quaternion, Twist, Vector3
+from gazebo_msgs.srv import SetModelState
+from gazebo_msgs.msg import ModelState
+from gazebo_ros_muscle_interface.srv import GetMuscleActivations, SetMuscleActivations, GetMuscleStates
+from gazebo_ros_muscle_interface.msg import MuscleStates
+from generic_controller_plugin.srv import SetPIDParameters
+from sensor_msgs.msg import JointState
+
+from generic_controller_plugin.srv import JointProperties
+
+model_name = "robot"
+joint_name = "cdp1_msled::world_sled"
+absolute_joint_name = "robot::cdp1_msled::world_sled"
+
+currentJointState = JointState()
+
+
+class WaitToClockStateCDP1(ClockMonitorState):
+    """
+    Defines a state that waits until the clock has passed a certain threshold
+    """
+
+    # pylint: disable=unused-argument
+    # This __callback logic is wrong! It messes with the SMACH state transition in a non-conforming way: INVALID goes to END_SLED!
+    def __callback(self, user_data, time):
+        """
+        Callback when a new world clock time is available
+
+        :param user_data: The user data of the state machine
+        :param time: The world time
+        """
+        print "__callback in WaitToClockStateCDP1: time = " + str(repr(time)) + ", __threshold = " + str(
+            self.__threshold) + ", nsecs = " + str(time.clock.nsecs) + " nsecs in secs = " + str(
+            1.0 * time.clock.nsecs / 1000000000)
+        threshold_reached = (1.0 * time.clock.nsecs / 1000000000) < self.__threshold
+        return threshold_reached
+
+    def __init__(self, threshold):
+        """
+        Defines a state that waits until the clock passes the given threshold
+
+        :param threshold: The time threshold
+        """
+        super(WaitToClockStateCDP1, self).__init__(self.__callback)
+        self.__threshold = threshold
+
+
+class JointPoseMonitorState(smach_ros.MonitorState):
+    """
+    This state monitors a Link pose
+    """
+
+    def __callback(self, user_data, states):
+        """
+        The callback when a new model state message arrives
+
+        :param user_data: The state machine user data
+        :param states: The link states
+        """
+        # print "__callback in JointPoseMonitorState. userdata = " + str(repr(user_data)) + ", states = " + str(
+        #    repr(states))
+        # clientLogger.info(
+        #    "__callback in JointPoseMonitorState. userdata = " + str(repr(user_data)) + ", states = " + str(
+        #        repr(states)))
+        for name, position in zip(states.name, states.position):
+            if name == self.__joint_name:
+                # print "Found my joint: " + str(name)
+                return self.__position_cb(user_data, position, self.experiment_control)
+
+        return True
+
+    def __init__(self, position_cb, joint_name, experiment_control):
+        """
+        Creates a new state that monitors the link position
+
+        :param position_cb: A callback that should be executed when a new pose is available
+         for the link
+        """
+        #print "__init__ for JointPoseMonitorState"
+        super(JointPoseMonitorState, self).__init__('/joint_states', JointState,
+                                                    self.__callback)
+        self.__joint_name = joint_name
+        self.__position_cb = position_cb
+        self.experiment_control = experiment_control
+
+
+class ExperimentControl(object):
+    def __init__(self, model_name, joint_name, absolute_joint_name):
+        self._model_name = model_name
+        self._joint_name = joint_name
+        self._absolute_joint_name = absolute_joint_name
+
+        self._spinal_cord_iterations = 1
+
+        #print "__init__ in ExperimentControl: model_name = " + self._model_name + ", joint_name = " + self._joint_name + ", absolute_joint_name = " + self._absolute_joint_name
+
+        self._kp = 20.0
+        self._ki = 10.0
+        self._kd = 2.0
+        self._pid_control_on = False
+        # self._init_muscle_processing()
+        self._init_sled_controller()
+
+        self._muscle_state = None
+
+        publisher_name = "/gazebo_muscle_interface/%s/Foot1/cmd_activation" % self._model_name
+        self.activateFoot1 = rospy.Publisher(publisher_name, Float64, queue_size=1)
+
+        publisher_name = "/gazebo_muscle_interface/%s/Foot2/cmd_activation" % self._model_name
+        self.activateFoot2 = rospy.Publisher(publisher_name, Float64, queue_size=1)
+
+        publisher_name = "/gazebo_muscle_interface/%s/Radius1/cmd_activation" % self._model_name
+        self.activateRadius1 = rospy.Publisher(publisher_name, Float64, queue_size=1)
+
+        publisher_name = "/gazebo_muscle_interface/%s/Radius2/cmd_activation" % self._model_name
+        self.activateRadius2 = rospy.Publisher(publisher_name, Float64, queue_size=1)
+
+        publisher_name = "/gazebo_muscle_interface/%s/Humerus1/cmd_activation" % self._model_name
+        self.activateHumerus1 = rospy.Publisher(publisher_name, Float64, queue_size=1)
+
+        publisher_name = "/gazebo_muscle_interface/%s/Humerus2/cmd_activation" % self._model_name
+        self.activateHumerus2 = rospy.Publisher(publisher_name, Float64, queue_size=1)
+
+        subscriber_topic = "/gazebo_muscle_interface/%s/muscle_states" % self._model_name
+        self.muscle_states_sub = rospy.Subscriber(subscriber_topic, MuscleStates, self._muscle_state_callback, queue_size=1)
+
+        path_to_code = os.path.join(os.environ['HBP'], 'Experiments', 'cdp1_mouse', 'code')
+        sys.path.append(path_to_code)
+        os.environ['NN_CODE'] = path_to_code
+        # WARNING: Any code changes in imported modules after initial import are ignored.
+        # And that counts since the launch of the plattform .
+        # NOTE: The simulations module is imported from Shravan's MouseLocomotion project!
+        # Its source files reside in the neuralnetwork/code folder.
+        import simulations
+        self.eesFreq = 40
+        self.eesAmp = 235
+        self.species = "mouse"
+        self.figName = "videoNetwrokActivity"
+        # The nnStructFile defines the NN configuration.
+        # Network in 'closedLoopMouse.txt' is designed to actuate the two muscles
+        # of the hind-foot in such a way that the hind foot tilts back and forth like a pendulum.
+        self.nnStructFile = "closedLoopMouse.txt"
+        # Instantiate the NN controller and internal transfer functions.
+        # Note  that the internal transfer functions are derived from experimental data
+        # of the hind limb. See MouseLocomotion/neuralnetwork/code/tools/afferents_tools.py
+        self.clm = simulations.ClosedLoopSimulation(self.nnStructFile, self.species, self.eesAmp, self.eesFreq, self.figName)
+        self.runningSimulation = True
+        #clientLogger.info("Initializing Spinal Cord - Done")
+
+    ##############################
+    ##  Spinal cord             ##
+    ##############################
+    def stepSpinalCord(self, over_limit_upper, over_limit_lower):
+        if self._muscle_state == None:
+            return
+
+        # print "MuscleStates: " + str(self._muscle_state)
+        #print "stepSpinalCord begin"
+        # Obtain muscle states, in a dict, indexed by name.
+        muscle_states = dict((m.name, m) for m in self._muscle_state.muscles)
+        # Prepare argument dict for input to the NN.
+        t = 1.0 * self._spinal_cord_iterations * 0.02 * 1000.0 + 20.0
+        self._spinal_cord_iterations = self._spinal_cord_iterations + 1
+        mmData = {'t': t, 'stretch': {}}
+        # The following are reference lengths for muscles used in NN control.
+        # We use only the humerus muscles because the NN has only two inputs and outputs each.
+        # These numbers are approximately the initial lengths at t=0. Obtain from rostopic echo for instance.
+        l_REF_HUMERUS1 = 0.0132
+        l_REF_HUMERUS2 = 0.0067
+        # Now compute relative change in length w.r.t. initial length.
+        lTA = (muscle_states['Humerus1'].length - l_REF_HUMERUS1) / l_REF_HUMERUS1
+        lLG = (muscle_states['Humerus2'].length - l_REF_HUMERUS2) / l_REF_HUMERUS2
+        # Map relative length change to suitable input to the NN.
+        # These are basically magic numbers that map the relative lengths to
+        # the value ranges that one finds on the muscles of the hind-foot-experiment.
+        l_CE_LG = lLG * 0.03 + 0.0048
+        l_CE_TA = lTA * 0.03 + 0.0051
+        # The names l_CE_LG and l_CE_TA refer to the meaning of the corresponding
+        # values in the hind-limb experiment, namely the lengths of the contractile
+        # elements of the 'LG' and 'TA' muscles.
+        # Now finish setting the argument dict for the NN.
+        mmData['stretch']['LEFT_LG'] = l_CE_LG
+        mmData['stretch']['LEFT_TA'] = l_CE_TA
+        # Advance the neural simulation.
+        try:
+            nnData = self.clm.run_step(mmData)
+        except:
+            tb = traceback.print_exc()
+            print "Exception occured in spinal cord run_step: " + str(tb)
+            pass
+
+        # There are only two outputs. We use them for three muscles each.
+        a = nnData['LEFT_TA']
+        b = nnData['LEFT_LG']
+
+        # A stronger muscle activation, please.
+        a = a * 2.2  # Determined by a fair dice roll
+        b = b * 4.4  # Determined by a fair dice roll
+
+        print "Activation values to OpenSim muscles: a = " + str(a) + ", b = " + str(b)
+
+        # "Multiplexed" outputs. The activation values are "compatible" between Shravan's controller
+        # and the Opensim Models. That is, they range from 0 to 1 where 1 is maximal excitation.
+        # if a == 0.0 and b > 0.0:
+        #self.activateHumerus2.publish(a)
+        #self.activateFoot2.publish(a)
+        #self.activateRadius2.publish(a)
+        # else:
+        #self.activateHumerus1.publish(b)
+        #self.activateFoot1.publish(b)
+        #self.activateRadius1.publish(b)
+
+        if over_limit_lower == True:
+            print "Lower limit case: Activate muscle_set 2"
+            activation_value = a
+            if a == 0:
+                activation_value = b
+
+            activation_value *= 3.0
+
+            self.activateHumerus2.publish(activation_value)
+            self.activateFoot2.publish(activation_value)
+            self.activateRadius2.publish(activation_value)
+
+            self.activateHumerus1.publish(0.0)
+            self.activateFoot1.publish(0.0)
+            self.activateRadius1.publish(0.0)
+
+        if over_limit_upper == True:
+            print "Upper limit case: Activate muscle_set 1"
+            activation_value = b
+            if b == 0:
+                activation_value = a
+
+            activation_value *= 3.0
+
+            self.activateHumerus1.publish(activation_value)
+            self.activateFoot1.publish(activation_value)
+            self.activateRadius1.publish(activation_value)
+
+            self.activateHumerus2.publish(0.0)
+            self.activateFoot2.publish(0.0)
+            self.activateRadius2.publish(0.0)
+
+        if over_limit_lower == False and over_limit_upper == False:
+            print "Default case: Activating both muscle_sets"
+            self.activateHumerus2.publish(a)
+            self.activateFoot2.publish(a)
+            self.activateRadius2.publish(a)
+            self.activateHumerus1.publish(b)
+            self.activateFoot1.publish(b)
+            self.activateRadius1.publish(b)
+
+
+        # Finally log some info.
+        #clientLogger.info("-------------------------------")
+        #clientLogger.info("Length=%f,%f" % (muscle_states['Humerus1'].length, muscle_states['Humerus2'].length))
+        #clientLogger.info("Stretches=LG=%f, TA=%f" % (mmData['stretch']['LEFT_LG'], mmData['stretch']['LEFT_TA']))
+        #clientLogger.info("Activations=LG=%f, TA=%f" % (nnData['LEFT_LG'], nnData['LEFT_TA']))
+        #clientLogger.info("Forces="+str([m.force for m in muscle_states.values()]))
+        #print "stepSpinalCord end"
+
+    ##############################
+    ##  muscle state           ##
+    ##############################
+    def _muscle_state_callback(self, msg):
+        # print "Received new muscle states"
+        self._muscle_state = msg
+
+    ##############################
+    ##  generic controller      ##
+    ##############################
+    def _init_sled_controller(self):
+        self._pid_parameters_service_name = '/%s/set_pid_parameters' % self._model_name
+        #print 'Waiting for service %s' % self._pid_parameters_service_name
+        rospy.wait_for_service(self._pid_parameters_service_name)
+
+        service_name = '/%s/joint_properties' % self._model_name
+        rospy.wait_for_service(service_name)
+        self._joint_properties = rospy.ServiceProxy(service_name, JointProperties)
+
+        publisher_name = '/%s/cdp1_msled__world_sled/cmd_pos' % self._model_name
+        #print 'Publishing sled commands to %s' % publisher_name
+        self._sled_pid_pub = rospy.Publisher(publisher_name, Float64, queue_size=1)
+
+        # self.set_sled_pid_parameters(10.0, 5.0, 1.0)
+        self.set_sled_pid_parameters(0.0, 0.0, 0.0)
+
+    def getJointsLimit(self, limit):
+        joint_property_data = self._joint_properties()
+        # print "getJointsLimit: joint_properties = " + str(repr(joint_property_data))
+
+        limit_value = 0.0
+        try:
+            joint_idx = -1
+            idx = 0
+            for joint_name in joint_property_data.joint:
+                # print "Joint name: " + joint_name + " == " + self._joint_name
+                if joint_name == self._joint_name:
+                    joint_idx = idx
+                    # print "Found at index " + str(joint_idx)
+                    break
+
+                idx += 1
+
+            if joint_idx >= 0:
+                if limit == "upper":
+                    limit_value = joint_property_data.upper_limit[joint_idx]
+                    # print "Upper limit: " + str(limit_value)
+                else:
+                    limit_value = joint_property_data.lower_limit[joint_idx]
+                    # print "Lower limit: " + str(limit_value)
+
+        except ValueError:
+            pass
+
+        return limit_value
+
+    def set_sled_pid_parameters(self, kp, ki, kd):
+        #print "set_sled_pid_parameters: kp = " + str(kp) + ", ki = " + str(ki) + ", kd = " + str(kd)
+        try:
+            set_pid_parameters = rospy.ServiceProxy(self._pid_parameters_service_name, SetPIDParameters)
+            set_pid_parameters(joint=str(self._absolute_joint_name), kp=float(kp), ki=float(ki), kd=float(kd))
+        except:
+            tb = traceback.print_exc()
+            print("Exception occured in set_pid_parameters service call: " + str(tb))
+            pass
+
+    def command_sled_position(self, p):
+        self._sled_pid_pub.publish(Float64(data=p))
+
+
+def notify_user_cb(msg):
+    @smach.cb_interface(input_keys=[], output_keys=[], outcomes=['succeeded'])
+    def notify_user(userdata):
+        # print "notify_user_cb: msg = " + str(msg)
+        # clientLogger.info(msg)
+        return 'succeeded'
+
+    return notify_user
+
+
+exp_control = ExperimentControl(model_name, joint_name, absolute_joint_name)
+iteration_counter = 0
+
+
+def joint_pose_monitor_cb(arg1, joint_position, experiment_control):
+    global iteration_counter
+    # print "joint_pose_monitor_cb: arg1 = " + str(repr(arg1))
+    upper_limit = experiment_control.getJointsLimit('upper')
+    lower_limit = experiment_control.getJointsLimit('lower')
+
+    # print "joint_pose_monitor_cb: joint_position = " + str(joint_position) + ", lower_limit = " + str(lower_limit) + ", upper_limit = " + str(upper_limit)
+    over_lower = False
+    if joint_position >= (0.9 * lower_limit):  # hitting 'lower' limit
+        print "Went over 'lower' limit: " + str(joint_position) + " >= " + str(0.9 * lower_limit)
+        over_lower = True
+
+    over_upper = False
+    if joint_position <= (0.9 * upper_limit):  # hitting 'upper' limit
+        print "Went over 'upper' limit: " + str(joint_position) + " <= " + str(0.9 * upper_limit)
+        over_upper = True
+
+    #print "Stepping spinal cord controller..."
+    timestep_begin = datetime.datetime.now()
+    experiment_control.stepSpinalCord(over_upper, over_lower)
+    timestep_end = datetime.datetime.now()
+
+    timestep_delta = timestep_end - timestep_begin
+    #print "Step duration in ms: " + str((timestep_delta.microseconds / 1000))
+
+    if iteration_counter % 200 == 0:
+        #print "Messing with the PID controller"
+        if experiment_control._pid_control_on == False:
+            #print "Switch on"
+            experiment_control.set_sled_pid_parameters(8.0, 4.0,
+                                                  2.0)
+            if joint_position >= 0.0:
+                experiment_control.command_sled_position(0.008)
+            else:
+                experiment_control.command_sled_position(-0.008)
+
+            experiment_control._pid_control_on = True
+        else:
+            #print "Switch off"
+            experiment_control.set_sled_pid_parameters(0.0, 0.0, 0.0)
+            experiment_control._pid_control_on = False
+
+    iteration_counter = iteration_counter + 1
+
+    return 'valid'
+    # if limit == "upper":
+    # return currentJointState.position < exp_control.getJointsLimit(limit) + ( exp_control.getJointsLimit(limit) * 0.1)
+    # print 'TODO upper limit, thanks!'
+    # else:
+    #  print 'TODO lower limit, thanks!'
+
+
+# cb_sled_limit = joint_pose_monitor_cb('upper')
+joint_pose_monitor_sled_limit = JointPoseMonitorState(joint_pose_monitor_cb, joint_name, exp_control)
+
+################################################################
+################################################################
+
+
+
+FINISHED = 'FINISHED'
+ERROR = 'ERROR'
+PREEMPTED = 'PREEMPTED'
+
+try:
+    #print "Before StateMachine instantiation"
+    sm = StateMachine(outcomes=[FINISHED, ERROR, PREEMPTED])
+    sm.userdata.counter = 0
+    #print "After StateMachine instantiation"
+    with sm:
+        #print "Adding states..."
+
+        StateMachine.add('INIT',
+                         CBState(notify_user_cb('INIT')),
+                         transitions={'succeeded': 'INITIAL_WAITING'})
+
+        StateMachine.add('INITIAL_WAITING',
+                         WaitToClockStateCDP1(0.1),
+                         transitions={'valid': 'END_SLED',
+                                      'invalid': 'END_SLED',
+                                      'preempted': PREEMPTED})
+
+        StateMachine.add('END_SLED',
+                         joint_pose_monitor_sled_limit,
+                         # transitions = {'succeeded': 'STOP_PID_MSG',
+                         #               'aborted': 'terminate_demo',
+                         #               'preempted': PREEMPTED}
+                         transitions={'valid': 'END_SLED',
+                                      'invalid': FINISHED,
+                                      'preempted': PREEMPTED})
+
+        # StateMachine.add('STOP_PID_MSG',
+        #                 CBState(notify_user_cb('PID set to 0')),
+        #                 transitions={'succeeded': 'STOP_PID'})
+
+        # StateMachine.add('STOP_PID',
+        #                 CBState(exp_control._init_sled_controller),
+        #                 transitions={'succeeded': 'INITIAL_WAITING'})
+
+        #print "States added."
+
+except:
+    tb = traceback.print_exc()
+    #clientLogger.info("Exception occured in SMACH state machine: " + str(tb))
