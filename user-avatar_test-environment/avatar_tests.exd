@@ -32,8 +32,8 @@ def action_spawn_avatars(user_data):
     avatar_rayman_file = open('/home/sandman/workspaces/hbp/nrp/Models/user_avatar_rayman/model.sdf','r')
     msg.entity_xml = avatar_rayman_file.read()
 
-    msg.initial_pose.position.x = 5.0
-    msg.initial_pose.position.y = 10.0
+    msg.initial_pose.position.x = 1.0
+    msg.initial_pose.position.y = 3.0
     msg.initial_pose.position.z = 1.0
     msg.initial_pose.orientation.x = 0.0
     msg.initial_pose.orientation.y = 0.0
