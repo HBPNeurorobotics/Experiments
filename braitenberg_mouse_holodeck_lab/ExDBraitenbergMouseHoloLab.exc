@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ExD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
+     xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ExDConfFile.xsd">
+    <name>Mouse Braitenberg experiment in holodeck biolab</name>
+    <thumbnail>ExDBraitenbergMouseLab.png</thumbnail>
+    <description>This experiment loads the soft-skin mouse model in the holodeck biolab environment. If the user starts the experiment, the mouse will stay still, until its eyes detect a red color on one screen. Then, the mouse will move the head towards the colored object. In this experiment, the user can interact and change the color of both screens by clicking on them with the right mouse button.</description>
+    <timeout>840</timeout>
+    <configuration type="3d-settings" src="ExDBraitenbergMouseLab.3ds"/>
+    <maturity>development</maturity>
+    <environmentModel src="holodeck_biolab/holodeck_biolab.sdf">
+        <robotPose x="1.659" y="-0.851" z="1.319" ux="0.0" uy="0.0" uz="0.75" theta="0.738"/>
+    </environmentModel>
+    <visualModel src="mouse_v2_model/meshes/mouse_v2_model_animated.dae" scale="0.01">
+        <visualPose x="1.715" y="-0.851" z="1.319" ux="0.0" uy="0.0" uz="1.5708" theta="0.0"/>
+    </visualModel>
+    <bibiConf src="braitenberg_mouse_lab.bibi"/>
+    <cameraPose>
+        <cameraPosition x="1.1421603714651787" y="-1.015793401143827" z="1.7139510542349161"/>
+        <cameraLookAt x="1.659" y="-0.851" z="1.319"/>
+    </cameraPose>
+</ExD>
+
