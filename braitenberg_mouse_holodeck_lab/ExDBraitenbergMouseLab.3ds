@@ -78,6 +78,7 @@
     "fogColor": "#97a2af",
     "pbrMaterial": true,
     "defaultCameraMode":"lookatrobot",
+    "nearClippingDistance": "0.01",
     "shadowSettings": [
         {
             "lightName": "sun",

@@ -76,6 +76,7 @@
     "fogDensity": "0.04",
     "fogColor": "#d8ccb1",
     "pbrMaterial": true,
+    "nearClippingDistance": "0.01",
     "shadowSettings": [
         {
             "lightName": "sunlight",
