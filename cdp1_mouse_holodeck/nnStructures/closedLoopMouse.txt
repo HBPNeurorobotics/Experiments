@@ -1,19 +1,26 @@
 # [SECTION 1]:  Muscles names + delay for afferent fibers (optional)
 @1
+# Hip flexor
+LEFT_PMA 2
+# Hip extensor
+LEFT_CF 2
+# Knee flexor
+LEFT_POP 2
+# Knee extensor
+LEFT_RF 2
+# Ankle extensor
 LEFT_LG 2
+# Ankle flexor
 LEFT_TA 2
-
-
-
 
 
 # [SECTION 2]: Common Cells per muscle: cellClass - name - number - required cell inputs (The name depend on the cell class; Motoneuron class - MnReal name, IntFireMn class - Mn name, AfferentFiber class - I... name for primary and II.. name for sencondary fibers, IntFire class - any name)
 @2
-motoneuron if_curr_alpha Mn 169
-afferentFiber / Iaf 60
-afferentFiber / IIf 60
-interneuron if_curr_alpha IaInt 196
-interneuron if_curr_alpha IIExInt 196
+motoneuron if_curr_alpha Mn 56
+afferentFiber / Iaf 20
+afferentFiber / IIf 20
+interneuron if_curr_alpha IaInt 56
+interneuron if_curr_alpha IIExInt 56
 
 
 
@@ -49,13 +56,13 @@ M1 IaInt M2 IaInt 0.51 -0.00145 inhibitory
 M1 IaInt M2 Mn 1.2 -0.0045 inhibitory
 
 WeightsMatrix:
-HeaderRowAndColumn      M2-GM    M2-TA
-M1-GM                   0        1
-M1-TA                   1        0
-
-
-
-
+HeaderRowAndColumn M2-LEFT_PMA  M2-LEFT_CF   M2-LEFT_POP  M2-LEFT_RF  M2-LEFT_LG  M2-LEFT_TA
+M1-LEFT_PMA        0            1            0            0           0           0
+M1-LEFT_CF         1            0            0            0           0           0
+M1-LEFT_POP        0            0            0            1           0           0
+M1-LEFT_RF         0            0            1            0           0           0
+M1-LEFT_LG         0            0            0            0           0           1
+M1-LEFT_TA         0            0            0            0           1           0
 
 
 # [SECTION 6]: Special network connections (optional): muscle/groupName - fromPopulation - muscle - toSingleCell - ratio - number - weight -type
