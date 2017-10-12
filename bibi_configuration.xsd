@@ -4,492 +4,1052 @@
            xmlns="http://schemas.humanbrainproject.eu/SP10/2014/BIBI"
            attributeFormDefault="unqualified" elementFormDefault="qualified">
 
-    <!--Root element of the bibi file -->
-    <xs:element name="bibi" type="BIBIConfiguration"/>
-    <xs:complexType name="BIBIConfiguration">
+  <!--Root element of the bibi file -->
+  <xs:element name="bibi" type="BIBIConfiguration"/>
+  <xs:complexType name="BIBIConfiguration">
+    <xs:annotation>
+      <xs:documentation>This class represents the root of the BIBI configuration.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="timestep" type="TimeStep" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>If specified, the CLE uses a different timestep than the default timestep of 20ms. The timestep is specified in milliseconds and depicts the time between two successive loops of the CLE in simulation time.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="brainModel" type="BrainModel">
+        <xs:annotation>
+          <xs:documentation>The brain model depicts a path to the neural network model.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="bodyModel" type="SDFFilename">
+        <xs:annotation>
+          <xs:documentation>The path to the robot model that should be used. This can either be a path to an SDF model or a path to a zip file containing all required assets for a robot. This zip file must have a file model.sdf at the root of the archive.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="extRobotController" type="ScriptFilename" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>A path to an external robot controller. If specified, the robot controller is started when the simulation begins and stopped when the simulation is over. Therefore, the path must be a path to a shell script that offers a function start and a function stop.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="configuration" type="ConfFile" minOccurs="0" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation>The configuration entries of an experiment depict additional files required for the simulation of experiments using this BIBI configuration.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="connectors" type="NeuronConnector" minOccurs="0" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation>A list of connectors. This can be useful when specifying transfer functions </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="synapseDynamics" type="SynapseDynamics" minOccurs="0" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation>A list of synapse dynamics. Such a synapse dynamic can be referenced later on in neural network devices.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="transferFunction" type="TransferFunction" minOccurs="0" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation>The transfer functions that are used to couple a neural network to robot</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="TimeStep">
+    <xs:annotation>
+      <xs:documentation>The timestep type of the CLE. This is a positive number in milliseconds. The maximum allowed value is 1000.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:positiveInteger">
+      <xs:maxInclusive value="1000"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="BrainModel">
+    <xs:annotation>
+      <xs:documentation>A neural network description as used in the CLE</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="file" type="BrainFilename">
+        <xs:annotation>
+          <xs:documentation>A path to the neural network file.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="populations" type="MultiNeuronSelector" minOccurs="0"
+                  maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation>The populations in this field are the explicitly defined populations. Each of this population is defined as a view of an assumed 'circuit' population.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="BrainFilename">
+    <xs:annotation>
+      <xs:documentation>This denotes the supported file types for neural network models. The current version only supports Python or H5 files for neural networks.</xs:documentation>
+    </xs:annotation>
+    <xs:union memberTypes="H5Filename PythonFilename"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="SDFFilename">
+    <xs:annotation>
+      <xs:documentation>This type denotes a path to an SDF (or Zip) file</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[a-zA-Z0-9\._/]*\.(sdf|zip)"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="H5Filename">
+    <xs:annotation>
+      <xs:documentation>This type denotes a path to an H5 file.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[a-zA-Z0-9\._/]*\.h5"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="PythonFilename">
+    <xs:annotation>
+      <xs:documentation>This type denotes a path to a Python file.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[a-zA-Z0-9\._/]*\.py"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="ScriptFilename">
+    <xs:annotation>
+      <xs:documentation>This type denotes a path to a script file.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[a-zA-Z0-9\._/]*\.sh"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="ConfFile">
+    <xs:annotation>
+      <xs:documentation>This type denotes an additional configuration entry that consists of a file and a purpose.</xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="src" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation>The source of a configuration entry is a path to a file that contains the necessary information. The path is relative to the BIBI model.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="type" type="ConfType" use="required">
+      <xs:annotation>
+        <xs:documentation>The type of a configuration entry denotes the purpose how this entry is used. This is used to decouple the purpose of a configuration entry from the file name.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:simpleType name="ConfType">
+    <xs:annotation>
+      <xs:documentation>This type denotes a configuration type which can be a standard configuration type or a custom type. The latter is just any string.</xs:documentation>
+    </xs:annotation>
+    <xs:union memberTypes="ConfTypeEnumeration xs:string"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="ConfTypeEnumeration">
+    <xs:annotation>
+      <xs:documentation>This enumeration lists the standard configuration types used in the NRP.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="retina"/>
+      <xs:enumeration value="brainvisualizer"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+
+  <xs:complexType name="TransferFunction" abstract="true">
+    <xs:annotation>
+      <xs:documentation>This is the abstract type for a transfer function specification. A transfer function may be specified either in XML or in Python. These specification options are reflected in subclasses of the abstract transfer function type.</xs:documentation>
+    </xs:annotation>
+  </xs:complexType>
+
+  <xs:complexType name="PythonTransferFunction">
+    <xs:annotation>
+      <xs:documentation>This type denotes a transfer function entirely specified in the Python DSL PyTF.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent mixed="true">
+      <xs:extension base="TransferFunction">
         <xs:sequence>
-            <xs:element name="timestep" type="TimeStep" minOccurs="0"/>
-            <xs:element name="brainModel" type="BrainModel"/>
-            <xs:element name="bodyModel" type="SDFFilename"/>
-            <xs:element name="extRobotController" type="ScriptFilename" minOccurs="0"/>
-            <xs:element name="configuration" type="ConfFile" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="connectors" type="NeuronConnector" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="synapseDynamics" type="SynapseDynamics" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="transferFunction" type="TransferFunction" minOccurs="0" maxOccurs="unbounded"/>
+          <xs:any namespace="##other" processContents="skip"
+                  minOccurs="0"
+                  maxOccurs="unbounded"/>
         </xs:sequence>
-    </xs:complexType>
+        <xs:attribute name="src" type="PythonFilename" use="optional">
+          <xs:annotation>
+            <xs:documentation>The 'src' attribute denotes the path of a python file that contains the entire transfer function. If this attribute is present, the actual contents of the transfer function element is ignored and only the contents of the specified Python file are taken into account.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
 
-    <xs:simpleType name="TimeStep">
-        <xs:restriction base="xs:positiveInteger">
-            <xs:maxInclusive value="1000"/>
-        </xs:restriction>
-    </xs:simpleType>
-
-    <xs:complexType name="BrainModel">
+  <!--contains a transfer function element with input, output and used transfer function-->
+  <xs:complexType name="BIBITransferFunction" abstract="true">
+    <xs:annotation>
+      <xs:documentation>This type denotes the abstract base type of Transfer Functions specified entirely in the BIBI model, in XML</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="TransferFunction">
         <xs:sequence>
-            <xs:element name="file" type="BrainFilename"/>
-            <xs:element name="populations" type="MultiNeuronSelector" minOccurs="0"
-                        maxOccurs="unbounded"/>
+          <xs:element name="local" type="Local" minOccurs="0" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>This denotes the local variables of this transfer function.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="device" type="DeviceChannel">
+              <xs:annotation>
+                <xs:documentation>This denotes device channels, connections of the transfer function to the neural network using exactly one device.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="deviceGroup" type="DeviceGroupChannel">
+              <xs:annotation>
+                <xs:documentation>This denotes the device group channels, connections of transfer functions to the neural network using a one-dimensional array of devices.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+          <xs:element name="topic" type="TopicChannel" minOccurs="0" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>This denotes the connections of the transfer function to robot control channels.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
         </xs:sequence>
-    </xs:complexType>
+        <xs:attribute name="name" type="xs:string" use="required">
+          <xs:annotation>
+            <xs:documentation>The name of the transfer function. This is used to identify the transfer function in order to update or delete it in a running simulation.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
 
-    <xs:simpleType name="BrainFilename">
-        <xs:union memberTypes="H5Filename PythonFilename"/>
-    </xs:simpleType>
+  <xs:complexType name="Robot2Neuron">
+    <xs:annotation>
+      <xs:documentation>A Robot2Neuron transfer function is a transfer function whose primary purpose is to translate information coming from robot sensors, transform it and push them into neural networks. </xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="BIBITransferFunction">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
 
-    <xs:simpleType name="SDFFilename">
-        <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z0-9\._/]*\.(sdf|zip)"/>
-        </xs:restriction>
-    </xs:simpleType>
-
-    <xs:simpleType name="H5Filename">
-        <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z0-9\._/]*\.h5"/>
-        </xs:restriction>
-    </xs:simpleType>
-
-    <xs:simpleType name="PythonFilename">
-        <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z0-9\._/]*\.py"/>
-        </xs:restriction>
-    </xs:simpleType>
-
-    <xs:simpleType name="ScriptFilename">
-        <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z0-9\._/]*\.sh"/>
-        </xs:restriction>
-    </xs:simpleType>
-
-    <xs:complexType name="ConfFile">
-        <xs:attribute name="src" type="xs:string" use="required"/>
-        <xs:attribute name="type" type="ConfType" use="required"/>
-    </xs:complexType>
-
-    <xs:simpleType name="ConfType">
-        <xs:union memberTypes="ConfTypeEnumeration xs:string"/>
-    </xs:simpleType>
-
-    <xs:simpleType name="ConfTypeEnumeration">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="retina"/>
-            <xs:enumeration value="brainvisualizer"/>
-        </xs:restriction>
-    </xs:simpleType>
-
-
-    <xs:complexType name="TransferFunction" abstract="true"/>
-
-    <xs:complexType name="PythonTransferFunction">
-        <xs:complexContent mixed="true">
-            <xs:extension base="TransferFunction">
-                <xs:sequence>
-                    <xs:any namespace="##other" processContents="skip"
-                            minOccurs="0"
-                            maxOccurs="unbounded"/>
-                </xs:sequence>
-                <xs:attribute name="src" type="PythonFilename" use="optional"/>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <!--contains a transfer function element with input, output and used transfer function-->
-    <xs:complexType name="BIBITransferFunction" abstract="true">
-        <xs:complexContent>
-            <xs:extension base="TransferFunction">
-                <xs:sequence>
-                    <xs:element name="local" type="Local" minOccurs="0" maxOccurs="unbounded"/>
-                    <xs:choice minOccurs="0" maxOccurs="unbounded">
-                        <xs:element name="device" type="DeviceChannel"/>
-                        <xs:element name="deviceGroup" type="DeviceGroupChannel"/>
-                    </xs:choice>
-                    <xs:element name="topic" type="TopicChannel" minOccurs="0" maxOccurs="unbounded"/>
-                </xs:sequence>
-                <xs:attribute name="name" type="xs:string" use="required"/>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="Robot2Neuron">
-        <xs:complexContent>
-            <xs:extension base="BIBITransferFunction">
-                <xs:sequence>
-                    <xs:element name="returnValue" type="DeviceChannel" minOccurs="0"/>
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="Neuron2Monitor">
-        <xs:complexContent>
-            <xs:restriction base="BIBITransferFunction">
-                <xs:sequence>
-                    <xs:element name="local" type="Local" minOccurs="0" maxOccurs="unbounded"/>
-                    <xs:choice minOccurs="0">
-                        <xs:element name="device" type="DeviceChannel"/>
-                    </xs:choice>
-                </xs:sequence>
-                <xs:attribute name="name" type="xs:string" use="required"/>
-            </xs:restriction>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="Neuron2Robot">
-        <xs:complexContent>
-            <xs:extension base="BIBITransferFunction">
-                <xs:sequence>
-                    <xs:element name="returnValue" type="TopicChannel" minOccurs="0"/>
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:simpleType name="NeuronTarget">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="Inhibitory"/>
-            <xs:enumeration value="Excitatory"/>
-        </xs:restriction>
-    </xs:simpleType>
-
-    <xs:complexType name="NeuronConnector" abstract="true">
-        <xs:attribute name="weights" type="xs:double" use="optional"/>
-        <xs:attribute name="delays" type="xs:double" use="optional"/>
-        <xs:attribute name="name" type="xs:string" use="optional" default="default"/>
-    </xs:complexType>
-
-    <xs:complexType name="NeuronConnectorRef">
-        <xs:complexContent>
-            <xs:restriction base="xs:anyType">
-                <xs:attribute name="ref" type="xs:string" use="required"/>
-            </xs:restriction>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="OneToOneConnector">
-        <xs:complexContent>
-            <xs:extension base="NeuronConnector"/>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="AllToAllConnector">
-        <xs:complexContent>
-            <xs:extension base="NeuronConnector"/>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="FixedNumberPreConnector">
-        <xs:complexContent>
-            <xs:extension base="NeuronConnector">
-                <xs:attribute name="count" type="xs:positiveInteger" use="required"/>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="SynapseDynamics" abstract="true">
-        <xs:attribute name="name" type="xs:string" use="optional" default="default"/>
-    </xs:complexType>
-
-    <xs:complexType name="SynapseDynamicsRef">
-        <xs:complexContent>
-            <xs:restriction base="xs:anyType">
-                <xs:attribute name="ref" type="xs:string" use="required"/>
-            </xs:restriction>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="TsodyksMarkramMechanism">
-        <xs:complexContent>
-            <xs:extension base="SynapseDynamics">
-                <xs:attribute name="u" type="xs:double" use="required"/>
-                <xs:attribute name="tau_rec" type="xs:double" use="required"/>
-                <xs:attribute name="tau_facil" type="xs:double" use="required"/>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="DeviceChannel">
+  <xs:complexType name="Neuron2Monitor">
+    <xs:annotation>
+      <xs:documentation>A NeuronMonitor is a special class of transfer functions that monitors neural network populations. Connections to robot control topics or device groups are not allowed.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:restriction base="BIBITransferFunction">
         <xs:sequence>
-            <xs:element name="neurons" type="NeuronSelector"/>
-            <xs:choice minOccurs="0">
-                <xs:element name="connector" type="NeuronConnector"/>
-                <xs:element name="connectorRef" type="NeuronConnectorRef"/>
-            </xs:choice>
-            <xs:choice minOccurs="0">
-                <xs:element name="synapseDynamics" type="SynapseDynamics"/>
-                <xs:element name="synapseDynamicsRef" type="SynapseDynamicsRef"/>
-            </xs:choice>
-            <xs:element name="target" type="NeuronTarget" minOccurs="0"/>
-            <xs:element name="body" type="FlowExpression" minOccurs="0"/>
-        </xs:sequence>
-        <xs:attribute name="name" type="xs:string" use="required"/>
-        <xs:attribute name="type" type="DeviceType" use="required"/>
-    </xs:complexType>
-
-    <xs:complexType name="DeviceGroupChannel">
-        <xs:sequence>
-            <xs:element name="neurons" type="NeuronGroupSelector"/>
-            <xs:choice minOccurs="0">
-                <xs:element name="connector" type="NeuronConnector"/>
-                <xs:element name="connectorRef" type="NeuronConnectorRef"/>
-            </xs:choice>
-            <xs:choice minOccurs="0">
-                <xs:element name="synapseDynamics" type="SynapseDynamics"/>
-                <xs:element name="synapseDynamicsRef" type="SynapseDynamicsRef"/>
-            </xs:choice>
-            <xs:element name="target" type="NeuronTarget" minOccurs="0"/>
-            <xs:element name="body" type="FlowExpression" minOccurs="0"/>
-        </xs:sequence>
-        <xs:attribute name="name" type="xs:string" use="required"/>
-        <xs:attribute name="type" type="DeviceType" use="required"/>
-    </xs:complexType>
-
-    <xs:complexType name="NeuronGroupSelector" abstract="true"/>
-
-    <xs:complexType name="ChainSelector">
-        <xs:complexContent>
-            <xs:extension base="NeuronGroupSelector">
-                <xs:sequence>
-                    <xs:element name="neurons" type="NeuronSelector" minOccurs="0" maxOccurs="unbounded"/>
-                    <xs:element name="connectors" type="NeuronGroupSelector" minOccurs="0" maxOccurs="unbounded"/>
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="MapSelector">
-        <xs:complexContent>
-            <xs:extension base="NeuronGroupSelector">
-                <xs:sequence>
-                    <xs:element name="source" type="MultiNeuronSelector"/>
-                    <xs:element name="pattern" type="NeuronSelectorTemplate"/>
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="NeuronSelector" abstract="true">
-        <xs:attribute name="population" type="xs:string" use="required"/>
-    </xs:complexType>
-
-    <xs:complexType name="Index">
-        <xs:complexContent>
-            <xs:extension base="NeuronSelector">
-                <xs:attribute name="index" type="xs:nonNegativeInteger" use="required"/>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="MultiNeuronSelector" abstract="true">
-        <xs:complexContent>
-            <xs:extension base="NeuronSelector"/>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="Range">
-        <xs:complexContent>
-            <xs:extension base="MultiNeuronSelector">
-                <xs:attribute name="from" type="xs:nonNegativeInteger" use="required"/>
-                <xs:attribute name="to" type="xs:nonNegativeInteger" use="required"/>
-                <xs:attribute name="step" type="xs:positiveInteger" use="optional"/>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="List">
-        <xs:complexContent>
-            <xs:extension base="MultiNeuronSelector">
-                <xs:sequence>
-                    <xs:element name="element" type="xs:nonNegativeInteger" maxOccurs="unbounded"/>
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="Population">
-        <xs:complexContent>
-            <xs:extension base="MultiNeuronSelector">
-                <xs:attribute name="count" type="xs:positiveInteger" use="required"/>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:simpleType name="TemplatePattern">
-        <xs:restriction base="xs:string">
-            <xs:pattern value="(\(\s*)*(i|\d+)(\s*(\+|\*)\s*(\(\s*)*(i|\d+)\s*|\))*"/>
-        </xs:restriction>
-    </xs:simpleType>
-
-    <xs:complexType name="NeuronSelectorTemplate" abstract="true"/>
-
-    <xs:complexType name="IndexTemplate">
-        <xs:complexContent>
-            <xs:extension base="NeuronSelectorTemplate">
-                <xs:attribute name="index" type="TemplatePattern" use="required"/>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="RangeTemplate">
-        <xs:complexContent>
-            <xs:extension base="NeuronSelectorTemplate">
-                <xs:attribute name="from" type="TemplatePattern" use="required"/>
-                <xs:attribute name="to" type="TemplatePattern" use="required"/>
-                <xs:attribute name="step" type="TemplatePattern" use="optional"/>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="ListTemplate">
-        <xs:complexContent>
-            <xs:extension base="NeuronSelectorTemplate">
-                <xs:sequence>
-                    <xs:element name="element" type="TemplatePattern" maxOccurs="unbounded"/>
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:simpleType name="DeviceType">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="ACSource"/>
-            <xs:enumeration value="DCSource"/>
-            <xs:enumeration value="FixedFrequency"/>
-            <xs:enumeration value="LeakyIntegratorAlpha"/>
-            <xs:enumeration value="LeakyIntegratorExp"/>
-            <xs:enumeration value="NCSource"/>
-            <xs:enumeration value="Poisson"/>
-            <xs:enumeration value="SpikeRecorder"/>
-            <xs:enumeration value="PopulationRate"/>
-        </xs:restriction>
-    </xs:simpleType>
-
-    <xs:complexType name="TopicChannel">
-        <xs:sequence>
-            <xs:element name="body" type="FlowExpression" minOccurs="0"/>
+          <xs:element name="local" type="Local" minOccurs="0" maxOccurs="unbounded"/>
+          <xs:choice minOccurs="0">
+            <xs:element name="device" type="DeviceChannel"/>
+          </xs:choice>
         </xs:sequence>
         <xs:attribute name="name" type="xs:string" use="required"/>
-        <xs:attribute name="topic" type="RobotTopicAddress" use="required"/>
-        <xs:attribute name="type" type="xs:string" use="required"/>
-    </xs:complexType>
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
 
-    <xs:simpleType name="RobotTopicAddress">
-        <xs:restriction base="xs:string">
-            <xs:pattern value="(/[a-zA-Z0-9_-]+)+(/)?"/>
-        </xs:restriction>
-    </xs:simpleType>
-
-    <xs:complexType name="FlowExpression" abstract="true"/>
-
-    <xs:complexType name="Scale">
-        <xs:complexContent>
-            <xs:extension base="FlowExpression">
-                <xs:sequence>
-                    <xs:element name="inner" type="FlowExpression"/>
-                </xs:sequence>
-                <xs:attribute name="factor" type="xs:double" use="required"/>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="Call">
-        <xs:complexContent>
-            <xs:extension base="FlowExpression">
-                <xs:sequence>
-                    <xs:element name="argument" type="Argument" maxOccurs="unbounded"/>
-                </xs:sequence>
-                <xs:attribute name="type" type="xs:string" use="required"/>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="Operator" abstract="true">
-        <xs:complexContent>
-            <xs:extension base="FlowExpression">
-                <xs:sequence>
-                    <xs:element name="operand" type="FlowExpression" minOccurs="2" maxOccurs="unbounded"/>
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="Add">
-        <xs:complexContent>
-            <xs:extension base="Operator"/>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="Subtract">
-        <xs:complexContent>
-            <xs:extension base="Operator"/>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="Multiply">
-        <xs:complexContent>
-            <xs:extension base="Operator"/>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="Divide">
-        <xs:complexContent>
-            <xs:extension base="Operator"/>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="Min">
-        <xs:complexContent>
-            <xs:extension base="Operator"/>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="Max">
-        <xs:complexContent>
-            <xs:extension base="Operator"/>
-        </xs:complexContent>
-    </xs:complexType>
-
-    <xs:complexType name="Argument">
+  <xs:complexType name="Neuron2Robot">
+    <xs:annotation>
+      <xs:documentation>A Neuron2Robot transfer function is a transfer function whose primary purpose is to extract information from the neural network and use this information to control the robot using robot control messages</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="BIBITransferFunction">
         <xs:sequence>
-            <xs:element name="value" type="FlowExpression"/>
+          <xs:element name="returnValue" type="TopicChannel" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>The return value topic channel of a Neuron2Robot transfer function is the channel to which control messages the return value of the Python function are sent</xs:documentation>
+            </xs:annotation>
+          </xs:element>
         </xs:sequence>
-        <xs:attribute name="name" type="xs:string" use="required"/>
-    </xs:complexType>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
 
-    <xs:complexType name="Local">
+  <xs:simpleType name="NeuronTarget">
+    <xs:annotation>
+      <xs:documentation>The target of a neural connection</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Inhibitory">
+        <xs:annotation>
+          <xs:documentation>Inhibitory means that the artificial synapse inhibits the target neuron, i.e. lowers its membrane potential.</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Excitatory">
+        <xs:annotation>
+          <xs:documentation>Excitatory means that the artificial synapse excites the target neuron, i.e. the membrane potential raises</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="NeuronConnector" abstract="true">
+    <xs:annotation>
+      <xs:documentation>This type denotes a connector to other populations</xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="weights" type="xs:double" use="optional">
+      <xs:annotation>
+        <xs:documentation>The weights of the connector denote the connections between the source neuron and the target neurons. If no weight is specified, the default weight of the neuron connection device is used.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="delays" type="xs:double" use="optional">
+      <xs:annotation>
+        <xs:documentation>The delays of the connector denote the delays of spike deliveries. If no delays are specified, the default delays of the neuron connection device is used.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="name" type="xs:string" use="optional" default="default">
+      <xs:annotation>
+        <xs:documentation>The name of the connector for later reference.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:complexType name="NeuronConnectorRef">
+    <xs:annotation>
+      <xs:documentation>A reference to an elsewhere defined neural connector</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:restriction base="xs:anyType">
+        <xs:attribute name="ref" type="xs:string" use="required">
+          <xs:annotation>
+            <xs:documentation>The name of the referenced connector</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="OneToOneConnector">
+    <xs:annotation>
+      <xs:documentation>
+        This connector type is obsolete.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="NeuronConnector"/>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="AllToAllConnector">
+    <xs:annotation>
+      <xs:documentation>This connector type is obsolete.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="NeuronConnector"/>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="FixedNumberPreConnector">
+    <xs:annotation>
+      <xs:documentation>This connector type is obsolete.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="NeuronConnector">
+        <xs:attribute name="count" type="xs:positiveInteger" use="required"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="SynapseDynamics" abstract="true">
+    <xs:annotation>
+      <xs:documentation>This type denotes a reusable synapse dynamics configuration</xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="name" type="xs:string" use="optional" default="default">
+      <xs:annotation>
+        <xs:documentation>The name of the synapse dynamics configuration</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:complexType name="SynapseDynamicsRef">
+    <xs:annotation>
+      <xs:documentation>This type specifies a reference to a synapse dynamics configuration</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:restriction base="xs:anyType">
+        <xs:attribute name="ref" type="xs:string" use="required">
+          <xs:annotation>
+            <xs:documentation>The name of the synapse dynamics configuration</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="TsodyksMarkramMechanism">
+    <xs:annotation>
+      <xs:documentation>A synapse dynamics implementation based on the Tsodyks-Markram mechanism</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="SynapseDynamics">
+        <xs:attribute name="u" type="xs:double" use="required"/>
+        <xs:attribute name="tau_rec" type="xs:double" use="required"/>
+        <xs:attribute name="tau_facil" type="xs:double" use="required"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="DeviceChannel">
+    <xs:annotation>
+      <xs:documentation>This type denotes a connection of a transfer function to a neural network</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="neurons" type="NeuronSelector">
+        <xs:annotation>
+          <xs:documentation>This specifies the neurons that should be connected to this neural connector device</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:choice minOccurs="0">
+        <xs:element name="connector" type="NeuronConnector">
+          <xs:annotation>
+            <xs:documentation>Additional information on the connection to the neurons</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="connectorRef" type="NeuronConnectorRef">
+          <xs:annotation>
+            <xs:documentation>A reference to a reusable connector</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:choice>
+      <xs:choice minOccurs="0">
+        <xs:element name="synapseDynamics" type="SynapseDynamics">
+          <xs:annotation>
+            <xs:documentation>Additional information on the dynamics of the connection of this device to the neural network</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="synapseDynamicsRef" type="SynapseDynamicsRef">
+          <xs:annotation>
+            <xs:documentation>A reference to a reusable synapse dynamics</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:choice>
+      <xs:element name="target" type="NeuronTarget" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>The target of this connection. This configuration is useful in particular for spike source devices such as Poisson generators. By default, these devices are excitatory but they can be configured to inhibit connected neurons.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="body" type="FlowExpression" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>This element is only meaningful for spike sources. It depicts the value to which the device should be configured.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation>The name of this device channel</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="type" type="DeviceType" use="required">
+      <xs:annotation>
+        <xs:documentation>The type of the neural network connection specified with this device channel</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:complexType name="DeviceGroupChannel">
+    <xs:annotation>
+      <xs:documentation>This type denotes a connection of a transfer function to a neural network using an array of devices</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="neurons" type="NeuronGroupSelector">
+        <xs:annotation>
+          <xs:documentation>This specifies the neurons that should be connected to this neural connector device</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:choice minOccurs="0">
+        <xs:element name="connector" type="NeuronConnector">
+          <xs:annotation>
+            <xs:documentation>Additional information on the connection to the neurons</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="connectorRef" type="NeuronConnectorRef">
+          <xs:annotation>
+            <xs:documentation>A reference to a reusable connector</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:choice>
+      <xs:choice minOccurs="0">
+        <xs:element name="synapseDynamics" type="SynapseDynamics">
+          <xs:annotation>
+            <xs:documentation>Additional information on the dynamics of the connection of this device to the neural network</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="synapseDynamicsRef" type="SynapseDynamicsRef">
+          <xs:annotation>
+            <xs:documentation>A reference to a reusable synapse dynamics</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:choice>
+      <xs:element name="target" type="NeuronTarget" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>The target of this connection. This configuration is useful in particular for spike source devices such as Poisson generators. By default, these devices are excitatory but they can be configured to inhibit connected neurons.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="body" type="FlowExpression" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>This element is only meaningful for spike sources. It depicts the value to which the device should be configured.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation>The name of this device group channel</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="type" type="DeviceType" use="required">
+      <xs:annotation>
+        <xs:documentation>The type of the neural network connection specified with this device group channel</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:complexType name="NeuronGroupSelector" abstract="true">
+    <xs:annotation>
+      <xs:documentation>This type denotes an abstract group of neurons</xs:documentation>
+    </xs:annotation>
+  </xs:complexType>
+
+  <xs:complexType name="ChainSelector">
+    <xs:annotation>
+      <xs:documentation>A chain of neurons or neuron groups</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="NeuronGroupSelector">
         <xs:sequence>
-            <xs:element name="body" type="FlowExpression"/>
+          <xs:element name="neurons" type="NeuronSelector" minOccurs="0" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>Single neuron connections such as single neurons</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="connectors" type="NeuronGroupSelector" minOccurs="0" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>Existing groups of neurons</xs:documentation>
+            </xs:annotation>
+          </xs:element>
         </xs:sequence>
-        <xs:attribute name="name" type="xs:string" use="required"/>
-    </xs:complexType>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
 
-    <xs:complexType name="SimulationStep">
-        <xs:complexContent>
-            <xs:extension base="FlowExpression"/>
-        </xs:complexContent>
-    </xs:complexType>
+  <xs:complexType name="MapSelector">
+    <xs:annotation>
+      <xs:documentation>An indexed mapping of neurons to neuron groups. As index, either a number or a population may be used. In the latter case, the size of the given population is used as count.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="NeuronGroupSelector">
+        <xs:sequence>
+          <xs:choice>
+            <xs:element name="count" type="xs:positiveInteger">
+              <xs:annotation>
+                <xs:documentation>The number of neural network connections contained in this indexed mapping</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="source" type="MultiNeuronSelector">
+              <xs:annotation>
+                <xs:documentation>The source population. If possibility is used, the indexed group consists of one neuron selection per neuron in the source group</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+          <xs:element name="pattern" type="NeuronSelectorTemplate">
+            <xs:annotation>
+              <xs:documentation>The pattern that shall be used to select neurons</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
 
-    <xs:complexType name="ArgumentReference">
-        <xs:complexContent>
-            <xs:extension base="FlowExpression">
-                <xs:attribute name="name" type="xs:string" use="required"/>
-                <xs:attribute name="property" type="xs:string" use="optional"/>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
+  <xs:complexType name="NeuronSelector" abstract="true">
+    <xs:annotation>
+      <xs:documentation>The abstract base class of neuron selectors</xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="population" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation>The population this neuron selector refers to</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
 
-    <xs:complexType name="Constant">
-        <xs:complexContent>
-            <xs:extension base="FlowExpression">
-                <xs:attribute name="value" type="xs:double" use="required"/>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
+  <xs:complexType name="Index">
+    <xs:annotation>
+      <xs:documentation>Selection of exactly one neuron using an index of a base population</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="NeuronSelector">
+        <xs:attribute name="index" type="xs:nonNegativeInteger" use="required">
+          <xs:annotation>
+            <xs:documentation>The index of the selected neuron within its population</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
 
-    <xs:complexType name="ConstantString">
-        <xs:complexContent>
-            <xs:extension base="FlowExpression">
-                <xs:attribute name="value" type="xs:string" use="required"/>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
+  <xs:complexType name="MultiNeuronSelector" abstract="true">
+    <xs:annotation>
+      <xs:documentation>
+        The abstract base class of selections of multiple neurons
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="NeuronSelector"/>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="Range">
+    <xs:annotation>
+      <xs:documentation>Selection of a range of neurons from an existing population</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="MultiNeuronSelector">
+        <xs:attribute name="from" type="xs:nonNegativeInteger" use="required">
+          <xs:annotation>
+            <xs:documentation>The starting index from which neurons are selected</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="to" type="xs:nonNegativeInteger" use="required">
+          <xs:annotation>
+            <xs:documentation>The stop index to which neurons are selected</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="step" type="xs:positiveInteger" use="optional">
+          <xs:annotation>
+            <xs:documentation>The step of the selection</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="List">
+    <xs:annotation>
+      <xs:documentation>Selection of a list of neurons using their indices</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="MultiNeuronSelector">
+        <xs:sequence>
+          <xs:element name="element" type="xs:nonNegativeInteger" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>The indices of selected neurons</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="Population">
+    <xs:annotation>
+      <xs:documentation>Selection of an entire population of neurons</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="MultiNeuronSelector">
+        <xs:attribute name="count" type="xs:positiveInteger" use="required">
+          <xs:annotation>
+            <xs:documentation>The size of the selected population. This is necessary for validation purposes where the neural network is not available.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:simpleType name="TemplatePattern">
+    <xs:annotation>
+      <xs:documentation>A regular expression denoting simple arithmetic index computations based on an index called i</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(\(\s*)*(i|\d+)(\s*(\+|\*)\s*(\(\s*)*(i|\d+)\s*|\))*"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="NeuronSelectorTemplate" abstract="true">
+    <xs:annotation>
+      <xs:documentation>A template for neuron selectors</xs:documentation>
+    </xs:annotation>
+  </xs:complexType>
+
+  <xs:complexType name="IndexTemplate">
+    <xs:annotation>
+      <xs:documentation>A template for an index-based neuron selection</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="NeuronSelectorTemplate">
+        <xs:attribute name="index" type="TemplatePattern" use="required">
+          <xs:annotation>
+            <xs:documentation>The template for the index to access the neurons</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="RangeTemplate">
+    <xs:annotation>
+      <xs:documentation>A template for the range-based neuron selection</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="NeuronSelectorTemplate">
+        <xs:attribute name="from" type="TemplatePattern" use="required">
+          <xs:annotation>
+            <xs:documentation>A template for the start index of the selected range</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="to" type="TemplatePattern" use="required">
+          <xs:annotation>
+            <xs:documentation>A template for the end index of the selected range</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="step" type="TemplatePattern" use="optional">
+          <xs:annotation>
+            <xs:documentation>A template for the step of the selected range</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="ListTemplate">
+    <xs:annotation>
+      <xs:documentation>A template for a list-based neuron selection</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="NeuronSelectorTemplate">
+        <xs:sequence>
+          <xs:element name="element" type="TemplatePattern" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>Templates for the indices of selected neurons</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:simpleType name="DeviceType">
+    <xs:annotation>
+      <xs:documentation>The device types supported by the CLE</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ACSource">
+        <xs:annotation>
+          <xs:documentation>The current generators for direct current, alternating current or noisy current do not generate spikes but inject currents of the specified type into all of the connected neurons. These devices receive the amplitude of the generated current as inputs. The ACSource injects alternating currents. </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="DCSource">
+        <xs:annotation>
+          <xs:documentation>The DCSource type is similar to the ACSource but injects directed currents.</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="FixedFrequency">
+        <xs:annotation>
+          <xs:documentation>A fixed frequency generator deterministically generates spikes at a given frequency. Here, the frequency is set as a parameter and can be adjusted to sensory inputs. Unlike the other spike generators, this device type is not directly implemented in neuronal simulators but can be implemented by connecting a current generator with an integrate-and-fire neuron. </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="LeakyIntegratorAlpha">
+        <xs:annotation>
+          <xs:documentation>The concept of leaky integrators is to simply integrate spikes coming from a neuron under observation and add a leak term to it. The rationale behind this is that in spiking neuronal networks, the membrane potential is highly fragile. Shortly after a spike has been issued, the membrane potential is reset and therefore, it has a high importance whether any measurement is taken before or after a neuron spikes. Therefore, we augment the neuronal network with an additional leaky integrate-and-fire neuron with an infinite threshold potential (so that it never spikes) and measure the membrane potential of this neuron. The result is much less fragile and therefore appropriate to be used for robot control signals. This version of leaky integrators has an alpha-shaped post-synaptic current.</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="LeakyIntegratorExp">
+        <xs:annotation>
+          <xs:documentation>This device type is similar to LeakyIntegratorAlpha but has an exponentially shaped post-synaptic current.</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="NCSource">
+        <xs:annotation>
+          <xs:documentation>The noisy current generator is rather a tool to test whether the neuronal network currently simulated is robust with regard to noise rather than being a good choice to encode sensory inputs.</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Poisson">
+        <xs:annotation>
+          <xs:documentation>A Poisson generator issues spikes according to a Poisson distribution. Here, the inverse of the lambda parameter can be set in accordance to sensory inputs. This inverse reflects the rate in which spikes are generated by this device. </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="SpikeRecorder">
+        <xs:annotation>
+          <xs:documentation>The simplest thing a spike sink can do is to simply record all spikes issued to a neuron under observation. However, this has two major drawbacks. At first, the communication overhead is increased since all spikes are transmitted between the neuronal simulation and the transfer function but more importantly the transfer function has to make sense of this series of spikes. This allows great flexibility as this approach is extensible, but it is not suited for general use.</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="PopulationRate">
+        <xs:annotation>
+          <xs:documentation>Another very common pattern is to simply take the average incoming spike rate of a neuron or a range of neurons. This is again relatively stable and can be used for translation into robot control signals.</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="TopicChannel">
+    <xs:annotation>
+      <xs:documentation>A connection of a transfer function to a robot control message topic</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="body" type="FlowExpression" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>The value that should be sent to the robot control topic. If this element is present, then the channel is published to. Otherwise, the channel subscribes to the selected topic.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation>The name of the robot topic channel</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="topic" type="RobotTopicAddress" use="required">
+      <xs:annotation>
+        <xs:documentation>The actual topic address, for example '/husky/cmd_vel'</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="type" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation>The type of the topic</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:simpleType name="RobotTopicAddress">
+    <xs:annotation>
+      <xs:documentation>This type denotes a valid address of a robot control topic</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(/[a-zA-Z0-9_-]+)+(/)?"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="FlowExpression" abstract="true">
+    <xs:annotation>
+      <xs:documentation>The abstract base class for an information flow expression. In the scope of the Transfer functions, an information flow is an expression without any control flow.</xs:documentation>
+    </xs:annotation>
+  </xs:complexType>
+
+  <xs:complexType name="Scale">
+    <xs:annotation>
+      <xs:documentation>The scaling of an element by a constant factor</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="FlowExpression">
+        <xs:sequence>
+          <xs:element name="inner" type="FlowExpression">
+            <xs:annotation>
+              <xs:documentation>The inner flow expression</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+        <xs:attribute name="factor" type="xs:double" use="required">
+          <xs:annotation>
+            <xs:documentation>The factor by which the inner expression should be scaled</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="Call">
+    <xs:annotation>
+      <xs:documentation>A call to a static method</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="FlowExpression">
+        <xs:sequence>
+          <xs:element name="argument" type="Argument" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>Named arguments that are passed to the selected method</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+        <xs:attribute name="type" type="xs:string" use="required">
+          <xs:annotation>
+            <xs:documentation>A reference to the static method. This is specified as a full path of a Python function, including both the path of the module and the name of the function. For this to work, the function must be static, i.e. a global function on that module or a static class function.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="Operator" abstract="true">
+    <xs:annotation>
+      <xs:documentation>The abstract base class for an operator call based on a flow expression</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="FlowExpression">
+        <xs:sequence>
+          <xs:element name="operand" type="FlowExpression" minOccurs="2" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>The arguments of the operator expression</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="Add">
+    <xs:annotation>
+      <xs:documentation>The sum of all operands</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="Operator"/>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="Subtract">
+    <xs:annotation>
+      <xs:documentation>The difference between two operands</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:restriction base="Operator">
+        <xs:sequence>
+          <xs:element name="operand" type="FlowExpression" minOccurs="2" maxOccurs="2">
+            <xs:annotation>
+              <xs:documentation>The arguments of the operator expression</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="Multiply">
+    <xs:annotation>
+      <xs:documentation>The product of all operands</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="Operator"/>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="Divide">
+    <xs:annotation>
+      <xs:documentation>The quotient of two operands</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:restriction base="Operator">
+        <xs:sequence>
+          <xs:element name="operand" type="FlowExpression" minOccurs="2" maxOccurs="2">
+            <xs:annotation>
+              <xs:documentation>The arguments of the operator expression</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="Min">
+    <xs:annotation>
+      <xs:documentation>The minimum of the provided values</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="Operator"/>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="Max">
+    <xs:annotation>
+      <xs:documentation>The maximum of the provided values</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="Operator"/>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="Argument">
+    <xs:annotation>
+      <xs:documentation>A named argument</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="value" type="FlowExpression">
+        <xs:annotation>
+          <xs:documentation>The value passed for this argument</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation>The name of this argument</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:complexType name="Local">
+    <xs:annotation>
+      <xs:documentation>A local variable</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="body" type="FlowExpression">
+        <xs:annotation>
+          <xs:documentation>The initial value for this local variable</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation>The name of the local variable</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:complexType name="SimulationStep">
+    <xs:annotation>
+      <xs:documentation>A reference to the simulation step</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="FlowExpression"/>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="ArgumentReference">
+    <xs:annotation>
+      <xs:documentation>A reference to an argument, either a device or a local variable</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="FlowExpression">
+        <xs:attribute name="name" type="xs:string" use="required">
+          <xs:annotation>
+            <xs:documentation>The name of the device or local variable</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="property" type="xs:string" use="optional">
+          <xs:annotation>
+            <xs:documentation>If specified, only a property of the local variable is referenced. Otherwise, the value itself (or the default property of a device) is selected.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="Constant">
+    <xs:annotation>
+      <xs:documentation>A constant as a flow element</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="FlowExpression">
+        <xs:attribute name="value" type="xs:double" use="required">
+          <xs:annotation>
+            <xs:documentation>The value for this constant</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="ConstantString">
+    <xs:annotation>
+      <xs:documentation>A constant string</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="FlowExpression">
+        <xs:attribute name="value" type="xs:string" use="required">
+          <xs:annotation>
+            <xs:documentation>The value of this string constant</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
 </xs:schema>
