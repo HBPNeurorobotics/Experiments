@@ -70,7 +70,7 @@
     "levelsInWhite": "1",
     "levelsOutBlack": "0",
     "levelsOutWhite": "1",
-    "skyBox": "img/3denv/sky/clouds/clouds",
+    "skyBox": "clouds",
     "sun": "SIMPLELENSFLARE",
     "bloom": true,
     "bloomStrength": "0.35",

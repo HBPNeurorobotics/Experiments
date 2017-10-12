@@ -67,7 +67,7 @@
     "levelsInWhite": "0.75",
     "levelsOutBlack": 0,
     "levelsOutWhite": 1,
-    "skyBox": "img/3denv/sky/country/country",
+    "skyBox": "country",
     "sun": "",
     "bloom": false,
     "bloomStrength": "0.83",

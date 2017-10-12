@@ -28,7 +28,7 @@
     "levelsInWhite": "0.95",
     "levelsOutBlack": 0,
     "levelsOutWhite": 1,
-    "skyBox": "img/3denv/sky/blur/blur",
+    "skyBox": "blur",
     "sun": "",
     "bloom": false,
     "bloomStrength": "0.51",

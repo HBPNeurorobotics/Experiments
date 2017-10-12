@@ -67,7 +67,7 @@
     "levelsInWhite": "0.8",
     "levelsOutBlack": 0,
     "levelsOutWhite": 1,
-    "skyBox": "img/3denv/sky/forest/forest",
+    "skyBox": "forest",
     "sun": "",
     "bloom": false,
     "bloomStrength": "0.83",

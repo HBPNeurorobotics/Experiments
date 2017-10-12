@@ -28,7 +28,7 @@
     "levelsInWhite": "0.65",
     "levelsOutBlack": "0.07",
     "levelsOutWhite": "0.98",
-    "skyBox": "img/3denv/sky/clouds/clouds",
+    "skyBox": "clouds",
     "sun": "",
     "bloom": false,
     "bloomStrength": "0.51",
