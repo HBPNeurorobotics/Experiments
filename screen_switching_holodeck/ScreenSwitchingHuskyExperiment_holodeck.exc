@@ -2,10 +2,10 @@
 <ExD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
      xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
-    <name>Husky Braitenberg experiment with automatically switching screens in holodeck</name>
+    <name>Holodeck Husky Braitenberg experiment with automatically switching screens</name>
     <thumbnail>ScreenSwitchingHuskyExperiment.png</thumbnail>
-    <description>This experiment is similar to the Husky Braitenberg one (Husky robot detecting red
-        colour and driving towards it).
+    <description>This experiment is similar to the Husky Braitenberg one in the Holodeck 
+        (Husky robot detecting red colour and driving towards it).
         In this experiment the right screen is turned red automatically after 20 seconds of
         simulation time. Also, the robot reaching a red screen triggers on the opposite screen.
         This is to demonstrate how, using the SMACH state machine script, the user can
@@ -13,7 +13,7 @@
     </description>
     <timeout>840</timeout>
     <configuration type="3d-settings" src="ScreenSwitchingHuskyExperiment.3ds"/>
-    <maturity>development</maturity>
+    <maturity>production</maturity>
     <environmentModel src="virtual_room/virtual_room.sdf">
         <robotPose x="0.0" y="0.0" z="0.5" ux="0.0" uy="0.0" uz="1.0" theta="0.0"/>
     </environmentModel>

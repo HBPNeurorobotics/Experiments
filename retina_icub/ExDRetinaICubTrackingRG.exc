@@ -2,9 +2,9 @@
 <ExD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
      xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
-    <name>iCub Visual Tracking experiment with Retina &amp; RG opponency</name>
+    <name>Holodeck iCub Visual Tracking experiment with Retina &amp; RG opponency</name>
     <thumbnail>ExDRetinaICubTrackingRG.png</thumbnail>
-    <description>In this experiment the iCub robot performs a Visual Tracking task in the virtual room environment exploiting Red-Green color opponency.</description>
+    <description>In this experiment the iCub robot performs a Visual Tracking task in the holodeck exploiting Red-Green color opponency.</description>
     <timeout>840</timeout>
     <maturity>development</maturity>
     <environmentModel src="virtual_room/virtual_room_tracking_icub.sdf">

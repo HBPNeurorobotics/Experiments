@@ -2,12 +2,12 @@
 <ExD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
      xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
-    <name>ICub in holodeck</name>
+    <name>Holodeck ICub</name>
     <thumbnail>ExDTemplateICubHolodeck.png</thumbnail>
     <description>This experiment loads the iCub robot in the holodeck, with an idle brain and basic transfer functions. You are free to edit it.</description>
     <timeout>840</timeout>
     <configuration type="3d-settings" src="ExDTemplateICubHolodeck.3ds"/>
-    <maturity>development</maturity>
+    <maturity>production</maturity>
     <environmentModel src="empty_virtuallab/empty_virtuallab.sdf">
         <robotPose x="1.929" y="0.286" z="0.949" ux="0.0" uy="0.0" uz="1.57" theta="0.70710689672598181"/>
     </environmentModel>
