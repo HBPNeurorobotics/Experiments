@@ -2,7 +2,7 @@
 <ExD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
      xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
-    <name>Empty Template Lauron experiment</name>
+    <name>Template Lauron in empty environment</name>
     <thumbnail>ExDTemplateLauron.png</thumbnail>
     <description>This experiment loads the Lauron robot in an empty world, with an idle brain and basic transfer functions. You are free to edit it.</description>
     <timeout>840</timeout>

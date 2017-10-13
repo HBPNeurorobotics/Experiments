@@ -2,7 +2,7 @@
 <ExD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
      xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
-    <name>CDP1 Mouse experiment in holodeck</name>
+    <name>Holodeck CDP1 Mouse experiment</name>
     <thumbnail>ExDMouseCDP1.png</thumbnail>
     <description>CDP-1 mouse experiment MVP</description>
     <timeout>1000000000</timeout>

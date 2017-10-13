@@ -2,8 +2,8 @@
 <ExD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
      xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
-    <name>Distributed Brain Husky Braitenberg experiment in holodeck</name>
-    <thumbnail>ExDXMLExample.png</thumbnail>
+    <name>Husky Braitenberg experiment with distributed brain</name>
+    <thumbnail>ExDDistributedBrainHusky.png</thumbnail>
     <description>This experiment loads the Husky robot from Clearpath Robotics and the virtual room
         environment. If the user starts the experiment, the Braitenberg vehicle network is executed
         and the robot will turn around itself in place, until the camera detects a red color. Then,
@@ -13,7 +13,7 @@
     <timeout>840</timeout>
     <configuration type="3d-settings" src="ExDXMLExample.3ds"/>
     <maturity>development</maturity>
-    <environmentModel src="virtual_room/virtual_room.sdf">
+    <environmentModel src="virtual_room/virtual_room_lausanne.sdf">
         <robotPose x="0.0" y="0.0" z="0.5" ux="0.0" uy="0.0" uz="1.0" theta="0.0"/>
     </environmentModel>
     <bibiConf src="milestone2_python_tf.bibi" processes="2"/>

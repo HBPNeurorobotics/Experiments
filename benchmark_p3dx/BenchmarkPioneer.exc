@@ -4,10 +4,11 @@
      xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
     <name>Benchmark Pioneer P3DX experiment</name>
     <thumbnail>BenchmarkPioneer.png</thumbnail>
-    <description>This experiment loads the Pioneer P3DX robot in a benchmark setup.</description>
+    <description>This experiment loads the Pioneer P3DX robot in a benchmark setup. The benchmarking code is not yet available though,
+    but you can still play and program the robot.</description>
     <timeout>840</timeout>
     <configuration type="3d-settings" src="BenchmarkPioneer.3ds"/>
-    <maturity>development</maturity>
+    <maturity>production</maturity>
     <environmentModel src="p3dxbenchmark_world/p3dxbenchmark_world.sdf">
         <robotPose x="0.0" y="0.0" z="0.5" ux="0.0" uy="0.0" uz="0.0" theta="0.0"/>
     </environmentModel>

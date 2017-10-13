@@ -2,11 +2,11 @@
 <ExD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
      xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
-    <name>Baseball tutorial experiment - Exercise</name>
+    <name>Tutorial baseball experiment - Exercise</name>
     <thumbnail>ExDTutorialBaseball.png</thumbnail>
     <description>
       This guided experiment will walk you through all the features of the Neurorobotics Platform.
-      Launch it and follow the instructions provided in the jupyter notebook located in the Experiments/tutorial_baseball/ folder.
+      Launch it and follow the instructions provided in the jupyter notebook located in the Experiments/tutorial_baseball_exercise folder.
     </description>
     <timeout>86400</timeout>
     <configuration type="3d-settings" src="ExDTutorialBaseball.3ds"/>

@@ -2,11 +2,12 @@
 <ExD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
      xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
-    <name>CodeJam 2017 Tutorial - TensorFlow Husky Braitenberg Experiment</name>
+    <name>Tutorial - TensorFlow Husky Braitenberg Experiment</name>
     <thumbnail>TensorFlowTutorial.png</thumbnail>
-    <description>This expeirment was presented as a tutorial at the CodeJam 2017 event. It
+    <description>This experiment was presented as a tutorial at the CodeJam 2017 event. It
     demonstrates using TensorFlow within the NRP for semantic object segmentation/detection
     in conjunction with the spiking neuron Braitenberg brain for object level interaction.
+    Find more information in the README file in Experiments/tutorial_tensorflow_husky.
     </description>
     <timeout>86400</timeout>
     <configuration type="3d-settings" src="TensorFlowTutorial.3ds"/>
