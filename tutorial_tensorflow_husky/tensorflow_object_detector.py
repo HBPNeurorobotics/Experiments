@@ -34,7 +34,7 @@ def object_detection(t, detection_graph, sess, category_index, bridge, state, ta
         import sys
 
         # paths to saved model states, update these paths if different in your local installation
-        MODEL_BASE = '/opt/models'
+        MODEL_BASE = '/opt/models/research'
         sys.path.append(MODEL_BASE)
         sys.path.append(MODEL_BASE + '/object_detection')
         sys.path.append(MODEL_BASE + '/slim')

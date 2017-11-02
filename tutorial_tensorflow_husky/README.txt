@@ -11,7 +11,7 @@ https://www.tensorflow.org/install/install_linux#installing_with_virtualenv
 
 == Install TensorFlow Models for Object Detction ==
 
-Install the models using this known version, the file structure has changed in the latest commits and will require more modification.
+Install the models from the official tensorflow/models repository.
 
 You will need some system level dependencies:
 
@@ -21,8 +21,7 @@ If you are unable to write to /opt, pick a different path and note it for below.
 
 cd /opt
 git clone https://github.com/tensorflow/models
-git checkout 614338f99a0302a0b4dd89f40acf966dce1dae32
-cd models
+cd models/research
 protoc object_detection/protos/*.proto --python_out=.
 
 
