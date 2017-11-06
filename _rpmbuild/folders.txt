@@ -22,6 +22,7 @@ manipulation_RL
 multiple_robots_tutorial
 neuronal_red_detection
 neuronal_red_detection_holodeck
+retina_icub
 roboy
 screen_switching
 screen_switching_holodeck
