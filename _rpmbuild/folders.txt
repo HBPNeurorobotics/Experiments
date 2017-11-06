@@ -23,6 +23,7 @@ multiple_robots_tutorial
 neuronal_red_detection
 neuronal_red_detection_holodeck
 retina_icub
+retina_mockup
 roboy
 screen_switching
 screen_switching_holodeck

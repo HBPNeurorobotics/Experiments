@@ -6,13 +6,15 @@
     <populations population="ganglion_input_ON" xsi:type="Range" from="320" to="640"/>
     <populations population="ganglion_output_OFF" xsi:type="Range" from="640" to="960"/>
     <populations population="ganglion_output_ON" xsi:type="Range" from="960" to="1280"/>
-    <populations population="record" xsi:type="Range" from="960" to="1280"/>
+    <populations population="record" xsi:type="Range" from="0" to="1280"/>
   </brainModel>
   <bodyModel>icub_model/model_retina.sdf</bodyModel>
   <configuration src="green_tracking_retina.py" type="retina"/>
 
   <transferFunction xsi:type="PythonTransferFunction">
     #<![CDATA[
+    # NOTE: record has 1280 neurons, monitoring slows down the sim
+    # it could be useful to reduce its size e.g. [960,1280]
     @nrp.NeuronMonitor(nrp.brain.record, nrp.spike_recorder)
     def all_neurons_monitor(t):
         return True
@@ -22,19 +24,21 @@
   <!-- This transfer function is for saving all the neuron spikes on a file only -->
   <transferFunction xsi:type="PythonTransferFunction">
     #<![CDATA[
+    #This TF saves the neuron spikes on a file only
     from std_msgs.msg import Empty
 
     @nrp.MapVariable("brain_data", initial_value=None)
     @nrp.MapSpikeSink("all_neurons", nrp.brain.circuit[slice(0, 1280, 1)], nrp.spike_recorder)
     @nrp.Neuron2Robot(Topic('/dummy', Empty))
     def all_neurons_spike_monitor(t, brain_data, all_neurons):
-        ns = brain_data.value
-        if ns is None:
-            ns = [0]*1280
-        for q in all_neurons.times.tolist():
-            ns[int(q[0])-nrp.config.brain_root.circuit[0]] = q[1]
-        nss = map(str, ns)
-        brain_data.value = ns
+        pass
+        #ns = brain_data.value
+        #if ns is None:
+        #    ns = [0]*1280
+        #for q in all_neurons.times.tolist():
+        #    ns[int(q[0])-nrp.config.brain_root.circuit[0]] = q[1]
+        #nss = map(str, ns)
+        #brain_data.value = ns
     #]]>
   </transferFunction>
 
@@ -113,9 +117,11 @@
       spike_counts_ON = [0]*320
       for ev in ganglion.times:
           if ev[0] > 640 and ev[0] <= 960:
-              spike_counts_OFF[int(ev[0]-641)] = spike_counts_OFF[int(ev[0]-641)] + 1
+              idx = int(ev[0]-641)
+              spike_counts_OFF[idx] = spike_counts_OFF[idx] + 1
           elif ev[0] > 960 and ev[0] <= 1280:
-              spike_counts_ON[int(ev[0]-961)] = spike_counts_ON[int(ev[0]-961)] + 1
+              idx = int(ev[0]-961)
+              spike_counts_ON[idx] = spike_counts_ON[idx] + 1
 
       highest_spiking_count_OFF = max(spike_counts_OFF)
       highest_spiking_count_ON = max(spike_counts_ON)
@@ -147,6 +153,7 @@
 
   <transferFunction xsi:type="PythonTransferFunction">
     #<![CDATA[
+    # Compute Target position following a sinusoidal trajectory
     @nrp.MapVariable("target_freq",scope=nrp.GLOBAL)
     @nrp.MapVariable("target_ampl", scope=nrp.GLOBAL)
     @nrp.MapVariable("target_delta", scope=nrp.GLOBAL)
@@ -164,6 +171,7 @@
 
   <transferFunction xsi:type="PythonTransferFunction">
     #<![CDATA[
+    # Compute Target position following a linear trajectory
     @nrp.MapVariable("target_delta", scope=nrp.GLOBAL)
     @nrp.MapVariable("trajectory", scope=nrp.GLOBAL)
     @nrp.Robot2Neuron()
@@ -179,6 +187,7 @@
 
   <transferFunction xsi:type="PythonTransferFunction">
     #<![CDATA[
+    # Compute Target position following a triangular trajectory
     @nrp.MapVariable("target_freq",scope=nrp.GLOBAL)
     @nrp.MapVariable("target_ampl", scope=nrp.GLOBAL)
     @nrp.MapVariable("target_delta", scope=nrp.GLOBAL)
@@ -203,6 +212,7 @@
 
   <transferFunction xsi:type="PythonTransferFunction">
     #<![CDATA[
+    # Compute Target position following a random linear trajectory
     @nrp.MapVariable("target_delta", scope=nrp.GLOBAL)
     @nrp.MapVariable("direction", initial_value=1)
     @nrp.MapVariable("counter", initial_value=0)

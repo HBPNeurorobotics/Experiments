@@ -7,7 +7,7 @@
     <populations population="record" xsi:type="Range" from="0" to="320"/>
   </brainModel>
   <bodyModel>icub_model/model_retina.sdf</bodyModel>
-  <configuration src="mockup_configuration.py" type="retina"/>
+  <configuration src="mockup_retina_configuration.py" type="retina"/>
 
   <transferFunction xsi:type="PythonTransferFunction">
     #<![CDATA[
