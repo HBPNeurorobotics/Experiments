@@ -23,4 +23,9 @@
         <cameraLookAt x="-0.527092211" y="0.839239426" z="-0.133607597"/>
     </cameraPose>
     <physicsEngine>opensim</physicsEngine>
+    <gzbridgesettings>
+        <pose_update_delta_translation>1.e-12</pose_update_delta_translation>
+        <pose_update_delta_rotation>1.e-12</pose_update_delta_rotation>
+        <pose_update_early_threshold>0.02</pose_update_early_threshold>
+    </gzbridgesettings>
 </ExD>

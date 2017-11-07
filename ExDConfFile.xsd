@@ -294,6 +294,11 @@
           <xsd:documentation>If specified, this element denotes the physics simulator that should be used. We currently support either ODE or OpenSim.</xsd:documentation>
         </xsd:annotation>
       </xsd:element>
+      <xsd:element name="gzbridgesettings" type="GzBridgeSettings" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>Settings for the relay of the component relaying information from the simulation backend to the visualization client.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
     </xsd:sequence>
   </xsd:complexType>
 
@@ -309,6 +314,32 @@
       </xsd:element>
     </xsd:sequence>
   </xsd:complexType>
+
+    <xsd:complexType name="GzBridgeSettings">
+        <xsd:sequence>
+            <xsd:element name="pose_update_delta_translation" type="xsd:float" minOccurs="0">
+              <xsd:annotation>
+                <xsd:documentation>
+                  The magnitude of translation delta by which a pose must change for it to be relayed to the frontend.
+                </xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="pose_update_delta_rotation" type="xsd:float"  minOccurs="0">
+              <xsd:annotation>
+                <xsd:documentation>
+                  The angle delta by which a pose must change for it to be relayed to the frontend.
+                </xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="pose_update_early_threshold" type="xsd:float"  minOccurs="0">
+              <xsd:annotation>
+                <xsd:documentation>
+                  Maximal period during which larger thresholds are used rather than those defined in gzbridgesettings.
+                </xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
 
   <xsd:complexType name="StateMachine" abstract="true">
     <xsd:annotation>
