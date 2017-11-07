@@ -3,128 +3,68 @@
 A state-machine that deletes, spawns and moves objects in the 3D scenes.
 """
 
-__author__ = 'FabianAichele, Michael Welter'
-
+# Standard imports
 import math
-import time
-import traceback
 import sys
 import os
-import datetime
-import copy
-import threading
 import time
 
+# ROS and SMACH
 import rospy
 import smach
 import smach_ros
 from smach import StateMachine
 from smach import CBState
+# Wait states
 from hbp_nrp_excontrol.nrp_states import ClockMonitorState, ClockDelayState
+
+# Logging
 from hbp_nrp_excontrol.logs import clientLogger
-from std_msgs.msg import Float64, String
-from generic_controller_plugin.srv import SetPIDParameters
-from sensor_msgs.msg import JointState
 
-from generic_controller_plugin.srv import JointProperties
-
-search_path = os.path.join(os.environ['HBP'], 'Models','cdp1_mouse_w_sled')
-sys.path.append(search_path)
+# The experimental setup comes with a convenientapi.
+# It is currently contained nia python module that
+# also allows manual control of the xperiment.
+# In order to use it we have to set the search path
+# and import it.
+sys.path.append(os.path.join(os.environ['HBP'], 'Models', 'cdp1_mouse_w_sled'))
 import manualcontrol
-reload(manualcontrol) # Because the NRP runs everything on the same python interpreter.
+reload(manualcontrol)
 
-model_name = "robot"
-joint_name = "cdp1_msled::world_sled"
+sled_control = manualcontrol.SledControl('robot', 'cdp1_msled::world_sled')
 
-# This class will raise an exception if some ROS services are
-# not available within some generous timeout.
-sled_control = \
-    manualcontrol.SledControl(model_name, joint_name)
-
-
+# Waitstate with sub-second precision
 class WaitToClockStateCDP1(ClockMonitorState):
     """
     Defines a state that waits until the clock has passed a certain threshold
     """
-
-    # pylint: disable=unused-argument
-    # This __callback logic is wrong! It messes with the SMACH state transition in a non-conforming way: INVALID goes to END_SLED!
     def __callback(self, user_data, time):
-        """
-        Callback when a new world clock time is available
-
-        :param user_data: The user data of the state machine
-        :param time: The world time
-        """
-        #print "__callback in WaitToClockStateCDP1: time = " + str(repr(time)) + ", __threshold = " + str(
-        #   self.__threshold) + ", nsecs = " + str(time.clock.nsecs) + " nsecs in secs = " + str(
-        #    1.0 * time.clock.nsecs / 1000000000)
         threshold_reached = (1.0 * time.clock.nsecs / 1000000000) < self.__threshold
         return threshold_reached
 
     def __init__(self, threshold):
-        """
-        Defines a state that waits until the clock passes the given threshold
-
-        :param threshold: The time threshold
-        """
         super(WaitToClockStateCDP1, self).__init__(self.__callback)
         self.__threshold = threshold
 
 
-
-class SledForwardState(smach.State):
-    """
-        This state simply turns on the PID controler on the sled and sets the desired target position.
-    """
-    def __init__(self):
-        super(SledForwardState, self).__init__(
-                outcomes = ['succeeded'])
-        self._target_position = 1.
-        # Need gazebo to do pretty short timesteps of 1 ms. This is default
-        # and currently cannot be changed. Keep in mind for future though.
-        self._pid_parameters = 40., 10., 10.
-
-    def sled_on(self):
-        sled_control.command_sled_position(self._target_position)
-        sled_control.set_sled_pid_parameters(*self._pid_parameters)
-        clientLogger.info("Sled motor on!")
-
-    def execute(self, ud):
-        self.sled_on()
-        return 'succeeded'
-
-
-
+# Sled control states
 class SledMoveForwardFixedSpeed(smach.State):
-    """
-        This state first computes the time period during which to move
-        the sled based on a prescribed velocity, the target position and
-        the current position. It then interpolates the commanded position
-        between current position and target based on the elapsed time
-        since start.
-    """
     def __init__(self):
         super(SledMoveForwardFixedSpeed, self).__init__(
             outcomes = ['succeeded'])
         self._target_position = 1.
         self._pid_parameters = 40., 10., 10.
-        self._speed = 0.5 # joint axis units per sec.
-
-    def get_sled_pos(self, block = True):
+        self._speed = 0.5
+    def get_sled_pos(self):
         while True:
             joint_states = sled_control.get_last_received_sled_states()
             if joint_states:
                 last_state = joint_states[-1]
                 last_pos = last_state['position']
                 return last_pos
-            if not block:
-                return None
-
     def execute(self, ud):
         pos = self.get_sled_pos()
-        tstart  = rospy.get_time()
-        tend    = tstart + (self._target_position - pos)/self._speed
+        tstart = rospy.get_time() # sim time
+        tend   = tstart + (self._target_position - pos)/self._speed
         sled_control.command_sled_position(pos)
         sled_control.set_sled_pid_parameters(*self._pid_parameters)
         clientLogger.info("Sled motor on, moving ...!")
@@ -139,46 +79,39 @@ class SledMoveForwardFixedSpeed(smach.State):
                 current_target = pos + f * (self._target_position - pos)
                 sled_control.command_sled_position(current_target)
             rate.sleep()
-        clientLogger.info("Sled reached its target.")
+        clientLogger.info('Sled reached its target.')
         return 'succeeded'
-
 
 
 class SledOffState(smach.State):
     def __init__(self):
         super(SledOffState, self).__init__(
-            outcomes = ['succeeded']
-        )
-
+            outcomes = ['succeeded'])
     def sled_off(self):
-        sled_control.set_sled_pid_parameters(0.0, 0.0, 0.0)
-
+        sled_control.set_sled_pid_parameters(0., 0., 0.)
     def execute(self, ud):
         self.sled_off()
         clientLogger.info("Sled released!")
         return 'succeeded'
 
 
-
 class SledMonitorForceState(smach.State):
     def __init__(self):
         super(SledMonitorForceState, self).__init__(
-            outcomes = ['succeeded']
-        )
+            outcomes = ['succeeded'])
         self.threshold_force = 0.195
         self.wait_at_least_sec_before_release = 1.
         self.filter_time_scale = 0.25
         self.last_out_time = time.time()
 
+    # Give some feedback from time to time
     def print_not_too_often(self, effort):
         if time.time() - self.last_out_time > 0.25:
             clientLogger.info("Checking sled effort: %f vs threshold %f" % (effort, self.threshold_force))
             self.last_out_time = time.time()
 
+    # Filter the (noisy) sled force with a exponential weighted low pass filter
     def filter_signal(self, val, new_values, dt):
-        '''
-        Exponentially weighted IIR filtering.
-        '''
         if val is None:
             val = new_values[0]
             new_values = new_values[1:]
@@ -190,7 +123,7 @@ class SledMonitorForceState(smach.State):
     def execute(self, ud):
         filtered_effort = None
         tinit = t = rospy.get_time()
-        clientLogger.info("Waiting %f sec ..." % self.wait_at_least_sec_before_release)
+        clientLogger.info('Waiting %f sec ...' % self.wait_at_least_sec_before_release)
         while 1:
             efforts = sled_control.get_last_received_sled_joint_efforts()
             if efforts:
@@ -200,49 +133,35 @@ class SledMonitorForceState(smach.State):
                 no_more_waiting = t - tinit > self.wait_at_least_sec_before_release
                 if no_more_waiting:
                     self.print_not_too_often(filtered_effort)
-                #print ("EFFORT: %f vs threshold %f" % (filtered_effort, self.threshold_force))
                 if filtered_effort > self.threshold_force and no_more_waiting:
                     break
             time.sleep(0.001)
         return 'succeeded'
 
 
-################################################################
-################################################################
-
-# IDE and programmer friendly initialization of state identifiers.
-FINISHED,ERROR,PREEMPTED,INIT,INITIAL_WAITING,TURN_SLED_ON,WAIT_SOME_TIME,MONITOR_SLED_FORCE,TURN_SLED_OFF = \
-    'FINISHED,ERROR,PREEMPTED,INIT,INITIAL_WAITING,TURN_SLED_ON,WAIT_SOME_TIME,MONITOR_SLED_FORCE,TURN_SLED_OFF'.split(',')
-
-
-
-if 1:
-    sm = StateMachine(outcomes=[FINISHED, ERROR, PREEMPTED])
-    sm.userdata.counter = 0
-    with sm:
-        StateMachine.add(INIT,
-                         WaitToClockStateCDP1(0.1),
-                         transitions={'valid': INIT,
-                                      'invalid': WAIT_SOME_TIME,
-                                      'preempted': PREEMPTED})
-
-        StateMachine.add(TURN_SLED_ON,
-                         SledMoveForwardFixedSpeed(),
-                         transitions={
-                             'succeeded': MONITOR_SLED_FORCE})
-
-        StateMachine.add(MONITOR_SLED_FORCE,
-                         SledMonitorForceState(),
-                         transitions={ 'succeeded': TURN_SLED_OFF })
-
-        StateMachine.add(TURN_SLED_OFF,
-                         SledOffState(),
-                         transitions={
-                             'succeeded': WAIT_SOME_TIME
-                         })
-
-        StateMachine.add(WAIT_SOME_TIME,
-                         ClockDelayState(waittime = 2),
-                         transitions={'valid': WAIT_SOME_TIME,
-                                      'invalid': TURN_SLED_ON,
-                                      'preempted': PREEMPTED })
+# The state machine
+sm = StateMachine(outcomes=['finished','error','preempted'])
+sm.userdata.counter = 0
+with sm:
+    StateMachine.add('init',
+                     WaitToClockStateCDP1(0.1), # Waits until things have settled
+                     transitions={'valid': 'init',
+                                  'invalid': 'wait_some_time',
+                                  'preempted' : 'preempted'})
+    StateMachine.add('turn_sled_on',
+                     SledMoveForwardFixedSpeed(),
+                     transitions={
+            			'succeeded' : 'monitor_sled_force' })
+    StateMachine.add('monitor_sled_force',
+                     SledMonitorForceState(),
+                     transitions={
+            			'succeeded' : 'turn_sled_off' })
+    StateMachine.add('turn_sled_off',
+                     SledOffState(),
+                     transitions={
+            			'succeeded' : 'wait_some_time'})
+    StateMachine.add('wait_some_time',
+                     ClockDelayState(waittime = 2),
+                     transitions = { 'valid' : 'wait_some_time',
+                                    'invalid' : 'turn_sled_on',
+                                    'preempted' : 'preempted' })
