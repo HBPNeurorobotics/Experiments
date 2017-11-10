@@ -94,7 +94,7 @@
       <xs:documentation>This type denotes a path to an SDF (or Zip) file</xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:string">
-      <xs:pattern value="[a-zA-Z0-9\._/]*\.(sdf|zip)"/>
+      <xs:pattern value="(storage:)?[a-zA-Z0-9\._/]*\.(sdf|zip)"/>
     </xs:restriction>
   </xs:simpleType>
 
@@ -112,7 +112,7 @@
       <xs:documentation>This type denotes a path to a Python file.</xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:string">
-      <xs:pattern value="[a-zA-Z0-9\._/]*\.py"/>
+      <xs:pattern value="(storage:)?[a-zA-Z0-9\._/]*\.py"/>
     </xs:restriction>
   </xs:simpleType>
 
