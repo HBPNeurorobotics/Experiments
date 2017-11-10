@@ -90,5 +90,9 @@
             "bias": 0.0001,
             "radius": 1.2
         }
-    ]
+    ],
+    "cameraSensitivity": {
+        "translation": 0.1,
+        "rotation": 1.0
+    }
 }

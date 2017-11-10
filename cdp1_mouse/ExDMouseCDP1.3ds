@@ -92,5 +92,9 @@
             "cameraTop": 1
         }
     ],
-    "defaultCameraMode":"lookatrobot"
+    "defaultCameraMode":"lookatrobot",
+    "cameraSensitivity": {
+        "translation": 0.1,
+        "rotation": 1.0
+    }
 }
