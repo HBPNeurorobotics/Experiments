@@ -3,7 +3,7 @@
      xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
      xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
     <name>Tutorial baseball experiment - Exercise</name>
-    <thumbnail>ExDTutorialBaseball.png</thumbnail>
+    <thumbnail>ExDTutorialBaseball.jpg</thumbnail>
     <description>
       This guided experiment will walk you through all the features of the Neurorobotics Platform.
       Launch it and follow the instructions provided in the jupyter notebook located in the Experiments/tutorial_baseball_exercise folder.

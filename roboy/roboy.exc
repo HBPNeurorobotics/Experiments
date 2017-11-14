@@ -3,7 +3,7 @@
      xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
      xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
     <name>Roboy experiment</name>
-    <thumbnail>roboy.png</thumbnail>
+    <thumbnail>roboy.jpg</thumbnail>
     <description>This experiment loads the anthropomimetic robot Roboy into the SpaceBotCup Arena. In the future, muscle simulations will be added which then can be controlled by a neural network (NEST). </description>
     <timeout>840</timeout>
     <environmentModel src="spacebotcup_world/spacebotcup_world.sdf">

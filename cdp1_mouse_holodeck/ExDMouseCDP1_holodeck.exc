@@ -3,7 +3,7 @@
      xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
      xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
     <name>Holodeck CDP1 Mouse experiment</name>
-    <thumbnail>ExDMouseCDP1.png</thumbnail>
+    <thumbnail>ExDMouseCDP1.jpg</thumbnail>
     <description>CDP-1 mouse experiment MVP</description>
     <timeout>1000000000</timeout>
     <configuration type="3d-settings" src="holodeck.3ds"/>

@@ -3,7 +3,7 @@
      xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
      xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
     <name>Template HoLLie arm in empty environment</name>
-    <thumbnail>ExDTemplateManipulation.png</thumbnail>
+    <thumbnail>ExDTemplateManipulation.jpg</thumbnail>
     <description>Loads a custom build robot model of a table and one of the HoLLie robot arms with the hand fixed to it.
     </description>
     <timeout>840</timeout>

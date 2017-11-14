@@ -3,7 +3,7 @@
      xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
      xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
     <name>Mouse demo experiment in biology lab</name>
-    <thumbnail>ExDMouseLabExample.png</thumbnail>
+    <thumbnail>ExDMouseLabExample.jpg</thumbnail>
     <description>This demo shows how to manipulate the environment from a state machine.
     Objects are created during the experiment and change the behaviour of the mouse.</description>
     <timeout>210</timeout>

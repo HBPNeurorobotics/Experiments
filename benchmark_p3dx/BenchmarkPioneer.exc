@@ -3,7 +3,7 @@
      xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
      xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
     <name>Benchmark Pioneer P3DX experiment</name>
-    <thumbnail>BenchmarkPioneer.png</thumbnail>
+    <thumbnail>BenchmarkPioneer.jpg</thumbnail>
     <description>This experiment loads the Pioneer P3DX robot in a benchmark setup. The benchmarking code is not yet available though,
     but you can still play and program the robot.</description>
     <timeout>840</timeout>

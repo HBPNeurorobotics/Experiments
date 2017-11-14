@@ -3,7 +3,7 @@
      xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
      xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
     <name>Tutorial - TensorFlow Husky Braitenberg Experiment</name>
-    <thumbnail>TensorFlowTutorial.png</thumbnail>
+    <thumbnail>TensorFlowTutorial.jpg</thumbnail>
     <description>This experiment was presented as a tutorial at the CodeJam 2017 event. It
     demonstrates using TensorFlow within the NRP for semantic object segmentation/detection
     in conjunction with the spiking neuron Braitenberg brain for object level interaction.

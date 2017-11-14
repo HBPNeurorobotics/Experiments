@@ -3,7 +3,7 @@
      xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
      xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
     <name>Holodeck Interactive manipulation experiment</name>
-    <thumbnail>ExDManipulation.png</thumbnail>
+    <thumbnail>ExDManipulation.jpg</thumbnail>
     <description>This experiment allows user to control Schunk robotic manipulator (arm and hand) using Myo armband and Leap Motion hand tracker using client side ROS nodes in the Holodeck.
     </description>
     <timeout>840</timeout>

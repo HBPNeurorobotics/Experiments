@@ -3,7 +3,7 @@
      xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
      xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ExDConfFile.xsd">
     <name>Multiple robots tutorial</name>
-    <thumbnail>MultipleRobots.png</thumbnail>
+    <thumbnail>MultipleRobots.jpg</thumbnail>
     <description>This experiment contains one iCub robot and two Pioneer 3DX equipped with brain models.
     </description>
     <timeout>1800</timeout>

@@ -3,7 +3,7 @@
      xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
      xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
     <name>iCub Visual Tracking experiment</name>
-    <thumbnail>ExDVisualTrackingICub.png</thumbnail>
+    <thumbnail>ExDVisualTrackingICub.jpg</thumbnail>
     <description>In this experiment the iCub robot performs a Visual Tracking task in the virtual room environment.</description>
     <timeout>840</timeout>
     <configuration type="3d-settings" src="ExDVisualTrackingICub.3ds"/>

@@ -3,7 +3,7 @@
 	xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
 	xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
 	<name>Tigrillo OpenLoop CPG</name>
-	<thumbnail>ExDTigrilloCPG.png</thumbnail>
+	<thumbnail>ExDTigrilloCPG.jpg</thumbnail>
 	<description>Tigrillo is a simple quadruped robot with compliant legs. Here, a Tigrillo model is controlled by a spiking neural network trained with reservoir computing techniques.</description>
 	<timeout>840</timeout>
 	<configuration type="3d-settings" src="ExDTigrilloCPG.3ds"/>

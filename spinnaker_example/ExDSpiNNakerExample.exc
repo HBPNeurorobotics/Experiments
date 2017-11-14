@@ -3,7 +3,7 @@
      xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
      xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
     <name>Holodeck Husky Braitenberg experiment with SpiNNaker</name>
-    <thumbnail>ExDSpiNNakerExample.png</thumbnail>
+    <thumbnail>ExDSpiNNakerExample.jpg</thumbnail>
     <description>This is a SpiNNaker compatible version of the Braitenberg Brain Husky Experiment in the holodeck.
     </description>
     <timeout>6000</timeout>

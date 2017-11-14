@@ -3,7 +3,7 @@
      xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
      xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
     <name>Empty template experiment</name>
-    <thumbnail>TemplateEmpty.png</thumbnail>
+    <thumbnail>TemplateEmpty.jpg</thumbnail>
     <description>This empty experiment is based on the models that you have selected. You are free to edit the description.</description>
     <timeout>840</timeout>
     <configuration type="3d-settings" src="TemplateEmpty.json"/>

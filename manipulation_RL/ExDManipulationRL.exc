@@ -3,7 +3,7 @@
      xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
      xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
     <name>Holodeck hollie Arm Reinforcement-Learning for target reaching</name>
-    <thumbnail>ExDManipulationRL.png</thumbnail>
+    <thumbnail>ExDManipulationRL.jpg</thumbnail>
     <description>
     A simple learning experiment with a Gaussian-shaped input population encoding the current position of a single arm axis which is connected via a dopamine regulated STDP synapse to two motor neurons. The absolute error between current joint and target angle determines the dopamine level. Random motor babbling helps the learning mechanism to explore the joint space and to correlate input and output layer.
     </description>

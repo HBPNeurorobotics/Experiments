@@ -3,7 +3,7 @@
      xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
      xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
     <name>Holodeck template iCub</name>
-    <thumbnail>ExDTemplateICubHolodeck.png</thumbnail>
+    <thumbnail>ExDTemplateICubHolodeck.jpg</thumbnail>
     <description>This experiment loads the iCub robot in the holodeck, with an idle brain and basic transfer functions. You are free to edit it.</description>
     <timeout>840</timeout>
     <configuration type="3d-settings" src="ExDTemplateICubHolodeck.3ds"/>

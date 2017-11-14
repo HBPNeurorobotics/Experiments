@@ -3,7 +3,7 @@
      xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
      xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
     <name>Template iCub in empty environment</name>
-    <thumbnail>ExDTemplateICub.png</thumbnail>
+    <thumbnail>ExDTemplateICub.jpg</thumbnail>
     <description>This experiment loads the iCub robot in an empty world, with an idle brain and basic transfer functions. You are free to edit it.</description>
     <timeout>840</timeout>
     <configuration type="3d-settings" src="ExDTemplateICub.3ds"/>

@@ -3,7 +3,7 @@
      xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
      xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
     <name>LAURON V Braitenberg experiment</name>
-    <thumbnail>ExDBraitenbergLauron.png</thumbnail>
+    <thumbnail>ExDBraitenbergLauron.jpg</thumbnail>
     <description>This experiment loads the six-legged walking robot LAURON V (developed at FZI) and the virtual room environment. If the user starts the experiment, the Braitenberg vehicle network is executed and the robot will turn around itself in place, until the camera detects a red color. Then, the robot will move towards the colored object. In this experiment, the user can interact and change the color of both screens by clicking on them with the right mouse button.</description>
     <timeout>840</timeout>
     <maturity>development</maturity>

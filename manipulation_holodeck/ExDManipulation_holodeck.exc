@@ -3,7 +3,7 @@
      xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
      xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
     <name>HoLLiE hand motion with CPG in holodeck</name>
-    <thumbnail>ExDManipulation.png</thumbnail>
+    <thumbnail>ExDManipulation.jpg</thumbnail>
     <description>This experiment shows a basic implementation of CPG driven motion control for a five-finger robotic hand.
     The transfer functions implement a simple muscle model.
     </description>

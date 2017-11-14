@@ -3,7 +3,7 @@
      xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
      xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
     <name>NAO experiment</name>
-    <thumbnail>ExDNao.png</thumbnail>
+    <thumbnail>ExDNao.jpg</thumbnail>
     <description>This experiment loads the humanoid robot NAO (Aldebaran) and the virtual room environment. In the future, it will be possible to connect NAO to a neuronal controller (NEST) to control single joints of the robot. </description>
     <timeout>840</timeout>
     <environmentModel src="virtual_room/virtual_room.sdf">

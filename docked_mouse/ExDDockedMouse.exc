@@ -3,7 +3,7 @@
      xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
      xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
     <name>Docked Mouse v2 experiment</name>
-    <thumbnail>ExDDockedMouse.png</thumbnail>
+    <thumbnail>ExDDockedMouse.jpg</thumbnail>
     <description>This experiment loads the Mouse in an empty world, with an idle brain and the docked walking controller.</description>
     <timeout>840</timeout>
     <maturity>development</maturity>

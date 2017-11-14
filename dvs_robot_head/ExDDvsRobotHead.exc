@@ -3,7 +3,7 @@
      xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
      xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ExDConfFile.xsd">
     <name>Dynamic Vision Sensor (DVS) simulation</name>
-    <thumbnail>ExDDvsRobotHead.png</thumbnail>
+    <thumbnail>ExDDvsRobotHead.jpg</thumbnail>
     <description>This experiment contains the NST robotic head equipped with two
     simulated Dynamic Vision Sensors (DVS, or silicon retina).
     </description>
