@@ -7,6 +7,7 @@
     <description>
     A simple learning experiment with a Gaussian-shaped input population encoding the current position of a single arm axis which is connected via a dopamine regulated STDP synapse to two motor neurons. The absolute error between current joint and target angle determines the dopamine level. Random motor babbling helps the learning mechanism to explore the joint space and to correlate input and output layer.
     </description>
+    <tags>robotics hollie hand finger STDP reaching</tags>
     <timeout>840</timeout>
     <configuration type="3d-settings" src="ExDManipulationRL.3ds"/>
     <maturity>production</maturity>

@@ -10,6 +10,7 @@
         the robot will move towards the colored object. In this experiment, the user can interact
         and change the color of both screens by clicking on them with the right mouse button.
     </description>
+    <tags>husky robotics</tags>
     <timeout>840</timeout>
     <configuration type="3d-settings" src="ExDXMLExample.3ds"/>
     <maturity>production</maturity>

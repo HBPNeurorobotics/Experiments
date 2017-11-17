@@ -5,6 +5,7 @@
     <name>Holodeck iCub Visual Tracking experiment </name>
     <thumbnail>ExDVisualTrackingICub.jpg</thumbnail>
     <description>In this experiment the iCub robot performs a Visual Tracking task in the Holodeck.</description>
+    <tags>icub robotics visual</tags>
     <timeout>840</timeout>
     <configuration type="3d-settings" src="ExDVisualTrackingICub.3ds"/>
     <maturity>production</maturity>

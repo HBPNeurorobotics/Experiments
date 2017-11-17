@@ -8,6 +8,7 @@
       This guided experiment will walk you through all the features of the Neurorobotics Platform.
       Launch it and follow the instructions provided in the jupyter notebook located in the Experiments/tutorial_baseball_exercise/ folder.
     </description>
+    <tags>icub robotics tutorial solution</tags>
     <timeout>86400</timeout>
     <configuration type="3d-settings" src="ExDTutorialBaseball.3ds"/>
     <maturity>production</maturity>

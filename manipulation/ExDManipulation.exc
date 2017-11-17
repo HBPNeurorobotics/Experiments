@@ -7,6 +7,7 @@
     <description>This experiment shows a basic implementation of CPG driven motion control for a five-finger robotic hand.
     The transfer functions implement a simple muscle model.
     </description>
+    <tags>robotics hollie hand finger</tags>
     <timeout>840</timeout>
     <configuration type="3d-settings" src="ExDManipulation.3ds"/>
     <maturity>production</maturity>
