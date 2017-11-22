@@ -20,7 +20,8 @@ def linear_twist(t, left_wheel_neuron, right_wheel_neuron):
     :param right_wheel_neuron: the right wheel neuron device
     :return: a geometry_msgs/Twist message setting the linear twist fo the husky robot movement.
     """
+
     return geometry_msgs.msg.Twist(
-        linear=geometry_msgs.msg.Vector3(x=45.0 * min(left_wheel_neuron.voltage, right_wheel_neuron.voltage), y=0.0,
-                                         z=0.0), angular=geometry_msgs.msg.Vector3(x=0.0, y=0.0, z=250.0 * (
+        linear=geometry_msgs.msg.Vector3(x=20.0 * min(left_wheel_neuron.voltage, right_wheel_neuron.voltage), y=0.0,
+                                         z=0.0), angular=geometry_msgs.msg.Vector3(x=0.0, y=0.0, z=100.0 * (
             right_wheel_neuron.voltage - left_wheel_neuron.voltage)))
