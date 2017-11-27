@@ -99,7 +99,7 @@ class SledMonitorForceState(smach.State):
     def __init__(self):
         super(SledMonitorForceState, self).__init__(
             outcomes = ['succeeded'])
-        self.threshold_force = 0.195
+        self.threshold_force = 0.09  # <--------- ADJUST FORCE THRESHOLD HERE!
         self.wait_at_least_sec_before_release = 1.
         self.filter_time_scale = 0.25
         self.last_out_time = time.time()
