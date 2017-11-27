@@ -77,6 +77,10 @@
     </xsd:attribute>
   </xsd:complexType>
 
+  <xsd:simpleType name="Tags">
+    <xsd:list itemType="xsd:string" />
+  </xsd:simpleType>
+
   <xsd:simpleType name="ConfType">
     <xsd:annotation>
       <xsd:documentation>This type denotes a configuration type which can be a standard configuration type or a custom type. The latter is just any string.</xsd:documentation>
@@ -225,6 +229,8 @@
         <xsd:annotation>
           <xsd:documentation>This description will appear in the experiment description and provide a short description explaining what the experiment is all about.</xsd:documentation>
         </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="tags" type="Tags" minOccurs="0">
       </xsd:element>
       <xsd:element name="timeout" type="xsd:double" minOccurs="0">
         <xsd:annotation>
