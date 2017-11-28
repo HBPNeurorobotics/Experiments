@@ -231,6 +231,9 @@
         </xsd:annotation>
       </xsd:element>
       <xsd:element name="tags" type="Tags" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>List of space separated tags that describe the experiment.</xsd:documentation>
+        </xsd:annotation>
       </xsd:element>
       <xsd:element name="timeout" type="xsd:double" minOccurs="0">
         <xsd:annotation>
