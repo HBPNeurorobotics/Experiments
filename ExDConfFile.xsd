@@ -77,6 +77,7 @@
     </xsd:attribute>
   </xsd:complexType>
 
+  <!-- List of tags -->
   <xsd:simpleType name="Tags">
     <xsd:list itemType="xsd:string" />
   </xsd:simpleType>
