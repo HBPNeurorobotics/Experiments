@@ -4,13 +4,19 @@
      xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
     <name>Benchmark Pioneer P3DX experiment</name>
     <thumbnail>BenchmarkPioneer.jpg</thumbnail>
-    <description>This experiment loads the Pioneer P3DX robot in a benchmark setup. The benchmarking code is not yet available though,
-    but you can still play and program the robot.</description>
+    <description>Benchmark aiming at developing a program that controls a Pioneer 3DX robot to follow a 2m by 2m square path.
+      The metric used to evaluate the robot is applied for 4 separate segments of the path,
+      which correspond to the 4 sides of the square. The final performance is computed averaging the 4 segments evaluations.
+      Each segment is defined as a corridor that lies on one edge of the square.
+      For each individual segment, we compute a performance which is based on 3 different parameters:
+      the "path" (how well the robot managed to keep close to the "ideal" route),
+      the "time" needed to go through this segment, and the "distance" to the goal,
+      which is mostly used to evaluate how close to the goal the robot is in the current segment.</description>
     <timeout>840</timeout>
     <configuration type="3d-settings" src="BenchmarkPioneer.3ds"/>
     <maturity>production</maturity>
     <environmentModel src="p3dxbenchmark_world/p3dxbenchmark_world.sdf">
-        <robotPose x="0.0" y="0.0" z="0.5" ux="0.0" uy="0.0" uz="0.0" theta="0.0"/>
+        <robotPose x="-1.0" y="1.0" z="0.05" ux="0.0" uy="0.0" uz="0.0" theta="0.0"/>
     </environmentModel>
     <bibiConf src="template_pioneer.bibi"/>
     <cameraPose>
