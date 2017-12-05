@@ -16,12 +16,12 @@ def transferfunction( t, clm,
                 muscle_states_msg):
   # Obtained from Blender.
   length_bounds = {
-      'Foot1' : (0.008153, 0.009358),
-      'Foot2': (0.005556, 0.005871),
-      'Radius1': (0.005420, 0.006850),
-      'Radius2': (0.004728, 0.006186),
-      'Humerus1': (0.013028, 0.013279),
-      'Humerus2': (0.006273, 0.007500),
+    'Foot1': (0.004814, 0.005428),
+    'Foot2': (0.004922, 0.005544),
+    'Radius1': (0.005802, 0.007600),
+    'Radius2': (0.004154, 0.006238),
+    'Humerus1': (0.010311, 0.013530),
+    'Humerus2': (0.007796, 0.011747),
   }
   if clm.value is None:
       import sys
@@ -56,11 +56,11 @@ def transferfunction( t, clm,
       )
       a, b =  0.4, 0.0056
       l_CE_CF = normalized_lengths['Humerus2'] * a + b
-      l_CE_PMA = normalized_lengths['Humerus1'] * 0 + b
+      l_CE_PMA = normalized_lengths['Humerus1'] * a + b
       l_CE_POP = normalized_lengths['Radius2'] * a + b
-      l_CE_RF  = normalized_lengths['Radius1'] * 0 + b
+      l_CE_RF  = normalized_lengths['Radius1'] * a + b
       l_CE_TA  = normalized_lengths['Foot1'] * a + b
-      l_CE_LG  = normalized_lengths['Foot2'] * 0 + b
+      l_CE_LG  = normalized_lengths['Foot2'] * a + b
       mmData['stretch']['LEFT_PMA'] = l_CE_PMA
       mmData['stretch']['LEFT_CF'] = l_CE_CF
       mmData['stretch']['LEFT_POP'] = l_CE_POP
