@@ -125,7 +125,7 @@ with sm:
                                   'aborted': ERROR})
     StateMachine.add('SPAWN_OBJECT',
                      SpawnSphere(model_name="tracked_sphere", radius=0.05,
-                                 position=initialSpherePos, use_gravity=False),
+                                 position=initialSpherePos, gravity_factor=0),
                      transitions={'succeeded': 'DELAY_ON_RED_SWITCHING', 'aborted': ERROR,
                                   'preempted': PREEMPTED})
     StateMachine.add('DELAY_ON_RED_SWITCHING',
