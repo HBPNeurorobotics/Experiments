@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bibi xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.humanbrainproject.eu/SP10/2014/BIBI" xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/BIBI ../bibi_configuration.xsd">
+  <brainModel>
+    <file>brain_model/idle_brain.py</file>
+    <populations population="neurons" xsi:type="Range" from="0" to="2"/>
+    <populations population="record" xsi:type="Range" from="0" to="2"/>
+  </brainModel>
+  <bodyModel>mmm_robot/mmm_robot.sdf</bodyModel>
+  <transferFunction xsi:type="PythonTransferFunction">
+    #<![CDATA[
+    import hbp_nrp_cle.tf_framework as nrp
+
+    # This specifies that the neurons 0 to 2 of the circuit population
+    # should be monitored. You can see them in the spike train widget
+    @nrp.NeuronMonitor(nrp.brain.record, nrp.spike_recorder)
+    def all_neurons_spike_monitor(t):
+        # Uncomment to log into the 'log-console' visible in the simulation
+        # clientLogger.info("Time: "+str(t))
+        return True
+    #]]>
+  </transferFunction>
+
+  <!-- temporary solution to forward all joints since the frontend only monitors /joint_states -->
+  <transferFunction xsi:type="PythonTransferFunction">
+    #<![CDATA[
+    from sensor_msgs.msg import JointState
+
+    @nrp.MapRobotSubscriber("joints", Topic("/robot/joints", JointState))
+    @nrp.Neuron2Robot(Topic('/joint_states', JointState))
+    def joint_states_passthrough(t, joints):
+        return joints.value
+    #]]>
+  </transferFunction>
+
+</bibi>
