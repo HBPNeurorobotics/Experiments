@@ -1,11 +1,12 @@
 # Imported Python Transfer Function
+@nrp.MapRobotPublisher('benchmark_metrics', Topic('/benchmark/metrics', sensor_msgs.msg.Image))
 @nrp.MapVariable("metric", global_key="metric", initial_value=None)
 # 'robot_index' is the index of the values related to the Pioneer 3DX robot in the 'position.value.pose' data structure
 @nrp.MapVariable("robot_index", global_key="robot_index", initial_value=None)
 @nrp.MapVariable("is_over", global_key="is_over", initial_value=False)
 @nrp.MapRobotSubscriber("position", Topic('/gazebo/model_states', gazebo_msgs.msg.ModelStates))
 @nrp.Robot2Neuron()
-def benchmark_evaluation(t, metric, robot_index, position, is_over):
+def benchmark_evaluation(t, metric, robot_index, position, is_over, benchmark_metrics):
     from math import sqrt
     from math import exp
     from math import acos
@@ -261,6 +262,7 @@ def benchmark_evaluation(t, metric, robot_index, position, is_over):
             getWebNewPoints() method.
             """
             self.initialized = True
+            self.rendered_image = None
             self.currentSegment = 0
             self.robotHasFinished = False
             self.storePoints = storePoints
@@ -309,8 +311,6 @@ def benchmark_evaluation(t, metric, robot_index, position, is_over):
                 if (self.segments[self.currentSegment].timeStopped(time) >
                    self.MAX_STOP_TIME):
                     self.robotHasFinished = True
-                    clientLogger.info("Segment 4: %.4f" % self.getSegmentPerformance(3))
-                    clientLogger.info("Performance: %.4f" % self.getPerformance())
                     clientLogger.advertise(
                         "Benchmark is completed.\nSegment 1: %.4f\nSegment 2: %.4f\nSegment 3: %.4f\nSegment 4: %.4f\nPerformance: %.4f\n" \
                         % (self.getSegmentPerformance(0), self.getSegmentPerformance(1),
@@ -321,13 +321,10 @@ def benchmark_evaluation(t, metric, robot_index, position, is_over):
                 # one).
                 if (self.segments[self.currentSegment].isGoalReached() and
                    self.currentSegment < 3):
-                    clientLogger.info("Segment %d evaluation: %.4f" % (self.currentSegment + 1, self.getSegmentPerformance(self.currentSegment)))
                     self.currentSegment = self.currentSegment + 1
             else:
                 self.robotHasFinished = True
                 clientLogger.info("TIMEOUT")
-                clientLogger.info("Segment 4: %.4f" % self.getSegmentPerformance(3))
-                clientLogger.info("Performance: %.4f" % self.getPerformance())
                 clientLogger.advertise(
                     "Benchmark is over because of timeout.\nSegment 1: %.4f\nSegment 2: %.4f\nSegment 3: %.4f\nSegment 4: %.4f\nPerformance: %.4f\n" \
                      % (self.getSegmentPerformance(0), self.getSegmentPerformance(1),
@@ -366,6 +363,48 @@ def benchmark_evaluation(t, metric, robot_index, position, is_over):
 
             return performance
 
+        def getImageWithMetrics(self):
+            """
+            Return image showing metrics and robot trajectory
+            """
+            import numpy as np
+            import PIL
+            from PIL import ImageFont
+            from PIL import Image
+            from PIL import ImageDraw
+            offsetX = 20
+            offsetY = 85
+            if self.rendered_image is None:
+                self.rendered_img = Image.new('RGB', (256, 256), "white")
+                draw = ImageDraw.Draw(self.rendered_img)
+                regularFont = ImageFont.truetype("LiberationMono-Regular.ttf", 16)
+                boldFont = ImageFont.truetype("LiberationMono-Bold.ttf", 16)
+                # Write metrics text
+                performance = 0
+                for i in range(1, 5):
+                    performance = performance + self.segments[i-1].getPerformance()
+                    text = ('Segment %d: %5.2f%%') % (i, self.segments[i-1].getPerformance() * 100)
+                    draw.text((10, i * 20 - 15), text, fill="black", font=regularFont)
+                text = ('Average:   %5.2f%%') % (performance * 25)
+                draw.text((10, 90), text, fill="black", font=boldFont)
+                # Draw square and segment ids in gray
+                grayColor = (187, 187, 187)
+                draw.rectangle([(50 + offsetX, 50 + offsetY), (150 + offsetX, 150 + offsetY)], outline=grayColor)
+                font = ImageFont.truetype("LiberationSerif-Regular.ttf", 18)
+                draw.text((35  + offsetX, 90 + offsetY), '4', fill=grayColor, font=regularFont)
+                draw.text((97  + offsetX, 30  + offsetY), '1', fill=grayColor, font=regularFont)
+                draw.text((155 + offsetX, 90 + offsetY), '2', fill=grayColor, font=regularFont)
+                draw.text((97  + offsetX, 155 + offsetY), '3', fill=grayColor, font=regularFont)
+
+            # Draw trajectory in red
+            draw = ImageDraw.Draw(self.rendered_img)
+            for point in self.newPoints:
+                x = (int(point[0] * 50)) + offsetX + 100
+                y = offsetY + 100 - (int(point[1] * 50))
+                draw.ellipse((x - 1, y - 1, x + 1, y + 1), fill=(255, 0, 0))
+            cv_img = np.array(self.rendered_img)
+            msg_frame = CvBridge().cv2_to_imgmsg(cv_img, 'rgb8')
+            return msg_frame
 
     if metric.value == None:
         clientLogger.info(
@@ -414,4 +453,4 @@ def benchmark_evaluation(t, metric, robot_index, position, is_over):
             orientation = position.value.pose[robot_index.value].orientation
             angle = 2 * acos(orientation.w)
             metric.value.update(pos2d, 2 * acos(orientation.w), t)
-
+            benchmark_metrics.send_message(metric.value.getImageWithMetrics())
