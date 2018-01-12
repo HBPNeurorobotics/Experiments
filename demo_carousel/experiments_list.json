@@ -1,4 +1,6 @@
 {
     "HuskyLabyrinth":"ExDDemoHuskySBC",
-    "TwoICubsWaving":"ExDDvsIcub"
+    "TwoICubsWaving":"ExDDvsIcub",
+    "Mouse":"ExDMouseLabExample",
+    "Hollie":"ExDDemoManipulation"
 }
