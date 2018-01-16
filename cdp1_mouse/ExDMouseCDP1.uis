@@ -1,0 +1,9 @@
+{
+    "camera": {
+        "defaultMode": "lookatrobot",
+        "sensitivity": {
+            "translation": 0.1,
+            "rotation": 1.0
+        }
+    }
+}

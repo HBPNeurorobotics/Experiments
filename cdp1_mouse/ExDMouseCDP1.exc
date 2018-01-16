@@ -8,6 +8,7 @@
     <timeout>1000000000</timeout>
     <configuration type="3d-settings" src="ExDMouseCDP1.3ds"/>
     <configuration type="brainvisualizer" src="MouseCDP1NeuronCoords.json"/>
+    <configuration type="user-interaction-settings" src="ExDMouseCDP1.uis"/>
     <maturity>development</maturity>
     <environmentModel src="cdp1_world/cdp1_world.sdf">
         <robotPose x="0.0" y="0.0" z="0.0" ux="0.0" uy="0.0" uz="0.0" theta="0.0"/>
