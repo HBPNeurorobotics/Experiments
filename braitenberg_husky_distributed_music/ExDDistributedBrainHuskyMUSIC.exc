@@ -6,7 +6,7 @@
     <thumbnail>ExDDistributedBrainHuskyMUSICHolodeck.png</thumbnail>
     <description>WARNING: This experiment has limited functionality, use at your own risk! See the
     corresponding Nest only experiment for a distributed, more feature complete version.</description>
-    <tags>husky robotics distributed braitenberg</tags>
+    <tags>husky robotics distributed braitenberg music</tags>
     <timeout>840</timeout>
     <configuration type="3d-settings" src="ExDXMLExample.3ds"/>
     <maturity>development</maturity>

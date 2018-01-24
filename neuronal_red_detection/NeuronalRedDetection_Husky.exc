@@ -5,7 +5,7 @@
     <name>Husky with neuronal red detection</name>
     <thumbnail>NeuronalRedDetection_Husky.jpg</thumbnail>
     <description>This experiment loads the Husky robot from Clearpath Robotics and the virtual room environment. If the user starts the experiment, the Braitenberg vehicle network is executed and the robot will turn around itself in place, until the camera detects a red color. The color detection is done with a neuronal image recognition. Then, the robot will move towards the colored object. In this experiment, the user can interact and change the color of both screens by clicking on them with the right mouse button.</description>
-    <tags>husky robotics visual</tags>
+    <tags>husky robotics visual virtualroom braitenberg neuronal</tags>
     <timeout>1680</timeout>
     <configuration type="3d-settings" src="ExDXMLExample.3ds"/>
     <maturity>production</maturity>

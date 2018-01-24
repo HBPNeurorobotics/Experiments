@@ -8,6 +8,7 @@
         The experiment shows the HoLLie arm performing an infinite grasping task controlled by a SMACH state machine.
         The robot clears the table of the two cylindrical objects placed on it, disposing of them in the container beside.
     </description>
+    <tags>hollie arm manipulation demo empty robotics</tags>
     <timeout>180</timeout>
     <configuration type="3d-settings" src="ExDDemoManipulation.3ds"/>
     <maturity>development</maturity>

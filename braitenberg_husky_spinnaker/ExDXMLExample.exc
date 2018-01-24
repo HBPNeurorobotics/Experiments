@@ -11,6 +11,7 @@
         and change the color of both screens by clicking on them with the right mouse button. The
         neural network used in this experiment is SpiNNaker.
     </description>
+    <tags>husky braitenberg robotics spinnaker virtualroom neuromorphics</tags>
     <timeout>840</timeout>
     <configuration type="3d-settings" src="ExDXMLExample.3ds"/>
     <maturity>development</maturity>

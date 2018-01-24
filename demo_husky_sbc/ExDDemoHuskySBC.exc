@@ -5,7 +5,7 @@
     <name>Husky labyrinth demo experiment in the SpaceBotCup 2013 arena</name>
     <thumbnail>ExDDemoHuskySBC.jpg</thumbnail>
     <description>In this experiment the robot will find his path in a labyrinth by following red lights.</description>
-    <tags>husky robotics maze</tags>
+    <tags>husky robotics maze labyrinth spacebotcup demo</tags>
     <timeout>210</timeout>
     <configuration type="3d-settings" src="ExDDemoHuskySBC.3ds"/>
     <maturity>production</maturity>

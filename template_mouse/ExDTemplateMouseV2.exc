@@ -5,6 +5,7 @@
     <name>Empty Template Mouse v2 experiment</name>
     <thumbnail>ExDTemplateMouseV2.jpg</thumbnail>
     <description>This experiment loads the Mouse in an empty world, with an idle brain and basic transfer functions, as well as a prototype docked robot controller. You are free to edit it.</description>
+    <tags>empty template mouse docked biological empty</tags>    
     <timeout>840</timeout>
     <maturity>development</maturity>
     <environmentModel src="empty_world/empty_world.sdf">

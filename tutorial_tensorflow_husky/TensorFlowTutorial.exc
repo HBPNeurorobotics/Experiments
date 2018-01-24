@@ -9,6 +9,7 @@
     in conjunction with the spiking neuron Braitenberg brain for object level interaction.
     Find more information in the README file in Experiments/tutorial_tensorflow_husky.
     </description>
+    <tags>husky tutorial robotics tensorflow braitenberg holodeck</tags>  
     <timeout>86400</timeout>
     <configuration type="3d-settings" src="TensorFlowTutorial.3ds"/>
     <maturity>development</maturity>

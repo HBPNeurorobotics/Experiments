@@ -8,6 +8,7 @@
     The iCub with a DVS tries to replicate the hand motion of the other one.
     </description>
     <timeout>180</timeout>
+    <tags>icub visual dvs vision robotics empty</tags>
     <configuration type="3d-settings" src="ExDDvsIcub.3ds"/>
     <maturity>development</maturity>
     <environmentModel src="tracking_world/tracking_world.sdf">

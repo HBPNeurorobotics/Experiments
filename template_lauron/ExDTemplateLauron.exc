@@ -5,6 +5,7 @@
     <name>Template Lauron in empty environment</name>
     <thumbnail>ExDTemplateLauron.jpg</thumbnail>
     <description>This experiment loads the Lauron robot in an empty world, with an idle brain and basic transfer functions. You are free to edit it.</description>
+    <tags>lauron template docked robotics empty</tags>    
     <timeout>840</timeout>
     <maturity>development</maturity>
     <environmentModel src="empty_world/empty_world.sdf">

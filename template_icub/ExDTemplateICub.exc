@@ -5,7 +5,7 @@
     <name>Template iCub in empty environment</name>
     <thumbnail>ExDTemplateICub.jpg</thumbnail>
     <description>This experiment loads the iCub robot in an empty world, with an idle brain and basic transfer functions. You are free to edit it.</description>
-    <tags>icub robotics</tags>
+    <tags>icub robotics template empty</tags>
     <timeout>840</timeout>
     <configuration type="3d-settings" src="ExDTemplateICub.3ds"/>
     <maturity>production</maturity>

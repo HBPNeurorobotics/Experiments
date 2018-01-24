@@ -5,6 +5,7 @@
     <name>Template Husky timeouted experiment</name>
     <thumbnail>ExDTemplateHuskyTimeout.jpg</thumbnail>
     <description>Test experiment for timeout testing.</description>
+    <tags>template husky robotics timeout</tags>
     <timeout>120</timeout>
     <configuration type="3d-settings" src="ExDTemplateHuskyTimeout.3ds"/>
     <maturity>development</maturity>

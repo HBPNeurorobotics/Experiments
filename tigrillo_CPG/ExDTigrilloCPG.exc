@@ -5,6 +5,7 @@
 	<name>Tigrillo OpenLoop CPG</name>
 	<thumbnail>ExDTigrilloCPG.jpg</thumbnail>
 	<description>Tigrillo is a simple quadruped robot with compliant legs. Here, a Tigrillo model is controlled by a spiking neural network trained with reservoir computing techniques.</description>
+	<tags>robotics tigrillo openloop cpg</tags>
 	<timeout>840</timeout>
 	<configuration type="3d-settings" src="ExDTigrilloCPG.3ds"/>
 	<maturity>development</maturity>

@@ -7,6 +7,7 @@
     <description>This experiment contains one iCub robot and two Pioneer 3DX equipped with brain models.
     </description>
     <timeout>1800</timeout>
+    <tags>multiple robots tutorial</tags>
     <configuration type="3d-settings" src="MultipleRobots.3ds"/>
     <maturity>development</maturity>
     <environmentModel src="multi_robots_environment/multi_robots_environment.sdf">

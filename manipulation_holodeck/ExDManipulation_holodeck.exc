@@ -8,6 +8,7 @@
     The transfer functions implement a simple muscle model.
     </description>
     <timeout>840</timeout>
+    <tags>hollie hand cpg holodeck</tags>
     <configuration type="3d-settings" src="ExDManipulation.3ds"/>
     <maturity>development</maturity>
     <environmentModel src="virtual_room/virtual_room.sdf">

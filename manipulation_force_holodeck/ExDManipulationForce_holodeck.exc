@@ -6,6 +6,7 @@
     <thumbnail>ExDManipulationForce.jpg</thumbnail>
     <description>The experiment shows a simple example of force based spiking interface for a Schunk SVH robotic hand. Two joints of the index finger are being controlled by two motor neurons (antagonist and synergist) to reach a desired position, which is adjustable in the transfer function. A simple muscle model converts activation dynamics to joint efforts and applies them in a physics simulator. The rest of the 8 joints (2 for each finger) are maintaining zero positions with traditional PID controllers and do not move at all. The experiment demonstrates one of the possible mechanisms for implementing force based control using existing Gazebo/ROS NRP platform architecture, opening the path to more complex muscle model simulations in the future.
     </description>
+    <tags>holodeck force based joint control robotics</tags>
     <timeout>840</timeout>
     <configuration type="3d-settings" src="ExDManipulationForce.3ds"/>
     <maturity>development</maturity>

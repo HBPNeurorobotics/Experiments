@@ -6,6 +6,7 @@
     <thumbnail>ExDBraitenbergLauron.jpg</thumbnail>
     <description>This experiment loads the six-legged walking robot LAURON V (developed at FZI) and the virtual room environment. If the user starts the experiment, the Braitenberg vehicle network is executed and the robot will turn around itself in place, until the camera detects a red color. Then, the robot will move towards the colored object. In this experiment, the user can interact and change the color of both screens by clicking on them with the right mouse button.</description>
     <timeout>840</timeout>
+    <tags>lauron robotics virtualroom braitenberg</tags>
     <maturity>development</maturity>
     <environmentModel src ="virtual_room/virtual_room.sdf">
         <robotPose x="0.0" y="0.0" z="0.0" ux="0.0" uy="0.0" uz="1.0" theta="0.0"/>

@@ -7,6 +7,7 @@
     <description>This experiment contains the NST robotic head equipped with two
     simulated Dynamic Vision Sensors (DVS, or silicon retina).
     </description>
+    <tags>dynamic dvs vision robotics virtualroom</tags>
     <timeout>840</timeout>
     <maturity>development</maturity>
     <environmentModel src="tracking_world/tracking_world.sdf">

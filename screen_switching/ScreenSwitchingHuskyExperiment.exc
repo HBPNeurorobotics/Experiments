@@ -11,7 +11,7 @@
         This is to demonstrate how, using the SMACH state machine script, the user can
         automate the experiment events.
     </description>
-    <tags>husky robotics</tags>
+    <tags>husky robotics braitenberg virtualroom</tags>
     <timeout>840</timeout>
     <configuration type="3d-settings" src="ScreenSwitchingHuskyExperiment.3ds"/>
     <maturity>production</maturity>
