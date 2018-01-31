@@ -5,11 +5,11 @@
     <name>Holodeck CDP1 Mouse experiment</name>
     <thumbnail>ExDMouseCDP1.jpg</thumbnail>
     <description>CDP-1 mouse experiment MVP</description>
+    <tags>mouse biological cdp1 holodeck</tags>
     <timeout>1000000000</timeout>
     <configuration type="3d-settings" src="holodeck.3ds"/>
     <configuration type="brainvisualizer" src="MouseCDP1NeuronCoords.json"/>
     <maturity>development</maturity>
-    <tags>mouse biological cdp1 holodeck</tags>
     <environmentModel src="cdp1_world/cdp1_world_holodeck.sdf">
         <robotPose x="1.51587" y="-1.0442" z="1.3375" ux="0.0" uy="0.0" uz="0.0" theta="0.0"/>
     </environmentModel>

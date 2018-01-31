@@ -6,8 +6,8 @@
     <thumbnail>user-avatar-thumbnail.jpg</thumbnail>
     <description>This is a test environment for implementations of user avatars.
     </description>
-    <timeout>9999</timeout>
     <tags>avatar user test</tags>
+    <timeout>9999</timeout>
     <configuration type="3d-settings" src="user-avatar_test-env.3ds"/>
     <maturity>development</maturity>
     <environmentModel src="empty_virtuallab/empty_virtuallab.sdf">

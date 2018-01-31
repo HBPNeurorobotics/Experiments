@@ -7,8 +7,8 @@
     <description>This experiment contains an iCub robot equipped with one simulated Dynamic Vision Sensors and another iCub robot that is waving periodically its left or right hand.
     The iCub with a DVS tries to replicate the hand motion of the other one.
     </description>
-    <timeout>180</timeout>
     <tags>icub visual dvs vision robotics empty</tags>
+    <timeout>180</timeout>
     <configuration type="3d-settings" src="ExDDvsIcub.3ds"/>
     <maturity>development</maturity>
     <environmentModel src="tracking_world/tracking_world.sdf">

@@ -5,9 +5,8 @@
     <name>Template Husky in empty environment</name>
     <thumbnail>ExDTemplateHusky.jpg</thumbnail>
     <description>This experiment loads the Husky robot in an empty world, with an idle brain and basic transfer functions. You are free to edit it.</description>
-    <tags>husky robotics</tags>
-    <timeout>840</timeout>
     <tags>template husky robotics empty</tags>
+    <timeout>840</timeout>
     <configuration type="3d-settings" src="ExDTemplateHusky.3ds"/>
     <maturity>production</maturity>
     <environmentModel src="empty_world/empty_world.sdf">

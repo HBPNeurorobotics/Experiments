@@ -12,8 +12,8 @@
       the "path" (how well the robot managed to keep close to the "ideal" route),
       the "time" needed to go through this segment, and the "distance" to the goal,
       which is mostly used to evaluate how close to the goal the robot is in the current segment.</description>
+    <tags>benchmark pioneer woodcheckerboard trajectory robotics</tags>
     <timeout>840</timeout>
-    <tags>benchmark pioneer woodcheckerboard trajectory robotics</tags>    
     <configuration type="3d-settings" src="BenchmarkPioneer.3ds"/>
     <maturity>production</maturity>
     <environmentModel src="p3dxbenchmark_world/p3dxbenchmark_world.sdf">

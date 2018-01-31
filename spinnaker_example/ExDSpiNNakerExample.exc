@@ -6,8 +6,8 @@
     <thumbnail>ExDSpiNNakerExample.jpg</thumbnail>
     <description>This is a SpiNNaker compatible version of the Braitenberg Brain Husky Experiment in the holodeck.
     </description>
-    <timeout>6000</timeout>
     <tags>holodeck Husky braitenberg spinnaker robotics</tags>
+    <timeout>6000</timeout>
     <maturity>development</maturity>
     <environmentModel src="virtual_room/virtual_room.sdf">
         <robotPose x="0.0" y="0.0" z="0.0" ux="0.0" uy="0.0" uz="1.0" theta="0.0"/>

@@ -6,8 +6,8 @@
     <thumbnail>ExDMouseLabExample.jpg</thumbnail>
     <description>This demo shows how to manipulate the environment from a state machine.
     Objects are created during the experiment and change the behaviour of the mouse.</description>
-    <timeout>210</timeout>
     <tags>mouse demo braitenberg biological holodeck</tags>
+    <timeout>210</timeout>
     <configuration type="3d-settings" src="ExDMouseLabExample.3ds"/>
     <maturity>development</maturity>
     <environmentModel src="biologylab_world/biologylab.sdf">

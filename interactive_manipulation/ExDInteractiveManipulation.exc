@@ -6,8 +6,8 @@
     <thumbnail>ExDManipulation.jpg</thumbnail>
     <description>This experiment allows user to control Schunk robotic manipulator (arm and hand) using Myo armband and Leap Motion hand tracker using client side ROS nodes in the Holodeck.
     </description>
-    <timeout>840</timeout>
     <tags>holodeck ínteractive robotics hollie hand finger</tags>
+    <timeout>840</timeout>
     <maturity>development</maturity>
     <environmentModel src="virtual_room/virtual_room.sdf">
         <robotPose x="0.0" y="0.0" z="0.025" ux="0.0" uy="0.0" uz="1.0" theta="0.0"/>

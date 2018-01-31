@@ -5,8 +5,8 @@
     <name>NAO experiment</name>
     <thumbnail>ExDNao.jpg</thumbnail>
     <description>This experiment loads the humanoid robot NAO (Aldebaran) and the virtual room environment. In the future, it will be possible to connect NAO to a neuronal controller (NEST) to control single joints of the robot. </description>
-    <timeout>840</timeout>
     <tags>nao humanoid virtualroom robotics</tags>
+    <timeout>840</timeout>
     <environmentModel src="virtual_room/virtual_room.sdf">
         <robotPose x="0.0" y="0.0" z="-0.157" ux="0.0" uy="0.0" uz="1.0" theta="0.0"/>
     </environmentModel>
