@@ -1,0 +1,167 @@
+﻿#!/usr/bin/env python
+"""
+A state-machine that deletes, spawns and moves objects in the 3D scenes.
+"""
+
+# Standard imports
+import math
+import sys
+import os
+import time
+
+# ROS and SMACH
+import rospy
+import smach
+import smach_ros
+from smach import StateMachine
+from smach import CBState
+# Wait states
+from hbp_nrp_excontrol.nrp_states import ClockMonitorState, ClockDelayState
+
+# Logging
+from hbp_nrp_excontrol.logs import clientLogger
+
+# The experimental setup comes with a convenientapi.
+# It is currently contained nia python module that
+# also allows manual control of the xperiment.
+# In order to use it we have to set the search path
+# and import it.
+sys.path.append(os.path.join(os.environ['HBP'], 'Models', 'cdp1_mouse_w_sled'))
+import manualcontrol
+reload(manualcontrol)
+
+sled_control = manualcontrol.SledControl('robot', 'cdp1_msled::world_sled')
+
+# Waitstate with sub-second precision
+class WaitToClockStateCDP1(ClockMonitorState):
+    """
+    Defines a state that waits until the clock has passed a certain threshold
+    """
+    def __callback(self, user_data, time):
+        threshold_reached = (1.0 * time.clock.nsecs / 1000000000) < self.__threshold
+        return threshold_reached
+
+    def __init__(self, threshold):
+        super(WaitToClockStateCDP1, self).__init__(self.__callback)
+        self.__threshold = threshold
+
+
+# Sled control states
+class SledMoveForwardFixedSpeed(smach.State):
+    def __init__(self):
+        super(SledMoveForwardFixedSpeed, self).__init__(
+            outcomes = ['succeeded'])
+        self._target_position = 1.
+        self._pid_parameters = 40., 10., 10.
+        self._speed = 0.5
+    def get_sled_pos(self):
+        while True:
+            joint_states = sled_control.get_last_received_sled_states()
+            if joint_states:
+                last_state = joint_states[-1]
+                last_pos = last_state['position']
+                return last_pos
+    def execute(self, ud):
+        pos = self.get_sled_pos()
+        tstart = rospy.get_time() # sim time
+        tend   = tstart + (self._target_position - pos)/self._speed
+        sled_control.command_sled_position(pos)
+        sled_control.set_sled_pid_parameters(*self._pid_parameters)
+        clientLogger.info("Sled motor on, moving ...!")
+        rate = rospy.Rate(10./self._speed)
+        while True:
+            t_now = rospy.get_time()
+            if t_now > tend:
+                sled_control.command_sled_position(self._target_position)
+                break
+            else:
+                f = (t_now - tstart)/(tend-tstart)
+                current_target = pos + f * (self._target_position - pos)
+                sled_control.command_sled_position(current_target)
+            rate.sleep()
+        clientLogger.info('Sled reached its target.')
+        return 'succeeded'
+
+
+class SledOffState(smach.State):
+    def __init__(self):
+        super(SledOffState, self).__init__(
+            outcomes = ['succeeded'])
+    def sled_off(self):
+        sled_control.set_sled_pid_parameters(0., 0., 0.)
+    def execute(self, ud):
+        self.sled_off()
+        clientLogger.info("Sled released!")
+        return 'succeeded'
+
+
+class SledMonitorForceState(smach.State):
+    def __init__(self):
+        super(SledMonitorForceState, self).__init__(
+            outcomes = ['succeeded'])
+        self.threshold_force = 0.09  # <--------- ADJUST FORCE THRESHOLD HERE!
+        self.wait_at_least_sec_before_release = 1.
+        self.filter_time_scale = 0.25
+        self.last_out_time = time.time()
+
+    # Give some feedback from time to time
+    def print_not_too_often(self, effort):
+        if time.time() - self.last_out_time > 0.25:
+            clientLogger.info("Checking sled effort: %f vs threshold %f" % (effort, self.threshold_force))
+            self.last_out_time = time.time()
+
+    # Filter the (noisy) sled force with a exponential weighted low pass filter
+    def filter_signal(self, val, new_values, dt):
+        if val is None:
+            val = new_values[0]
+            new_values = new_values[1:]
+        filter_factor = math.exp(-dt / self.filter_time_scale)
+        for i in xrange(len(new_values)):
+            val = filter_factor * val + (1. - filter_factor) * new_values[i]
+        return val
+
+    def execute(self, ud):
+        filtered_effort = None
+        tinit = t = rospy.get_time()
+        clientLogger.info('Waiting %f sec ...' % self.wait_at_least_sec_before_release)
+        while 1:
+            efforts = sled_control.get_last_received_sled_joint_efforts()
+            if efforts:
+                t_new = rospy.get_time()
+                filtered_effort = self.filter_signal(filtered_effort, efforts, t_new-t)
+                t = t_new
+                no_more_waiting = t - tinit > self.wait_at_least_sec_before_release
+                if no_more_waiting:
+                    self.print_not_too_often(filtered_effort)
+                if filtered_effort > self.threshold_force and no_more_waiting:
+                    break
+            time.sleep(0.001)
+        return 'succeeded'
+
+
+# The state machine
+sm = StateMachine(outcomes=['finished','error','preempted'])
+sm.userdata.counter = 0
+with sm:
+    StateMachine.add('init',
+                     WaitToClockStateCDP1(0.1), # Waits until things have settled
+                     transitions={'valid': 'init',
+                                  'invalid': 'wait_some_time',
+                                  'preempted' : 'preempted'})
+    StateMachine.add('turn_sled_on',
+                     SledMoveForwardFixedSpeed(),
+                     transitions={
+            			'succeeded' : 'monitor_sled_force' })
+    StateMachine.add('monitor_sled_force',
+                     SledMonitorForceState(),
+                     transitions={
+            			'succeeded' : 'turn_sled_off' })
+    StateMachine.add('turn_sled_off',
+                     SledOffState(),
+                     transitions={
+            			'succeeded' : 'wait_some_time'})
+    StateMachine.add('wait_some_time',
+                     ClockDelayState(waittime = 2),
+                     transitions = { 'valid' : 'wait_some_time',
+                                    'invalid' : 'turn_sled_on',
+                                    'preempted' : 'preempted' })
