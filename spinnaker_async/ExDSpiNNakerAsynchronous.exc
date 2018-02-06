@@ -2,19 +2,17 @@
 <ExD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
      xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
-    <name>Holodeck Husky Braitenberg experiment with SpiNNaker</name>
+    <name>Holodeck Husky Braitenberg experiment with asynchronous SpiNNaker</name>
     <thumbnail>ExDSpiNNakerExample.jpg</thumbnail>
-    <description>This is a SpiNNaker compatible version of the Braitenberg Brain Husky Experiment in the holodeck.
+    <description>This is a SpiNNaker experiment that utilizes the live input/output of spikes
     </description>
     <tags>holodeck Husky braitenberg spinnaker robotics</tags>
     <timeout>6000</timeout>
-    <configuration type="brainvisualizer" src="brainvisualizer.json"/>
-	<configuration type="user-interaction-settings" src="ExDSpiNNakerExample.uis"/>
     <maturity>development</maturity>
     <environmentModel src="virtual_room/virtual_room.sdf">
         <robotPose x="0.0" y="0.0" z="1.0" roll="0.0" pitch="-0.0" yaw="3.14159265359"/>
     </environmentModel>
-    <bibiConf src="milestone2_spinnaker_python_tf.bibi"/>
+    <bibiConf src="asynchronous_spinnaker.bibi"/>
     <cameraPose>
         <cameraPosition x="4.5" y="0" z="1.8"/>
         <cameraLookAt x="0" y="0" z="0.6"/>

@@ -7,9 +7,9 @@ from hbp_nrp_cle.robotsim.RobotInterface import Topic
 import geometry_msgs.msg
 
 
-@nrp.MapSpikeSink("left_wheel_neuron", nrp.brain.circuit[6], nrp.leaky_integrator_exp)
-@nrp.MapSpikeSink("right_wheel_neuron", nrp.brain.circuit[7], nrp.leaky_integrator_exp)
-@nrp.Neuron2Robot(Topic('/husky/cmd_vel', geometry_msgs.msg.Twist))
+@nrp.MapSpikeSink("left_wheel_neuron", nrp.brain.left, nrp.leaky_integrator_exp, weight=2.0, timesteps=100)
+@nrp.MapSpikeSink("right_wheel_neuron", nrp.brain.right, nrp.leaky_integrator_exp, weight=2.0, timesteps=100)
+@nrp.Neuron2Robot(Topic('/husky/cmd_vel', geometry_msgs.msg.Twist), triggers="left_wheel_neuron")
 def linear_twist(t, left_wheel_neuron, right_wheel_neuron):
     """
     The transfer function which calculates the linear twist of the husky robot based on the
@@ -20,8 +20,10 @@ def linear_twist(t, left_wheel_neuron, right_wheel_neuron):
     :param right_wheel_neuron: the right wheel neuron device
     :return: a geometry_msgs/Twist message setting the linear twist fo the husky robot movement.
     """
-
+    clientLogger.info("Leaky integrated: {} {} at time {}".format(left_wheel_neuron.voltage, right_wheel_neuron.voltage, t))
     return geometry_msgs.msg.Twist(
-        linear=geometry_msgs.msg.Vector3(x=20.0 * min(left_wheel_neuron.voltage, right_wheel_neuron.voltage), y=0.0,
-                                         z=0.0), angular=geometry_msgs.msg.Vector3(x=0.0, y=0.0, z=1000.0 * (
-            right_wheel_neuron.voltage - left_wheel_neuron.voltage)))
+            linear=geometry_msgs.msg.Vector3(x=0.02 * min(left_wheel_neuron.voltage, right_wheel_neuron.voltage), y=0.0,
+                                             z=0.0),
+            angular=geometry_msgs.msg.Vector3(x=0.0, y=0.0, z=0.07 * (
+                right_wheel_neuron.voltage - left_wheel_neuron.voltage)))
+
