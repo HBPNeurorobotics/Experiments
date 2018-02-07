@@ -7,6 +7,7 @@
     <description>Loads the 1 DOF Myorobotics Arm into the Holodeck. Muscles can be controlled via ROS messages.</description>
     <timeout>1000000000</timeout>
     <configuration type="3d-settings" src="holodeck.3ds"/>
+    <configuration type="user-interaction-settings" src="holodeck.uis"/>
 
     <maturity>development</maturity>
     <environmentModel src="cdp1_world/cdp1_world_holodeck.sdf">

@@ -7,6 +7,7 @@
     <description>This experiment loads the Mouse in an empty world, with an idle brain and the docked walking controller.</description>
     <tags>mouse biological old empty</tags>
     <timeout>840</timeout>
+    <configuration type="user-interaction-settings" src="ExDDockedMouse.uis"/>
     <maturity>development</maturity>
     <environmentModel src="empty_world/empty_world.sdf">
         <robotPose x="0.0" y="0.0" z="0.8" ux="0.0" uy="0.0" uz="1.57" theta="0.70710689672598181"/>

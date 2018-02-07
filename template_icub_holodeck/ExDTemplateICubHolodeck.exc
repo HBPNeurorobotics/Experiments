@@ -8,6 +8,7 @@
     <tags>icub robotics holodeck template</tags>
     <timeout>840</timeout>
     <configuration type="3d-settings" src="ExDTemplateICubHolodeck.3ds"/>
+    <configuration type="user-interaction-settings" src="ExDTemplateICubHolodeck.uis"/>
     <maturity>production</maturity>
     <environmentModel src="empty_virtuallab/empty_virtuallab.sdf">
         <robotPose x="1.929" y="0.286" z="0.949" ux="0.0" uy="0.0" uz="1.57" theta="0.70710689672598181"/>

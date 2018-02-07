@@ -8,6 +8,7 @@
     <tags>template mmm empty</tags>
     <timeout>840</timeout>
     <configuration type="3d-settings" src="ExDTemplateMMM.json"/>
+    <configuration type="user-interaction-settings" src="ExDTemplateMMM.uis"/>
     <maturity>development</maturity>
     <environmentModel src="empty_world/empty_world.sdf">
         <robotPose x="0.0" y="0.0" z="0.556" ux="0.0" uy="0.0" uz="1.57" theta="0.70710689672598181"/>

@@ -8,6 +8,7 @@
     <tags>mouse biological visual braitenberg biologylab</tags>
     <timeout>840</timeout>
     <configuration type="3d-settings" src="ExDBraitenbergMouseLab.3ds"/>
+    <configuration type="user-interaction-settings" src="ExDBraitenbergMouseLab.uis"/>
     <maturity>production</maturity>
     <environmentModel src="biologylab_world/biologylab.sdf">
         <robotPose x="-1.0" y="-2.0" z="1.135" ux="0.0" uy="0.0" uz="0.75" theta="0.738"/>

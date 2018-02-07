@@ -8,6 +8,7 @@
 	<tags>robotics tigrillo openloop cpg</tags>
 	<timeout>840</timeout>
 	<configuration type="3d-settings" src="ExDTigrilloCPG.3ds"/>
+    <configuration type="user-interaction-settings" src="ExDTigrilloCPG.uis"/>
 	<maturity>development</maturity>
 	<environmentModel src="empty_world/empty_world.sdf">
 		<robotPose x="0.0" y="0.0" z="0.2" ux="0.0" uy="0.0" uz="0.0" theta="0.0"/>

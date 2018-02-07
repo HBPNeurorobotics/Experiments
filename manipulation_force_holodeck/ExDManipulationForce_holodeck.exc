@@ -9,6 +9,7 @@
     <tags>holodeck force based joint control robotics</tags>
     <timeout>840</timeout>
     <configuration type="3d-settings" src="ExDManipulationForce.3ds"/>
+    <configuration type="user-interaction-settings" src="ExDManipulationForce.uis"/>
     <maturity>development</maturity>
     <environmentModel src="virtual_room/virtual_room.sdf">
         <robotPose x="0.0" y="0.0" z="0.025" ux="0.0" uy="0.0" uz="1.0" theta="0.0"/>

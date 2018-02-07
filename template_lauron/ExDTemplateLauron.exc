@@ -7,6 +7,7 @@
     <description>This experiment loads the Lauron robot in an empty world, with an idle brain and basic transfer functions. You are free to edit it.</description>
     <tags>lauron template docked robotics empty</tags>
     <timeout>840</timeout>
+    <configuration type="user-interaction-settings" src="ExDTemplateLauron.uis"/>
     <maturity>development</maturity>
     <environmentModel src="empty_world/empty_world.sdf">
         <robotPose x="0.0" y="0.0" z="1" ux="0.0" uy="0.0" uz="0.0" theta="0.0"/>

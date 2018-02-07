@@ -8,6 +8,7 @@
     <tags>husky robotics visual virtualroom braitenberg neuronal</tags>
     <timeout>1680</timeout>
     <configuration type="3d-settings" src="ExDXMLExample.3ds"/>
+    <configuration type="user-interaction-settings" src="ExDXMLExample.uis"/>
     <maturity>production</maturity>
     <environmentModel src="virtual_room_lausanne/virtual_room.sdf">
         <robotPose x="0.0" y="0.0" z="0.5" ux="0.0" uy="0.0" uz="1.0" theta="0.0"/>

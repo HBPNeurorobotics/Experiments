@@ -9,6 +9,7 @@
     <tags>multiple robots tutorial</tags>
     <timeout>1800</timeout>
     <configuration type="3d-settings" src="MultipleRobots.3ds"/>
+    <configuration type="user-interaction-settings" src="MultipleRobots.uis"/>
     <maturity>development</maturity>
     <environmentModel src="multi_robots_environment/multi_robots_environment.sdf">
         <robotPose x="0.0" y="-0.5" z="0.63" ux="0.0" uy="0.0" uz="-0.707106781" theta="0.707106781"/>
