@@ -6,7 +6,7 @@
     <populations population="actors" xsi:type="Range" from="5" to="8"/>
     <populations population="record" xsi:type="Range" from="0" to="8"/>
   </brainModel>
-  <bodyModel>husky_model/husky_model.zip</bodyModel>
+  <bodyModel>husky_zipped/husky_model.zip</bodyModel>
   <transferFunction xsi:type="Neuron2Monitor" name="all_neurons_spike_monitor">
     <device name="all_neurons" type="SpikeRecorder">
       <neurons xsi:type="Range" population="record" from="0" to="8" step="1"/>
