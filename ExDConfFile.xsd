@@ -37,7 +37,7 @@
   <!--Contains a pose -->
   <xsd:complexType name="RobotPose">
     <xsd:annotation>
-      <xsd:documentation>This type represents a robot pose. It consists of a position part (x, y and z coordinates) and a rotation part (ux, uy, uz and theta). All fields are double precision values.</xsd:documentation>
+      <xsd:documentation>This type represents a robot pose. It consists of a position part (x, y and z coordinates in meters) and a rotation part (roll, pitch and yaw in radians). All fields are double precision values.</xsd:documentation>
     </xsd:annotation>
     <xsd:attribute name="x" type="xsd:double" use="required">
       <xsd:annotation>
@@ -54,10 +54,9 @@
         <xsd:documentation>The z coordinate of the robot position</xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
-    <xsd:attribute name="ux" type="xsd:double" use="required"/>
-    <xsd:attribute name="uy" type="xsd:double" use="required"/>
-    <xsd:attribute name="uz" type="xsd:double" use="required"/>
-    <xsd:attribute name="theta" type="xsd:double" use="required"/>
+    <xsd:attribute name="pitch" type="xsd:double" use="required"/>
+    <xsd:attribute name="yaw" type="xsd:double" use="required"/>
+    <xsd:attribute name="roll" type="xsd:double" use="required"/>
   </xsd:complexType>
 
   <!-- Generic configuration file -->
