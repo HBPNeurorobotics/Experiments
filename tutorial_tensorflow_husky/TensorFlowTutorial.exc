@@ -12,7 +12,8 @@
     <tags>husky tutorial robotics tensorflow braitenberg holodeck</tags>
     <timeout>86400</timeout>
     <configuration type="3d-settings" src="TensorFlowTutorial.3ds"/>
-    <configuration type="user-interaction-settings" src="TensorFlowTutorial.uis"/>
+    <configuration type="brainvisualizer" src="brainvisualizer.json"/>
+	<configuration type="user-interaction-settings" src="TensorFlowTutorial.uis"/>
     <maturity>development</maturity>
     <environmentModel src="codejam_2017_tensorflow_world/tensorflow_world.sdf">
         <robotPose x="0.0" y="0.0" z="0.5" ux="0.0" uy="0.0" uz="1.0" theta="0.0"/>

@@ -7,6 +7,7 @@
     <description>This experiment loads the Mouse in an empty world, with an idle brain and basic transfer functions, as well as a prototype docked robot controller. You are free to edit it.</description>
     <tags>empty template mouse docked biological</tags>
     <timeout>840</timeout>
+    <configuration type="brainvisualizer" src="brainvisualizer.json"/>
     <maturity>development</maturity>
     <environmentModel src="empty_world/empty_world.sdf">
         <robotPose x="0.0" y="0.0" z="0.1" ux="0.0" uy="0.0" uz="1.57" theta="0.70710689672598181"/>

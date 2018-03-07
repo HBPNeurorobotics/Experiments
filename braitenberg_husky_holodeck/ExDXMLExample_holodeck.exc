@@ -4,7 +4,7 @@
      xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
     <name>Holodeck Husky Braitenberg experiment</name>
     <thumbnail>ExDXMLExample.jpg</thumbnail>
-    <description>This experiment loads the Husky robot from Clearpath Robotics in the Holodeck environment. 
+    <description>This experiment loads the Husky robot from Clearpath Robotics in the Holodeck environment.
         If the user starts the experiment, the Braitenberg vehicle network is executed
         and the robot will turn around itself in place, until the camera detects a red color. Then,
         the robot will move towards the colored object. In this experiment, the user can interact
@@ -13,7 +13,8 @@
     <tags>husky robotics holodeck braitenberg</tags>
     <timeout>840</timeout>
     <configuration type="3d-settings" src="ExDXMLExample.3ds"/>
-    <configuration type="user-interaction-settings" src="ExDXMLExample.uis"/>
+    <configuration type="brainvisualizer" src="brainvisualizer.json"/>
+	<configuration type="user-interaction-settings" src="ExDXMLExample.uis"/>
     <maturity>production</maturity>
     <environmentModel src="virtual_room/virtual_room.sdf">
         <robotPose x="0.0" y="0.0" z="0.5" ux="0.0" uy="0.0" uz="1.0" theta="0.0"/>

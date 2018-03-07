@@ -7,6 +7,7 @@
     <description>This experiment loads the anthropomimetic robot Roboy into the SpaceBotCup Arena. In the future, muscle simulations will be added which then can be controlled by a neural network (NEST). </description>
     <tags>roboy robotics spacebotcup</tags>
     <timeout>840</timeout>
+    <configuration type="brainvisualizer" src="brainvisualizer.json"/>
     <environmentModel src="spacebotcup_world/spacebotcup_world.sdf">
         <robotPose x="0.0" y="0.0" z="-0.157" ux="0.0" uy="0.0" uz="1.0" theta="0.0"/>
     </environmentModel>

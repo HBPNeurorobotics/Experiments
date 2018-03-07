@@ -8,7 +8,8 @@
     <tags>holodeck icub visual tracking retina</tags>
     <timeout>840</timeout>
     <configuration type="3d-settings" src="ExDRetinaICubTrackingRG.3ds"/>
-    <configuration type="user-interaction-settings" src="ExDRetinaICubTrackingRG.uis"/>
+    <configuration type="brainvisualizer" src="brainvisualizer.json"/>
+	<configuration type="user-interaction-settings" src="ExDRetinaICubTrackingRG.uis"/>
     <maturity>development</maturity>
     <environmentModel src="virtual_room/virtual_room_tracking_icub.sdf">
         <robotPose x="0.0" y="1.5" z="0.644" ux="0.0" uy="0.0" uz="-0.70710666564709435" theta="0.70710689672598181"/>

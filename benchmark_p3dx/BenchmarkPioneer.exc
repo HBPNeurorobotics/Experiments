@@ -15,7 +15,8 @@
     <tags>benchmark pioneer woodcheckerboard trajectory robotics</tags>
     <timeout>840</timeout>
     <configuration type="3d-settings" src="BenchmarkPioneer.3ds"/>
-    <configuration type="user-interaction-settings" src="BenchmarkPioneer.uis"/>
+    <configuration type="brainvisualizer" src="brainvisualizer.json"/>
+	<configuration type="user-interaction-settings" src="BenchmarkPioneer.uis"/>
     <maturity>production</maturity>
     <environmentModel src="p3dxbenchmark_world/p3dxbenchmark_world.sdf">
         <robotPose x="-1.0" y="1.0" z="0.05" ux="0.0" uy="0.0" uz="0.0" theta="0.0"/>

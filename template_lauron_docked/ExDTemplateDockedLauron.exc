@@ -7,7 +7,8 @@
     <description>This experiment loads the Lauron robot from a docker container in an empty world, with an idle brain and basic transfer functions. You are free to edit it.</description>
     <tags>lauron template docked lauron empty</tags>
     <timeout>840</timeout>
-    <configuration type="user-interaction-settings" src="ExDTemplateDockedLauron.uis"/>
+    <configuration type="brainvisualizer" src="brainvisualizer.json"/>
+	<configuration type="user-interaction-settings" src="ExDTemplateDockedLauron.uis"/>
     <maturity>development</maturity>
     <environmentModel src="empty_world/empty_world.sdf">
         <robotPose x="0.0" y="0.0" z="1" ux="0.0" uy="0.0" uz="0.0" theta="0.0"/>

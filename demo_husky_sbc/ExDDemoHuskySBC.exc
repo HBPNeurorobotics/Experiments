@@ -8,7 +8,8 @@
     <tags>husky robotics maze labyrinth spacebotcup demo</tags>
     <timeout>210</timeout>
     <configuration type="3d-settings" src="ExDDemoHuskySBC.3ds"/>
-    <configuration type="user-interaction-settings" src="ExDDemoHuskySBC.uis"/>
+    <configuration type="brainvisualizer" src="brainvisualizer.json"/>
+	<configuration type="user-interaction-settings" src="ExDDemoHuskySBC.uis"/>
     <maturity>production</maturity>
     <environmentModel src="spacebotcup_world_labyrinth/spacebotcup_world.sdf">
         <robotPose x="1.33815" y="-2.07915" z="1.08401" ux="0.0" uy="0.0" uz="0.0" theta="0.0"/>

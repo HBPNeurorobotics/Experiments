@@ -8,7 +8,8 @@
     <tags>template husky robotics timeout</tags>
     <timeout>120</timeout>
     <configuration type="3d-settings" src="ExDTemplateHuskyTimeout.3ds"/>
-    <configuration type="user-interaction-settings" src="ExDTemplateHuskyTimeout.uis"/>
+    <configuration type="brainvisualizer" src="brainvisualizer.json"/>
+	<configuration type="user-interaction-settings" src="ExDTemplateHuskyTimeout.uis"/>
     <maturity>development</maturity>
     <environmentModel src="empty_world/empty_world.sdf">
         <robotPose x="0.0" y="0.0" z="0.5" ux="0.0" uy="0.0" uz="0.0" theta="0.0"/>
