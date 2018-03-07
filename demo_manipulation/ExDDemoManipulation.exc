@@ -11,7 +11,8 @@
     <tags>hollie arm manipulation demo empty robotics</tags>
     <timeout>180</timeout>
     <configuration type="3d-settings" src="ExDDemoManipulation.3ds"/>
-    <configuration type="user-interaction-settings" src="ExDDemoManipulation.uis"/>
+    <configuration type="brainvisualizer" src="brainvisualizer.json"/>
+	<configuration type="user-interaction-settings" src="ExDDemoManipulation.uis"/>
     <maturity>development</maturity>
     <environmentModel src="empty_world/world_manipulation.sdf">
         <robotPose x="0.0" y="0.0" z="0.04" ux="0.0" uy="0.0" uz="1.0" theta="0.0"/>

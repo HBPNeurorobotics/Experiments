@@ -8,7 +8,8 @@
     <tags>husky robotics spacebotcup braitenberg</tags>
     <timeout>840</timeout>
     <configuration type="3d-settings" src="ExDBraitenbergHuskySBC.3ds"/>
-    <configuration type="user-interaction-settings" src="ExDBraitenbergHuskySBC.uis"/>
+    <configuration type="brainvisualizer" src="brainvisualizer.json"/>
+	<configuration type="user-interaction-settings" src="ExDBraitenbergHuskySBC.uis"/>
     <maturity>production</maturity>
     <environmentModel src="spacebotcup_world/spacebotcup_world.sdf">
         <robotPose x="0.0" y="0.0" z="1.0" ux="0.0" uy="0.0" uz="0.0" theta="0.0"/>

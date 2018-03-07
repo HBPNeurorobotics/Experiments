@@ -9,7 +9,8 @@
     <tags>avatar user test</tags>
     <timeout>9999</timeout>
     <configuration type="3d-settings" src="user-avatar_test-env.3ds"/>
-    <configuration type="user-interaction-settings" src="user-avatar_test-env.uis"/>
+    <configuration type="brainvisualizer" src="brainvisualizer.json"/>
+	<configuration type="user-interaction-settings" src="user-avatar_test-env.uis"/>
     <maturity>development</maturity>
     <environmentModel src="empty_virtuallab/empty_virtuallab.sdf">
         <robotPose x="1.929" y="0.286" z="0.949" ux="0.0" uy="0.0" uz="1.57" theta="0.70710689672598181"/>

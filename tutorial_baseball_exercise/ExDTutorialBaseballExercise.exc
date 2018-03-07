@@ -11,7 +11,8 @@
     <tags>icub robotics tutorial exercise baseball tutorial</tags>
     <timeout>86400</timeout>
     <configuration type="3d-settings" src="ExDTutorialBaseball.3ds"/>
-    <configuration type="user-interaction-settings" src="ExDTutorialBaseball.uis"/>
+    <configuration type="brainvisualizer" src="brainvisualizer.json"/>
+	<configuration type="user-interaction-settings" src="ExDTutorialBaseball.uis"/>
     <maturity>production</maturity>
     <environmentModel src="empty_world/empty_world.sdf">
         <robotPose x="0.0" y="0.0" z="0.624" ux="0.0" uy="0.0" uz="1.57" theta="0.70710689672598181"/>

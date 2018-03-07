@@ -9,7 +9,8 @@
     <tags>template hollie robotics arm empty</tags>
     <timeout>840</timeout>
     <configuration type="3d-settings" src="ExDTemplateManipulation.3ds"/>
-    <configuration type="user-interaction-settings" src="ExDTemplateManipulation.uis"/>
+    <configuration type="brainvisualizer" src="brainvisualizer.json"/>
+	<configuration type="user-interaction-settings" src="ExDTemplateManipulation.uis"/>
     <maturity>production</maturity>
     <environmentModel src="empty_world/empty_world.sdf">
         <robotPose x="0.0" y="0.0" z="0.04" ux="0.0" uy="0.0" uz="1.0" theta="0.0"/>

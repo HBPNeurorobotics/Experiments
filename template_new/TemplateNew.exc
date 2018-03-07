@@ -6,6 +6,7 @@
     <thumbnail>TemplateNew.jpg</thumbnail>
     <description>This new experiment is based on the models that you have selected. You are free to edit the description.</description>
     <timeout>840</timeout>
+    <configuration type="brainvisualizer" src="brainvisualizer.json"/>
     <configuration type="3d-settings" src="TemplateNew.3ds"/>
     <maturity>development</maturity>
     <environmentModel src="empty_world/empty_world.sdf">
