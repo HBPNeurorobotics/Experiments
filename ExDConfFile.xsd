@@ -156,6 +156,11 @@
         <xsd:documentation>A path to an SDF file that specifies the scene</xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
+    <xsd:attribute name="customModelPath" type="xsd:string">
+      <xsd:annotation>
+        <xsd:documentation>Specifies the path to the custom model</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
   </xsd:complexType>
 
   <!-- Contains a visualModel with pose and scale for the frontend -->
