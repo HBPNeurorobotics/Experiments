@@ -12,7 +12,7 @@
 	<configuration type="user-interaction-settings" src="ExDDemoHuskySBC.uis"/>
     <maturity>production</maturity>
     <environmentModel src="spacebotcup_world_labyrinth/spacebotcup_world.sdf">
-        <robotPose x="1.33815" y="-2.07915" z="1.08401" ux="0.0" uy="0.0" uz="0.0" theta="0.0"/>
+        <robotPose x="1.33815" y="-2.07915" z="1.08401" roll="0.0" pitch="-0.0" yaw="0.0"/>
     </environmentModel>
     <bibiConf src="milestone2.bibi"/>
     <experimentControl>
