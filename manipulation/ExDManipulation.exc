@@ -14,7 +14,7 @@
 	<configuration type="user-interaction-settings" src="ExDManipulation.uis"/>
     <maturity>production</maturity>
     <environmentModel src="virtual_room_lausanne/virtual_room.sdf">
-        <robotPose x="0.0" y="0.0" z="0.025" roll="0.0" pitch="-0.0" yaw="3.14159265359"/>
+        <robotPose x="0.0" y="0.0" z="0.025" ux="0.0" uy="0.0" uz="1.0" theta="0.0"/>
     </environmentModel>
     <bibiConf src="manipulation.bibi"/>
     <cameraPose>

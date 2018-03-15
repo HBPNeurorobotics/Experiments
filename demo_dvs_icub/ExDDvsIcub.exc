@@ -14,7 +14,7 @@
 	<configuration type="user-interaction-settings" src="ExDDvsIcub.uis"/>
     <maturity>development</maturity>
     <environmentModel src="tracking_world/tracking_world.sdf">
-        <robotPose x="0.0" y="-0.5" z="0.63" roll="0.0" pitch="0.0" yaw="-1.57079632679"/>
+        <robotPose x="0.0" y="-0.5" z="0.63" ux="0.0" uy="0.0" uz="-0.707106781" theta="0.707106781"/>
     </environmentModel>
     <bibiConf src="DVSIcub.bibi"/>
     <experimentControl>

@@ -11,7 +11,7 @@
 	<configuration type="user-interaction-settings" src="ExDTemplateDockedLauron.uis"/>
     <maturity>development</maturity>
     <environmentModel src="empty_world/empty_world.sdf">
-        <robotPose x="0.0" y="0.0" z="1" roll="0.0" pitch="-0.0" yaw="0.0"/>
+        <robotPose x="0.0" y="0.0" z="1" ux="0.0" uy="0.0" uz="0.0" theta="0.0"/>
     </environmentModel>
     <bibiConf src="docked_template_lauron.bibi"/>
     <cameraPose>
