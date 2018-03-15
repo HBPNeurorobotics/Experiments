@@ -77,7 +77,7 @@
     "fogDensity": "0.02",
     "fogColor": "#97a2af",
     "pbrMaterial": true,
-    "defaultCameraMode":"lookatrobot",
+    "defaultCameraMode":"free-camera",
     "nearClippingDistance": "0.01",
     "shadowSettings": [
         {

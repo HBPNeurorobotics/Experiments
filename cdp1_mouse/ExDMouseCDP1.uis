@@ -1,6 +1,6 @@
 {
     "camera": {
-        "defaultMode": "lookatrobot",
+        "defaultMode": "free-camera",
         "sensitivity": {
             "translation": 0.1,
             "rotation": 1.0
