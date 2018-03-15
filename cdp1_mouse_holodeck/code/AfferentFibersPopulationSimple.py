@@ -52,7 +52,7 @@ class AfferentFibersPopulationSimple(sim.Population):
         if firingRate>0:
 
             if firingRate>=self.__class__.__maxFiringRate:
-                print "Warning: the firingRate exceeds the predefined maximum value (%d)."%(firingRate)
+                # print "Warning: the firingRate exceeds the predefined maximum value (%d)."%(firingRate)
                 firingRate=self.__class__.__maxFiringRate
 
             lower = 1000.0/self.__class__.__maxFiringRate
