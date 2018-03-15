@@ -12,10 +12,10 @@
 	<configuration type="user-interaction-settings" src="ExDBraitenbergMouseLab.uis"/>
     <maturity>production</maturity>
     <environmentModel src="holodeck_biolab/holodeck_biolab.sdf">
-        <robotPose x="1.659" y="-0.851" z="1.319" roll="0.0" pitch="-0.0" yaw="1.58692500941"/>
+        <robotPose x="1.659" y="-0.851" z="1.319" ux="0.0" uy="0.0" uz="0.75" theta="0.738"/>
     </environmentModel>
     <visualModel src="mouse_v2_model/meshes/mouse_v2_model_animated.dae" scale="0.01">
-        <visualPose x="1.715" y="-0.851" z="1.319" roll="0.0" pitch="-0.0" yaw="1.5708"/>
+        <visualPose x="1.715" y="-0.851" z="1.319" ux="0.0" uy="0.0" uz="1.5708" theta="0.0"/>
     </visualModel>
     <bibiConf src="braitenberg_mouse_lab.bibi"/>
     <cameraPose>
