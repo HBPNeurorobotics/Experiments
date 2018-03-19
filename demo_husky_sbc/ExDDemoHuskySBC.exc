@@ -7,7 +7,7 @@
     <description>In this experiment the robot will find his path in a labyrinth by following red lights.</description>
     <tags>husky robotics maze labyrinth spacebotcup demo</tags>
     <timeout>210</timeout>
-    <configuration type="3d-settings" src="ExDDemoHuskySBC.3ds"/>
+    <configuration type="3d-settings" src="ExDDemoHuskySBC.ini"/>
     <configuration type="brainvisualizer" src="brainvisualizer.json"/>
 	<configuration type="user-interaction-settings" src="ExDDemoHuskySBC.uis"/>
     <maturity>production</maturity>

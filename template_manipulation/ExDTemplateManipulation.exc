@@ -8,7 +8,7 @@
     </description>
     <tags>template hollie robotics arm empty</tags>
     <timeout>840</timeout>
-    <configuration type="3d-settings" src="ExDTemplateManipulation.3ds"/>
+    <configuration type="3d-settings" src="ExDTemplateManipulation.ini"/>
     <configuration type="brainvisualizer" src="brainvisualizer.json"/>
 	<configuration type="user-interaction-settings" src="ExDTemplateManipulation.uis"/>
     <maturity>production</maturity>

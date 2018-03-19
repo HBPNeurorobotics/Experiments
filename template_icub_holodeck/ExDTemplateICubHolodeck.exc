@@ -7,7 +7,7 @@
     <description>This experiment loads the iCub robot in the holodeck, with an idle brain and basic transfer functions. You are free to edit it.</description>
     <tags>icub robotics holodeck template</tags>
     <timeout>840</timeout>
-    <configuration type="3d-settings" src="ExDTemplateICubHolodeck.3ds"/>
+    <configuration type="3d-settings" src="ExDTemplateICubHolodeck.ini"/>
     <configuration type="brainvisualizer" src="brainvisualizer.json"/>
 	<configuration type="user-interaction-settings" src="ExDTemplateICubHolodeck.uis"/>
     <maturity>production</maturity>

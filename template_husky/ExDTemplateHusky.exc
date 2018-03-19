@@ -7,7 +7,7 @@
     <description>This experiment loads the Husky robot in an empty world, with an idle brain and basic transfer functions. You are free to edit it.</description>
     <tags>template husky robotics empty</tags>
     <timeout>840</timeout>
-    <configuration type="3d-settings" src="ExDTemplateHusky.3ds"/>
+    <configuration type="3d-settings" src="ExDTemplateHusky.ini"/>
     <configuration type="brainvisualizer" src="brainvisualizer.json"/>
 	<configuration type="user-interaction-settings" src="ExDTemplateHusky.uis"/>
     <maturity>production</maturity>

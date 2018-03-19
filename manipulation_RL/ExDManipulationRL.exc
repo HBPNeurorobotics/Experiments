@@ -9,7 +9,7 @@
     </description>
     <tags>robotics hollie hand finger sdtp holodeck reinforcement learning</tags>
     <timeout>840</timeout>
-    <configuration type="3d-settings" src="ExDManipulationRL.3ds"/>
+    <configuration type="3d-settings" src="ExDManipulationRL.ini"/>
     <configuration type="brainvisualizer" src="brainvisualizer.json"/>
 	<configuration type="user-interaction-settings" src="ExDManipulationRL.uis"/>
     <maturity>production</maturity>

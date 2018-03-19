@@ -9,7 +9,7 @@
     </description>
     <tags>hollie hand cpg holodeck</tags>
     <timeout>840</timeout>
-    <configuration type="3d-settings" src="ExDManipulation.3ds"/>
+    <configuration type="3d-settings" src="ExDManipulation.ini"/>
     <configuration type="brainvisualizer" src="brainvisualizer.json"/>
 	<configuration type="user-interaction-settings" src="ExDManipulation.uis"/>
     <maturity>development</maturity>

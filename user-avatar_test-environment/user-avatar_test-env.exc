@@ -8,7 +8,7 @@
     </description>
     <tags>avatar user test</tags>
     <timeout>9999</timeout>
-    <configuration type="3d-settings" src="user-avatar_test-env.3ds"/>
+    <configuration type="3d-settings" src="user-avatar_test-env.ini"/>
     <configuration type="brainvisualizer" src="brainvisualizer.json"/>
 	<configuration type="user-interaction-settings" src="user-avatar_test-env.uis"/>
     <maturity>development</maturity>

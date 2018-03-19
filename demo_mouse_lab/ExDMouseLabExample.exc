@@ -8,7 +8,7 @@
     Objects are created during the experiment and change the behaviour of the mouse.</description>
     <tags>mouse demo braitenberg biological holodeck</tags>
     <timeout>210</timeout>
-    <configuration type="3d-settings" src="ExDMouseLabExample.3ds"/>
+    <configuration type="3d-settings" src="ExDMouseLabExample.ini"/>
     <configuration type="brainvisualizer" src="brainvisualizer.json"/>
 	<configuration type="user-interaction-settings" src="ExDMouseLabExample.uis"/>
     <maturity>development</maturity>
