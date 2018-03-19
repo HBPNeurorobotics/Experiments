@@ -16,12 +16,12 @@
           <xs:documentation>If specified, the CLE uses a different timestep than the default timestep of 20ms. The timestep is specified in milliseconds and depicts the time between two successive loops of the CLE in simulation time.</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="brainModel" type="BrainModel">
+      <xs:element name="brainModel" type="BrainModelWithPath">
         <xs:annotation>
           <xs:documentation>The brain model depicts a path to the neural network model.</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="bodyModel" type="SDFFilename">
+      <xs:element name="bodyModel" type="SDFWithPath">
         <xs:annotation>
           <xs:documentation>The path to the robot model that should be used. This can either be a path to an SDF model or a path to a zip file containing all required assets for a robot. This zip file must have a file model.sdf at the root of the archive.</xs:documentation>
         </xs:annotation>
@@ -96,6 +96,14 @@
     </xs:restriction>
   </xs:simpleType>
 
+  <xs:complexType name="BrainModelWithPath">
+    <xs:complexContent>
+        <xs:extension base="BrainModel">
+        <xs:attribute name="customModelPath" type="xs:string" use="optional"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
   <xs:complexType name="BrainModel">
     <xs:annotation>
       <xs:documentation>A neural network description as used in the CLE</xs:documentation>
@@ -113,6 +121,14 @@
         </xs:annotation>
       </xs:element>
     </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="SDFWithPath">
+      <xs:simpleContent>
+        <xs:extension base="SDFFilename">
+        <xs:attribute name="customModelPath" type="xs:string" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
   </xs:complexType>
 
   <xs:simpleType name="BrainFilename">
