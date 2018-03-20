@@ -12,10 +12,10 @@
 	<configuration type="user-interaction-settings" src="ExDBraitenbergMouse.uis"/>
     <maturity>production</maturity>
     <environmentModel src="mouse_ymaze_world/mouse_lab.sdf">
-        <robotPose x="0.0" y="0.0" z="-1.5" ux="0.0" uy="0.0" uz="0.0" theta="0.0"/>
+        <robotPose x="0.0" y="0.0" z="-1.5" roll="0.0" pitch="-0.0" yaw="0.0"/>
     </environmentModel>
     <visualModel src="mouse_v1_model/meshes/mouse_v1_model_animated.dae">
-        <visualPose x="0.0" y="5.0" z="-2.62" ux="0.0" uy="0.0" uz="0.0" theta="0.0"/>
+        <visualPose x="0.0" y="5.0" z="-2.62" roll="0.0" pitch="-0.0" yaw="0.0"/>
     </visualModel>
     <bibiConf src="braitenberg_mouse.bibi"/>
     <cameraPose>
