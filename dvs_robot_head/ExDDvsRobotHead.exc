@@ -13,7 +13,7 @@
 	<configuration type="user-interaction-settings" src="ExDDvsRobotHead.uis"/>
     <maturity>development</maturity>
     <environmentModel src="tracking_world/tracking_world.sdf">
-        <robotPose x="0.0" y="0.0" z="0.0" ux="0.0" uy="0.0" uz="1.0" theta="0.0"/>
+        <robotPose x="0.0" y="-0.5" z="0.0" ux="0.0" uy="0.0" uz="1.0" theta="0.0"/>
     </environmentModel>
     <bibiConf src="DVSRobotHead.bibi"/>
     <cameraPose>
