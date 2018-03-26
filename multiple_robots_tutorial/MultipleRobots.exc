@@ -8,7 +8,7 @@
     </description>
     <tags>multiple robots tutorial</tags>
     <timeout>1800</timeout>
-    <configuration type="3d-settings" src="MultipleRobots.3ds"/>
+    <configuration type="3d-settings" src="MultipleRobots.ini"/>
     <configuration type="brainvisualizer" src="brainvisualizer.json"/>
 	<configuration type="user-interaction-settings" src="MultipleRobots.uis"/>
     <maturity>development</maturity>

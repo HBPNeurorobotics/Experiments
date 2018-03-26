@@ -11,7 +11,7 @@
     </description>
     <tags>husky tutorial robotics tensorflow braitenberg holodeck</tags>
     <timeout>86400</timeout>
-    <configuration type="3d-settings" src="TensorFlowTutorial.3ds"/>
+    <configuration type="3d-settings" src="TensorFlowTutorial.ini"/>
     <configuration type="brainvisualizer" src="brainvisualizer.json"/>
 	<configuration type="user-interaction-settings" src="TensorFlowTutorial.uis"/>
     <maturity>development</maturity>

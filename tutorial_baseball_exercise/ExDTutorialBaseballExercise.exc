@@ -10,7 +10,7 @@
     </description>
     <tags>icub robotics tutorial exercise baseball tutorial</tags>
     <timeout>86400</timeout>
-    <configuration type="3d-settings" src="ExDTutorialBaseball.3ds"/>
+    <configuration type="3d-settings" src="ExDTutorialBaseball.ini"/>
     <configuration type="brainvisualizer" src="brainvisualizer.json"/>
 	<configuration type="user-interaction-settings" src="ExDTutorialBaseball.uis"/>
     <maturity>production</maturity>

@@ -7,7 +7,7 @@
     <description>This new experiment is based on the models that you have selected. You are free to edit the description.</description>
     <timeout>840</timeout>
     <configuration type="brainvisualizer" src="brainvisualizer.json"/>
-    <configuration type="3d-settings" src="TemplateNew.3ds"/>
+    <configuration type="3d-settings" src="TemplateNew.ini"/>
     <maturity>development</maturity>
     <environmentModel src="empty_world/empty_world.sdf">
         <robotPose x="0.0" y="0.0" z="0.5" ux="0.0" uy="0.0" uz="0.0" theta="0.0"/>

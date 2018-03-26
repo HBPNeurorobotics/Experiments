@@ -13,7 +13,7 @@
     </description>
     <tags>husky robotics braitenberg virtualroom</tags>
     <timeout>840</timeout>
-    <configuration type="3d-settings" src="ScreenSwitchingHuskyExperiment.3ds"/>
+    <configuration type="3d-settings" src="ScreenSwitchingHuskyExperiment.ini"/>
     <configuration type="brainvisualizer" src="brainvisualizer.json"/>
 	<configuration type="user-interaction-settings" src="ScreenSwitchingHuskyExperiment.uis"/>
     <maturity>production</maturity>

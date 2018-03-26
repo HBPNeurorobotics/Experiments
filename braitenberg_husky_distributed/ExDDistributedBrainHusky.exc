@@ -12,7 +12,7 @@
     </description>
     <tags>husky robotics distributed braitenberg nest holodeck</tags>
     <timeout>840</timeout>
-    <configuration type="3d-settings" src="ExDXMLExample.3ds"/>
+    <configuration type="3d-settings" src="ExDXMLExample.ini"/>
     <configuration type="brainvisualizer" src="brainvisualizer.json"/>
 	<configuration type="user-interaction-settings" src="ExDXMLExample.uis"/>
     <maturity>development</maturity>

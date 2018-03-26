@@ -7,7 +7,7 @@
     <description>In this experiment the iCub robot performs a Visual Tracking task in the Holodeck.</description>
     <tags>icub robotics visual holodeck</tags>
     <timeout>840</timeout>
-    <configuration type="3d-settings" src="ExDVisualTrackingICub.3ds"/>
+    <configuration type="3d-settings" src="ExDVisualTrackingICub.ini"/>
     <configuration type="brainvisualizer" src="brainvisualizer.json"/>
 	<configuration type="user-interaction-settings" src="ExDVisualTrackingICub.uis"/>
     <maturity>production</maturity>

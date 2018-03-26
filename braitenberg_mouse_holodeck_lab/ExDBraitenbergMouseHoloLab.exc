@@ -7,7 +7,7 @@
     <description>This experiment loads the soft-skin mouse model in the holodeck biolab environment. If the user starts the experiment, the mouse will stay still, until its eyes detect a red color on one screen. Then, the mouse will move the head towards the colored object. In this experiment, the user can interact and change the color of both screens by clicking on them with the right mouse button.</description>
     <tags>mouse biological visual holodeck braitenberg</tags>
     <timeout>840</timeout>
-    <configuration type="3d-settings" src="ExDBraitenbergMouseLab.3ds"/>
+    <configuration type="3d-settings" src="ExDBraitenbergMouseLab.ini"/>
     <configuration type="brainvisualizer" src="brainvisualizer.json"/>
 	<configuration type="user-interaction-settings" src="ExDBraitenbergMouseLab.uis"/>
     <maturity>production</maturity>

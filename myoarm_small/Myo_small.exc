@@ -6,7 +6,7 @@
     <thumbnail>Myo_small.jpg</thumbnail>
     <description>Loads the 1 DOF Myorobotics Arm into the Holodeck. Muscles can be controlled via ROS messages.</description>
     <timeout>1000000000</timeout>
-    <configuration type="3d-settings" src="holodeck.3ds"/>
+    <configuration type="3d-settings" src="holodeck.ini"/>
     <configuration type="brainvisualizer" src="brainvisualizer.json"/>
 	<configuration type="user-interaction-settings" src="holodeck.uis"/>
 

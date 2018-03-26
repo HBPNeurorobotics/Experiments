@@ -8,7 +8,7 @@
     </description>
     <tags>holodeck force based joint control robotics</tags>
     <timeout>840</timeout>
-    <configuration type="3d-settings" src="ExDManipulationForce.3ds"/>
+    <configuration type="3d-settings" src="ExDManipulationForce.ini"/>
     <configuration type="brainvisualizer" src="brainvisualizer.json"/>
 	<configuration type="user-interaction-settings" src="ExDManipulationForce.uis"/>
     <maturity>development</maturity>

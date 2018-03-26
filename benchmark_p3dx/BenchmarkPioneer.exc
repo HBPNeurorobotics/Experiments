@@ -14,7 +14,7 @@
       which is mostly used to evaluate how close to the goal the robot is in the current segment.</description>
     <tags>benchmark pioneer woodcheckerboard trajectory robotics</tags>
     <timeout>840</timeout>
-    <configuration type="3d-settings" src="BenchmarkPioneer.3ds"/>
+    <configuration type="3d-settings" src="BenchmarkPioneer.ini"/>
     <configuration type="brainvisualizer" src="brainvisualizer.json"/>
 	<configuration type="user-interaction-settings" src="BenchmarkPioneer.uis"/>
     <maturity>production</maturity>

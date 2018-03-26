@@ -7,7 +7,7 @@
     <description>Test experiment for timeout testing.</description>
     <tags>template husky robotics timeout</tags>
     <timeout>120</timeout>
-    <configuration type="3d-settings" src="ExDTemplateHuskyTimeout.3ds"/>
+    <configuration type="3d-settings" src="ExDTemplateHuskyTimeout.ini"/>
     <configuration type="brainvisualizer" src="brainvisualizer.json"/>
 	<configuration type="user-interaction-settings" src="ExDTemplateHuskyTimeout.uis"/>
     <maturity>development</maturity>

@@ -7,7 +7,7 @@
     <description>In this experiment the iCub robot sends visual input to a retina model.</description>
     <tags>icub retina robotics holodeck</tags>
     <timeout>840</timeout>
-    <configuration type="3d-settings" src="ExDRetinaICubMockup.3ds"/>
+    <configuration type="3d-settings" src="ExDRetinaICubMockup.ini"/>
     <configuration type="brainvisualizer" src="brainvisualizer.json"/>
 	<configuration type="user-interaction-settings" src="ExDRetinaICubMockup.uis"/>
     <maturity>development</maturity>

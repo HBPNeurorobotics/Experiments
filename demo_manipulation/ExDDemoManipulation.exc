@@ -10,7 +10,7 @@
     </description>
     <tags>hollie arm manipulation demo empty robotics</tags>
     <timeout>180</timeout>
-    <configuration type="3d-settings" src="ExDDemoManipulation.3ds"/>
+    <configuration type="3d-settings" src="ExDDemoManipulation.ini"/>
     <configuration type="brainvisualizer" src="brainvisualizer.json"/>
 	<configuration type="user-interaction-settings" src="ExDDemoManipulation.uis"/>
     <maturity>development</maturity>
