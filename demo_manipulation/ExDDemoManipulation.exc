@@ -13,7 +13,7 @@
     <configuration type="3d-settings" src="ExDDemoManipulation.ini"/>
     <configuration type="brainvisualizer" src="brainvisualizer.json"/>
 	<configuration type="user-interaction-settings" src="ExDDemoManipulation.uis"/>
-    <maturity>development</maturity>
+    <maturity>production</maturity>
     <environmentModel src="empty_world/world_manipulation.sdf">
         <robotPose x="0.0" y="0.0" z="0.04" roll="0.0" pitch="-0.0" yaw="3.14159265359"/>
     </environmentModel>

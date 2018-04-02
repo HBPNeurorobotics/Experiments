@@ -2,7 +2,7 @@
 <ExD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
      xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ExDConfFile.xsd">
-    <name>iCub robot with Dynamic Vision Sensor (DVS)</name>
+    <name>iCub robot with Dynamic Vision Sensor (DVS) demo</name>
     <thumbnail>ExDDvsIcub.jpg</thumbnail>
     <description>This experiment contains an iCub robot equipped with one simulated Dynamic Vision Sensors and another iCub robot that is waving periodically its left or right hand.
     The iCub with a DVS tries to replicate the hand motion of the other one.
