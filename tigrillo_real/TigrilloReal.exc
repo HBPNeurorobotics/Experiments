@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ExD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
+     xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
+    <name>The Real Tigrillo Experiment</name>
+    <thumbnail>ExDTigrillo.png</thumbnail>
+    <description>Controlling the real Tigrillo Robot with the NRP.</description>
+    <timeout>840</timeout>
+    <configuration type="3d-settings" src="TigrilloReal.ini"/>
+    <maturity>development</maturity>
+    <environmentModel src="virtual_room/virtual_room.sdf">
+        <robotPose x="0.0" y="0.0" z="0.0" roll="0.0" pitch="0.0" yaw="0.0"/>
+    </environmentModel>
+    <bibiConf src="TigrilloReal.bibi"/>
+    <cameraPose>
+        <cameraPosition x="2.1504202465717563" y="1.2381462778435453" z="1.3380507195673994"/>
+        <cameraLookAt x="0" y="0" z="0.49999"/>
+    </cameraPose>
+</ExD>
