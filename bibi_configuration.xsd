@@ -124,9 +124,18 @@
   </xs:complexType>
 
   <xs:complexType name="SDFWithPath">
-      <xs:simpleContent>
-        <xs:extension base="SDFFilename">
-        <xs:attribute name="customModelPath" type="xs:string" use="optional"/>
+    <xs:simpleContent>
+      <xs:extension base="SDFFilename">
+        <xs:attribute name="customAsset" type="xs:boolean" use="optional">
+          <xs:annotation>
+            <xs:documentation>Whether the model is custom</xs:documentation>
+          </xs:annotation>
+       </xs:attribute>
+        <xs:attribute name="assetPath" type="xs:string" use="optional">
+          <xs:annotation>
+            <xs:documentation>Assets path</xs:documentation>
+          </xs:annotation>
+       </xs:attribute>
       </xs:extension>
     </xs:simpleContent>
   </xs:complexType>
