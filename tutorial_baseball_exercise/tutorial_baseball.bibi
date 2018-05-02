@@ -9,4 +9,14 @@
   <transferFunction xsi:type="PythonTransferFunction" src="monitor_population.py"/>
   <transferFunction xsi:type="PythonTransferFunction" src="grab_image.py"/>
   <transferFunction xsi:type="PythonTransferFunction" src="swing.py"/>
+  <!-- passthrough for the joint state plot -->
+  <transferFunction xsi:type="PythonTransferFunction">
+    #<![CDATA[
+    from sensor_msgs.msg import JointState
+    @nrp.MapRobotSubscriber("joints", Topic("/robot/joints", JointState))
+    @nrp.Neuron2Robot(Topic('/joint_states', JointState))
+    def joint_states_passthrough(t, joints):
+    return joints.value
+    #]]>
+  </transferFunction>
 </bibi>
