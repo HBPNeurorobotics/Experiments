@@ -89,10 +89,10 @@
 
   <xs:simpleType name="TimeStep">
     <xs:annotation>
-      <xs:documentation>The timestep type of the CLE. This is a positive number in milliseconds. The maximum allowed value is 1000.</xs:documentation>
+      <xs:documentation>The timestep type of the CLE. This is a positive number in milliseconds. The maximum allowed value is an hour.</xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:positiveInteger">
-      <xs:maxInclusive value="1000"/>
+      <xs:maxInclusive value="3600000"/>
     </xs:restriction>
   </xs:simpleType>
 
