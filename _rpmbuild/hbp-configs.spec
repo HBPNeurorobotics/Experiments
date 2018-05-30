@@ -1,6 +1,6 @@
 Summary: Configuration files for the HBP NRP (ExD, BIBI)
 Name: hbp-configs
-Version: 2.0.0
+Version: 2.0.2
 Release: %{?dist}
 BuildArch: noarch
 License: GPL
