@@ -182,6 +182,14 @@
     <xsd:attribute name="scale" type="xsd:double"/>
   </xsd:complexType>
 
+  <!-- Contains a skin model for the frontend -->
+  <xsd:complexType name="SkinModel">
+    <xsd:annotation>
+      <xsd:documentation>This type defines a skin model (for example for the robot) as used in the frontend.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="src" type="xsd:string" use="required"/>
+  </xsd:complexType>
+
   <!-- Contains brain configuration and number of processes, default set for frontend -->
   <xsd:complexType name="BibiConf">
     <xsd:annotation>
@@ -271,6 +279,11 @@
       <xsd:element name="visualModel" type="VisualModel" minOccurs="0">
         <xsd:annotation>
           <xsd:documentation>With the visual model, an experiment can specify an alternatively used model for the frontend visualization. This is helpful in case the robot model used in gazebo is very detailed and thus hard to visualize on the client. On the server, there may be more resources available to simulate more complex models.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="skinModel" type="SkinModel" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>With the skin model, an experiment can specify a skin model for the frontend visualization.</xsd:documentation>
         </xsd:annotation>
       </xsd:element>
       <xsd:element name="bibiConf" type="BibiConf">
