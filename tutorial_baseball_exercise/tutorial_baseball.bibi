@@ -16,7 +16,7 @@
     @nrp.MapRobotSubscriber("joints", Topic("/robot/joints", JointState))
     @nrp.Neuron2Robot(Topic('/joint_states', JointState))
     def joint_states_passthrough(t, joints):
-    return joints.value
-    #]]>
+        return joints.value
+    ]]>
   </transferFunction>
 </bibi>
