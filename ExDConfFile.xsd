@@ -235,7 +235,7 @@
     <xsd:annotation>
       <xsd:documentation>This type is the root type for an experiment configuration.</xsd:documentation>
     </xsd:annotation>
-    <xsd:sequence>
+    <xsd:all>
       <xsd:element name="name" type="xsd:string">
         <xsd:annotation>
           <xsd:documentation>This element denotes the name of the experiment as it appears in the experiment list.</xsd:documentation>
@@ -334,7 +334,7 @@
           <xsd:documentation>Settings for the relay of the component relaying information from the simulation backend to the visualization client.</xsd:documentation>
         </xsd:annotation>
       </xsd:element>
-    </xsd:sequence>
+    </xsd:all>
   </xsd:complexType>
 
   <xsd:complexType name="ExperimentControl">
