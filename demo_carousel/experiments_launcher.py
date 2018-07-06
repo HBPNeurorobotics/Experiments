@@ -26,6 +26,9 @@ import os
 import time
 from hbp_nrp_virtual_coach import virtual_coach
 
+
+logger_format = '%(levelname)s: [%(asctime)s - %(name)s] %(message)s'
+logging.basicConfig(format=logger_format, level=logging.INFO)
 logger = logging.getLogger('ExperimentsLauncher')
 
 
@@ -42,7 +45,7 @@ class ExperimentsLauncher(object):
         """
         # instantiate a virtual coach instance and an empty dictionary to
         # contain the experiments we want to run constantly
-        self.__vc = virtual_coach.VirtualCoach('local')
+        self.__vc = virtual_coach.VirtualCoach('local', storage_username='nrpuser', storage_password='password')
         self.__experiments_list = {}
         #helper variables
         self.__last_status = [None]
@@ -103,10 +106,13 @@ class ExperimentsLauncher(object):
                 while not self.__launched:
                     try:
                         self.__sim = self.__vc.launch_experiment(
-                            str(self.__experiments_list[experiment]))
+                            str(self.__experiments_list[experiment]), cloned=False)
                         self.__launched = True
-                    except:
-                        time.sleep(1)
+                    except Exception as e:
+                       logger.info("Problem starting simulation:")
+                       logger.exception(e)
+                       logger.error(e)
+                       time.sleep(1)
                 # we basically update the status every second
                 self.__sim.register_status_callback(self.__on_status)
                 # give it some time to get a status callback
