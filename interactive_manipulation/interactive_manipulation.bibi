@@ -1,46 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<bibi xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.humanbrainproject.eu/SP10/2014/BIBI" xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/BIBI ../bibi_configuration.xsd">
-  <brainModel>
-    <file>brain_model/interactive_manipulation.py</file>
-    <populations population="shoulder" xsi:type="Range" from="0" to="1"/>
-    <populations population="elbow_flexion" xsi:type="Range" from="1" to="2"/>
-    <populations population="elbow_rotation" xsi:type="Range" from="2" to="3"/>
-    <populations population="record" xsi:type="Range" from="0" to="3"/>
-  </brainModel>
-  <bodyModel>arm_robot/arm_robot.sdf</bodyModel>
-
-  <transferFunction xsi:type="PythonTransferFunction">
-    #<![CDATA[
-    @nrp.NeuronMonitor(nrp.brain.record, nrp.spike_recorder)
-    def all_neurons_spike_monitor(t):
-        return True
-    #]]>
-  </transferFunction>
-
-    <transferFunction xsi:type="PythonTransferFunction">
-    #<![CDATA[
-    @nrp.MapRobotSubscriber("joint_data", Topic('/joint_states', sensor_msgs.msg.JointState))
-    @nrp.MapSpikeSource("shoulder_encoding", nrp.brain.shoulder, nrp.fixed_frequency)
-    @nrp.MapSpikeSource("elbow_flexion_encoding", nrp.brain.elbow_flexion, nrp.fixed_frequency)
-    @nrp.MapSpikeSource("elbow_rotation_encoding", nrp.brain.elbow_rotation, nrp.fixed_frequency)
-    @nrp.Robot2Neuron()
-    def arm_proprioception(t, joint_data, shoulder_encoding, elbow_flexion_encoding, elbow_rotation_encoding):
-        # shoulder encoding
-
-        if joint_data is None:
-            return
-
-        shoulder_idx = joint_data.value.name.index("hollie_real_left_arm_4_joint")
-        encoded_value = abs(joint_data.value.position[shoulder_idx]) * 20
-        shoulder_encoding.rate = encoded_value
-
-        elbow_flexion_idx = joint_data.value.name.index("hollie_real_left_arm_3_joint")
-        encoded_value = abs(joint_data.value.position[elbow_flexion_idx]) * 20
-        elbow_flexion_encoding.rate = encoded_value
-
-        elbow_rotation_idx = joint_data.value.name.index("hollie_real_left_arm_1_joint")
-        encoded_value = abs(joint_data.value.position[elbow_rotation_idx]) * 20
-        elbow_rotation_encoding.rate = encoded_value
-    #]]>
-  </transferFunction>
-</bibi>
+<?xml version="1.0" ?>
+<ns1:bibi xmlns:ns1="http://schemas.humanbrainproject.eu/SP10/2014/BIBI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<ns1:brainModel>
+		<ns1:file>brain_model/interactive_manipulation.py</ns1:file>
+		<ns1:populations from="0" population="shoulder" to="1" xsi:type="ns1:Range"/>
+		<ns1:populations from="1" population="elbow_flexion" to="2" xsi:type="ns1:Range"/>
+		<ns1:populations from="2" population="elbow_rotation" to="3" xsi:type="ns1:Range"/>
+		<ns1:populations from="0" population="record" to="3" xsi:type="ns1:Range"/>
+	</ns1:brainModel>
+	<ns1:bodyModel>arm_robot/arm_robot.sdf</ns1:bodyModel>
+	<ns1:transferFunction src="all_neurons_spike_monitor.py" xsi:type="ns1:PythonTransferFunction"/>
+	<ns1:transferFunction src="arm_proprioception.py" xsi:type="ns1:PythonTransferFunction"/>
+</ns1:bibi>

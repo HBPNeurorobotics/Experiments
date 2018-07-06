@@ -1,32 +1,11 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<bibi xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.humanbrainproject.eu/SP10/2014/BIBI" xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/BIBI ../bibi_configuration.xsd">
-  <timestep>1000</timestep>
-  <brainModel>
-    <file>brain_model/braitenberg_spinnaker.py</file>
-  </brainModel>
-  <bodyModel>husky_model/model.sdf</bodyModel>
-  <mode>SynchronousSpinnakerSimulation</mode>
-  <transferFunction xsi:type="PythonTransferFunction" src="braitenberg_husky_linear_twist.py"/>
-  <transferFunction xsi:type="PythonTransferFunction">
-    #<![CDATA[
-    import sensor_msgs.msg
-    import hbp_nrp_cle.tf_framework.tf_lib #import detect_red
-
-    @nrp.MapRobotSubscriber("camera", Topic('/husky/camera', sensor_msgs.msg.Image))
-    @nrp.MapSpikeSource("red_left_eye1", nrp.brain.circuit[0], nrp.poisson, delay=0.1, weight=1.0)
-    @nrp.MapSpikeSource("red_left_eye2", nrp.brain.circuit[2], nrp.poisson, delay=0.1, weight=1.0)
-    @nrp.MapSpikeSource("red_right_eye1", nrp.brain.circuit[1], nrp.poisson, delay=0.1, weight=1.0)
-    @nrp.MapSpikeSource("red_right_eye2", nrp.brain.circuit[3], nrp.poisson, delay=0.1, weight=1.0)
-    @nrp.MapSpikeSource("green_blue_eye", nrp.brain.circuit[4], nrp.poisson, delay=0.1, weight=1.0)
-    @nrp.Robot2Neuron()
-    def eye_sensor_transmit(t, camera, red_left_eye1, red_left_eye2, red_right_eye1, red_right_eye2, green_blue_eye):
-        image_results = hbp_nrp_cle.tf_framework.tf_lib.detect_red(image=camera.value)
-        
-        red_left_eye1.rate = 1000.0 * image_results.left
-        red_left_eye2.rate = 1000.0 * image_results.left
-        red_right_eye1.rate = 1000.0 * image_results.right
-        red_right_eye2.rate = 1000.0 * image_results.right
-        green_blue_eye.rate = 1000.0 * image_results.go_on
-    #]]>
-  </transferFunction>
-</bibi>
+<?xml version="1.0" ?>
+<ns1:bibi xmlns:ns1="http://schemas.humanbrainproject.eu/SP10/2014/BIBI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<ns1:timestep>1000</ns1:timestep>
+	<ns1:brainModel>
+		<ns1:file>brain_model/braitenberg_spinnaker.py</ns1:file>
+	</ns1:brainModel>
+	<ns1:bodyModel>husky_model/model.sdf</ns1:bodyModel>
+	<ns1:mode>SynchronousSpinnakerSimulation</ns1:mode>
+	<ns1:transferFunction src="braitenberg_husky_linear_twist.py" xsi:type="ns1:PythonTransferFunction"/>
+	<ns1:transferFunction src="eye_sensor_transmit.py" xsi:type="ns1:PythonTransferFunction"/>
+</ns1:bibi>

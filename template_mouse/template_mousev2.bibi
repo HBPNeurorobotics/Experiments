@@ -1,41 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<bibi xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.humanbrainproject.eu/SP10/2014/BIBI" xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/BIBI ../bibi_configuration.xsd">
-  <brainModel>
-    <file>brain_model/idle_brain.py</file>
-    <populations population="neurons" xsi:type="Range" from="0" to="2"/>
-  </brainModel>
-  <bodyModel>mouse_v2_model/model.sdf</bodyModel>
-  <extRobotController>mouse_v2_model/mousev2_ext_controller.sh</extRobotController>
-
-  <transferFunction xsi:type="PythonTransferFunction">
-    #<![CDATA[
-    import hbp_nrp_cle.tf_framework as nrp
-    from hbp_nrp_cle.robotsim.RobotInterface import Topic
-    import std_msgs.msg
-
-    @nrp.MapSpikeSink("output_neuron", nrp.brain.neurons[1], nrp.leaky_integrator_alpha)
-    @Neuron2Robot(Topic('/voltage', std_msgs.msg.Float64))
-    #Example TF: Writes the voltage to a topic
-    def write_message_to_topic(t, output_neuron):
-        # Uncomment to log into the 'log-console' visible in the simulation
-        # clientLogger.info("Time: ", t)
-        return output_neuron.voltage
-    #]]>
-  </transferFunction>
-
-  <transferFunction xsi:type="PythonTransferFunction">
-    #<![CDATA[
-    import hbp_nrp_cle.tf_framework as nrp
-    from hbp_nrp_cle.robotsim.RobotInterface import Topic
-    import sensor_msgs.msg
-
-    @nrp.MapRobotSubscriber("camera", Topic('/camera/image_raw', sensor_msgs.msg.Image))
-    @nrp.MapSpikeSource("input_neuron", nrp.brain.neurons[0], nrp.poisson)
-    @nrp.Robot2Neuron()
-    # Example TF: get image and fire at constant rate. You could do something with the image here and fire accordingly.
-    def grab_image(t, camera, input_neuron):
-        image = camera.value
-        input_neuron.rate = 10
-    #]]>
-  </transferFunction>
-</bibi>
+<?xml version="1.0" ?>
+<ns1:bibi xmlns:ns1="http://schemas.humanbrainproject.eu/SP10/2014/BIBI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<ns1:brainModel>
+		<ns1:file>brain_model/idle_brain.py</ns1:file>
+		<ns1:populations from="0" population="neurons" to="2" xsi:type="ns1:Range"/>
+	</ns1:brainModel>
+	<ns1:bodyModel>mouse_v2_model/model.sdf</ns1:bodyModel>
+	<ns1:extRobotController>mouse_v2_model/mousev2_ext_controller.sh</ns1:extRobotController>
+	<ns1:transferFunction src="write_message_to_topic.py" xsi:type="ns1:PythonTransferFunction"/>
+	<ns1:transferFunction src="grab_image.py" xsi:type="ns1:PythonTransferFunction"/>
+</ns1:bibi>

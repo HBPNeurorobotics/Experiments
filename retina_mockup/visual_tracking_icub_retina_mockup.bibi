@@ -1,73 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<bibi xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.humanbrainproject.eu/SP10/2014/BIBI" xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/BIBI ../bibi_configuration.xsd">
-  <brainModel>
-    <file>brain_model/retina_mockup_icub_brain.py</file>
-    <populations population="sensors" xsi:type="Range" from="0" to="320"/>
-    <populations population="actors" xsi:type="Range" from="0" to="320"/>
-    <populations population="record" xsi:type="Range" from="0" to="320"/>
-  </brainModel>
-  <bodyModel>icub_model/model_retina.sdf</bodyModel>
-  <configuration src="mockup_retina_configuration.py" type="retina"/>
-
-  <transferFunction xsi:type="PythonTransferFunction">
-    #<![CDATA[
-    @nrp.NeuronMonitor(nrp.brain.record, nrp.spike_recorder)
-    def all_neurons_monitor(t):
-        return True
-    #]]>
-  </transferFunction>
-
-  <transferFunction xsi:type="PythonTransferFunction">
-    #<![CDATA[
-    from gazebo_msgs.msg import ModelState
-
-    globals()['target_freq'] = 0.2
-    globals()['target_ampl'] = 0.6
-    globals()['target_center'] = {'x': 0, 'y': 2.42, 'z': 1.2}
-
-    @nrp.Neuron2Robot(Topic('/gazebo/set_model_state', ModelState))
-    def move_target(t):
-        from gazebo_msgs.msg import ModelState
-        m = ModelState()
-        frequency = globals()['target_freq']
-        amplitude = globals()['target_ampl']
-        m.model_name = 'Target'
-
-        # set orientation RYP axes
-        m.pose.orientation.x = 0
-        m.pose.orientation.y = 1
-        m.pose.orientation.z = 1
-
-        target_center = globals()['target_center']
-        m.reference_frame = 'world'
-        m.pose.position.x = \
-            target_center['x'] + np.sin(t * frequency * 2 * np.pi) * (float(amplitude) / 2)
-        m.pose.position.y = target_center['y']
-        m.pose.position.z = target_center['z']
-
-        m.scale.x = m.scale.y = m.scale.z = 1.0
-
-        return m
-    #]]>
-  </transferFunction>
-
-  <transferFunction xsi:type="PythonTransferFunction">
-    #<![CDATA[
-    import std_msgs.msg
-    from rospy.numpy_msg import numpy_msg
-    @nrp.MapRobotSubscriber("SNL_ganglion_data", Topic('/icub_model/left_eye_camera/retina/SNL_ganglion/data', numpy_msg(std_msgs.msg.Float64MultiArray)))
-    @nrp.MapSpikeSource("neurons", nrp.map_neurons(range(0, 320), lambda i: nrp.brain.sensors[i]), nrp.dc_source)
-    @nrp.Robot2Neuron()
-    # Example TF: get image and fire at constant rate. You could do something with the image here and fire accordingly.
-    def grab_data(t, neurons, SNL_ganglion_data):
-        getValue = hbp_nrp_cle.tf_framework.tf_lib.getValueFromFloat64MultiArray
-
-        data_msg = SNL_ganglion_data.value
-        if data_msg is not None:
-            magic_row = 70
-            for column in xrange(320):
-                neurons[column].amplitude = getValue(data_msg, magic_row, column)
-    #]]>
-  </transferFunction>
-
-</bibi>
+<?xml version="1.0" ?>
+<ns1:bibi xmlns:ns1="http://schemas.humanbrainproject.eu/SP10/2014/BIBI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<ns1:brainModel>
+		<ns1:file>brain_model/retina_mockup_icub_brain.py</ns1:file>
+		<ns1:populations from="0" population="sensors" to="320" xsi:type="ns1:Range"/>
+		<ns1:populations from="0" population="actors" to="320" xsi:type="ns1:Range"/>
+		<ns1:populations from="0" population="record" to="320" xsi:type="ns1:Range"/>
+	</ns1:brainModel>
+	<ns1:bodyModel>icub_model/model_retina.sdf</ns1:bodyModel>
+	<ns1:configuration src="mockup_retina_configuration.py" type="retina"/>
+	<ns1:transferFunction src="all_neurons_monitor.py" xsi:type="ns1:PythonTransferFunction"/>
+	<ns1:transferFunction src="move_target.py" xsi:type="ns1:PythonTransferFunction"/>
+	<ns1:transferFunction src="grab_data.py" xsi:type="ns1:PythonTransferFunction"/>
+</ns1:bibi>

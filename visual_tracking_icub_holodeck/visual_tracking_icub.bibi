@@ -1,146 +1,17 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<bibi xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.humanbrainproject.eu/SP10/2014/BIBI" xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/BIBI ../bibi_configuration.xsd">
-  <brainModel>
-    <file>brain_model/braitenberg.py</file>
-    <populations population="sensors" xsi:type="Range" from="0" to="5"/>
-    <populations population="actors" xsi:type="Range" from="5" to="8"/>
-    <populations population="record" xsi:type="Range" from="0" to="8"/>
-  </brainModel>
-  <bodyModel>icub_model/model.sdf</bodyModel>
-  <transferFunction xsi:type="PythonTransferFunction" src="csv_spike_monitor.py"/>
-
-  <transferFunction xsi:type="PythonTransferFunction">
-    #<![CDATA[
-    @nrp.NeuronMonitor(nrp.brain.record, nrp.spike_recorder)
-    def all_neurons_monitor(t):
-        return True
-    #]]>
-  </transferFunction>
-
-  <transferFunction xsi:type="PythonTransferFunction">
-    #<![CDATA[
-    from sensor_msgs.msg import JointState
-
-    @nrp.MapVariable("eye_position", initial_value=None, scope=nrp.GLOBAL)
-    @nrp.MapRobotSubscriber("joints", Topic("/robot/joints", JointState))
-    @nrp.Robot2Neuron()
-    def set_eyepos(t, eye_position, joints):
-        joints = joints.value
-        if joints is not None:
-            eye_position.value = joints.position[joints.name.index('eye_version')]
-    #]]>
-  </transferFunction>
-
-  <transferFunction xsi:type="PythonTransferFunction">
-    #<![CDATA[
-    from gazebo_msgs.srv import SetModelState
-    import rospy
-    rospy.wait_for_service("/gazebo/set_model_state")
-    service_proxy = rospy.ServiceProxy('/gazebo/set_model_state', SetModelState, persistent=True)
-
-    @nrp.MapVariable("target_freq", initial_value=0.3)
-    @nrp.MapVariable("target_ampl", initial_value=0.3)
-    @nrp.MapVariable("target_center", initial_value={'x': 0, 'y': 2.42, 'z': 1.2})
-    @nrp.MapVariable("set_model_state_srv", initial_value=service_proxy)
-    @nrp.Robot2Neuron() # dummy R2N
-    def move_target(t, target_freq, target_ampl, target_center, set_model_state_srv):
-        ms_msg =  gazebo_msgs.msg.ModelState()
-        frequency = target_freq.value
-        amplitude = target_ampl.value
-        center = target_center.value
-        ms_msg.model_name = 'Target'
-        # set orientation RYP axes
-        ms_msg.pose.orientation.x = 0
-        ms_msg.pose.orientation.y = 1
-        ms_msg.pose.orientation.z = 1
-        # reference frame
-        ms_msg.reference_frame = 'world'
-        #pose
-        ms_msg.pose.position.x = \
-            center['x'] + np.sin(t * frequency * 2 * np.pi) * (float(amplitude) / 2)
-        ms_msg.pose.position.y = center['y']
-        ms_msg.pose.position.z = center['z']
-        #scale
-        ms_msg.scale.x = ms_msg.scale.y = ms_msg.scale.z = 1.0
-        #call service
-        response = set_model_state_srv.value(ms_msg)
-        #check response
-        if not response.success:
-            clientLogger.info(response.status_message)
-    #]]>
-  </transferFunction>
-
-  <transferFunction xsi:type="PythonTransferFunction">
-    #<![CDATA[
-    from std_msgs.msg import Float64
-
-    @nrp.MapVariable("eye_position", scope=nrp.GLOBAL)
-    @nrp.MapSpikeSink("result_0_dv", nrp.brain.actors[1], nrp.leaky_integrator_alpha)
-    @nrp.MapSpikeSink("result_1_dv", nrp.brain.actors[2], nrp.leaky_integrator_alpha)
-    @nrp.Neuron2Robot(Topic('/robot/eye_version/pos', Float64))
-    def tf_results(t, eye_position, result_0_dv, result_1_dv):
-        def deg2rad(deg):
-            """
-            Degrees to radians conversion function.
-            :param deg: value in degrees
-            :return: value of deg in radians
-            """
-            return (float(deg) / 360.) * (2. * np.pi)
-
-        if eye_position.value is None:
-            return 0.0
-
-        d = result_1_dv.voltage - result_0_dv.voltage
-        max_mov = 1.0
-        ret = eye_position.value + deg2rad(-((d + 0.03) / 0.09 * 2 * max_mov - max_mov))
-
-        return ret
-    #]]>
-  </transferFunction>
-
-  <transferFunction xsi:type="PythonTransferFunction">
-    #<![CDATA[
-    @nrp.MapRobotSubscriber("camera", Topic('/icub_model/left_eye_camera/image_raw', sensor_msgs.msg.Image))
-    @nrp.MapSpikeSource("red_left_eye", nrp.brain.sensors[slice(0, 3, 2)], nrp.poisson)
-    @nrp.MapSpikeSource("red_right_eye", nrp.brain.sensors[slice(1, 4, 2)], nrp.poisson)
-    @nrp.MapSpikeSource("green_blue_eye", nrp.brain.sensors[4], nrp.poisson)
-    @nrp.Robot2Neuron()
-    def eye_sensor_transmit(t, camera, red_left_eye, red_right_eye, green_blue_eye):
-        import math
-        tf = hbp_nrp_cle.tf_framework.tf_lib
-        xy_ball_pos = tf.find_centroid_hsv(camera.value, [50, 100, 100], [70, 255, 255]) \
-            or (160, 120)
-        ae_ball_pos = tf.cam.pixel2angle(xy_ball_pos[0], xy_ball_pos[1])
-        red = 76800.0 / (1.0 + math.exp(-ae_ball_pos[0]))
-
-        red_left_eye.rate = 1000.0 * red / 76800.0
-        red_right_eye.rate = 1000.0 * red / 76800.0
-        green_blue_eye.rate = 1000.0 * (76800.0 - red) / 76800.0
-
-    #]]>
-  </transferFunction>
-
-  <transferFunction xsi:type="PythonTransferFunction">
-    #<![CDATA[
-    from sensor_msgs.msg import JointState
-
-    @nrp.MapRobotSubscriber("joints", Topic("/robot/joints", JointState))
-    @nrp.Neuron2Robot(Topic('/joint_states', JointState))
-    def filter_joints_for_nice_output_on_frontend(t, joints):
-        from sensor_msgs.msg import JointState
-
-        joints = joints.value
-        to_forward = ['eye_version']
-
-        ret = JointState()
-        ret.header = joints.header
-        ret.name = to_forward
-        ret.position = [joints.position[joints.name.index(x)] for x in to_forward]
-        ret.velocity = [joints.velocity[joints.name.index(x)] for x in to_forward]
-        ret.effort = [joints.effort[joints.name.index(x)] for x in to_forward]
-
-        return ret
-    #]]>
-  </transferFunction>
-
-</bibi>
+<?xml version="1.0" ?>
+<ns1:bibi xmlns:ns1="http://schemas.humanbrainproject.eu/SP10/2014/BIBI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<ns1:brainModel>
+		<ns1:file>brain_model/braitenberg.py</ns1:file>
+		<ns1:populations from="0" population="sensors" to="5" xsi:type="ns1:Range"/>
+		<ns1:populations from="5" population="actors" to="8" xsi:type="ns1:Range"/>
+		<ns1:populations from="0" population="record" to="8" xsi:type="ns1:Range"/>
+	</ns1:brainModel>
+	<ns1:bodyModel>icub_model/model.sdf</ns1:bodyModel>
+	<ns1:transferFunction src="csv_spike_monitor.py" xsi:type="ns1:PythonTransferFunction"/>
+	<ns1:transferFunction src="all_neurons_monitor.py" xsi:type="ns1:PythonTransferFunction"/>
+	<ns1:transferFunction src="set_eyepos.py" xsi:type="ns1:PythonTransferFunction"/>
+	<ns1:transferFunction src="move_target.py" xsi:type="ns1:PythonTransferFunction"/>
+	<ns1:transferFunction src="tf_results.py" xsi:type="ns1:PythonTransferFunction"/>
+	<ns1:transferFunction src="eye_sensor_transmit.py" xsi:type="ns1:PythonTransferFunction"/>
+	<ns1:transferFunction src="filter_joints_for_nice_output_on_frontend.py" xsi:type="ns1:PythonTransferFunction"/>
+</ns1:bibi>
