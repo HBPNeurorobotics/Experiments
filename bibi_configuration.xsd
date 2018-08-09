@@ -21,7 +21,7 @@
           <xs:documentation>The brain model depicts a path to the neural network model.</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="bodyModel" type="SDFWithPath" minOccurs="0">
+      <xs:element name="bodyModel" type="SDFWithPath" minOccurs="0" maxOccurs="unbounded">
         <xs:annotation>
           <xs:documentation>The path to the robot model that should be used. This can either be a path to an SDF model or a path to a zip file containing all required assets for a robot. This zip file must have a file model.sdf at the root of the archive.</xs:documentation>
         </xs:annotation>
@@ -116,6 +116,11 @@
   <xs:complexType name="SDFWithPath">
     <xs:simpleContent>
       <xs:extension base="SDFFilename">
+        <xs:attribute name="robotId" type="xs:string" use="optional">
+          <xs:annotation>
+            <xs:documentation>Robot id the pose refers to</xs:documentation>
+          </xs:annotation>
+       </xs:attribute>
         <xs:attribute name="customAsset" type="xs:boolean" use="optional">
           <xs:annotation>
             <xs:documentation>Whether the model is custom</xs:documentation>

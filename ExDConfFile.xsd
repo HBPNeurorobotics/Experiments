@@ -39,6 +39,11 @@
     <xsd:annotation>
       <xsd:documentation>This type represents a robot pose. It consists of a position part (x, y and z coordinates in meters) and a rotation part (roll, pitch and yaw in radians). All fields are double precision values.</xsd:documentation>
     </xsd:annotation>
+    <xsd:attribute name="robotId" type="xsd:string" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>Robot id the pose refers to</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
     <xsd:attribute name="x" type="xsd:double" use="required">
       <xsd:annotation>
         <xsd:documentation>The x coordinate of the robot position</xsd:documentation>
@@ -152,7 +157,7 @@
       <xsd:documentation>This type defines the necessary configuration for an environment. It combines the specification of an environment model through the src attribute and a robot pose using the element robotPose.</xsd:documentation>
     </xsd:annotation>
     <xsd:sequence>
-      <xsd:element name="robotPose" type="RobotPose">
+      <xsd:element name="robotPose" type="RobotPose" minOccurs="0" maxOccurs="unbounded">
         <xsd:annotation>
           <xsd:documentation>The position of the robot</xsd:documentation>
         </xsd:annotation>
