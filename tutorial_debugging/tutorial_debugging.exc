@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ExD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
+     xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
+    <name>Tutorial: How to debug my experiment</name>
+    <thumbnail>tutorial_debugging.jpg</thumbnail>
+    <description>This experiment is accompanying the tutorial "How to debug my experiment" from the online Guide Book on neurorobotics.net.
+        This tutorial guides you through steps to debug a faulty experiment. Upon completing the tutorial, you will have learnt about the data monitors,
+        the visualizers, the logging mechanism, the online editing tools and you will have fixed the tutorial example experiment.
+    </description>
+    <tags>tutorial debugging husky robotics braitenberg virtualroom</tags>
+    <timeout>840</timeout>
+    <configuration type="3d-settings" src="tutorial_debugging.ini"/>
+    <configuration type="brainvisualizer" src="brainvisualizer.json"/>
+	<configuration type="user-interaction-settings" src="tutorial_debugging.uis"/>
+    <maturity>production</maturity>
+    <environmentModel src="virtual_room/virtual_room.sdf">
+        <robotPose x="0.0" y="0.0" z="0.5" roll="0.0" pitch="-0.0" yaw="3.14159265359"/>
+    </environmentModel>
+    <bibiConf src="tutorial_debugging.bibi"/>
+    <cameraPose>
+        <cameraPosition x="5.056825994369357" y="-1.0210998541555323" z="2.697598759953974"/>
+        <cameraLookAt x="0" y="0" z="0.49999"/>
+    </cameraPose>
+</ExD>
