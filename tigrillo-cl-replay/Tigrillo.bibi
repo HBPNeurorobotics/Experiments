@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bibi xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.humanbrainproject.eu/SP10/2014/BIBI" xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/BIBI ../bibi_configuration.xsd">
+	
+    <brainModel>
+        <file>brain_model/idle_brain.py</file>
+    <populations population="sensors" xsi:type="Range" from="0" to="2"/>
+    </brainModel>
+    
+    <bodyModel>tigrillo2/model_14052018.sdf</bodyModel>
+    <transferFunction xsi:type="PythonTransferFunction" src="tf_actuation_csv.py"/> 	
+</bibi>
