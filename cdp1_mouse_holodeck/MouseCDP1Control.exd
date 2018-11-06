@@ -26,7 +26,7 @@ from hbp_nrp_excontrol.logs import clientLogger
 # also allows manual control of the xperiment.
 # In order to use it we have to set the search path
 # and import it.
-sys.path.append(os.path.join(os.environ['HBP'], 'Models', 'cdp1_mouse_w_sled'))
+sys.path.append(os.path.join(os.environ['NRP_MODELS_DIRECTORY'], 'cdp1_mouse_w_sled'))
 import manualcontrol
 reload(manualcontrol)
 

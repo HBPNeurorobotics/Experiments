@@ -67,7 +67,7 @@ class SpinalNeuralNetwork():
 		section = None
 		sensorimotorConnections = None
 		sensorimotorMatrix = None
-		for line in open(pathToCode+"/../nnStructures/"+self._inputFile,"r"):
+		for line in open(pathToCode+"/nnStructures/"+self._inputFile,"r"):
 			if line[0] == "#" or line[0] == "\n": continue
 			elif line[0] == "@": section = float(line[1])
 			elif section == 1: self._infoMuscles.append(line.strip("\n").split())

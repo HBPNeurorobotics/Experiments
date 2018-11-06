@@ -78,12 +78,13 @@ def transferfunction( t, clm,
     'Humerus2': (0.007796, 0.011747),
   }
   if clm.value is None:
-      import sys
+      import inspect
       import os
       clientLogger.info("Initializing Spinal Cord")
       # Configure python search paths to allow import of the spinal cord code.
-      path_to_code = os.path.join(os.environ['HBP'],'Experiments','cdp1_mouse','code')
-      sys.path.insert(0, path_to_code)
+      filename = inspect.getframeinfo(inspect.currentframe()).filename
+      path = os.path.dirname(os.path.abspath(filename))
+      path_to_code = os.path.join(path, 'resources')
       os.environ['NN_CODE'] = path_to_code
       # WARNING: Currently, code changes in imported
       # modules after initial import are ignored.
