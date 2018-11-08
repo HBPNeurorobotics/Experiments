@@ -7,7 +7,7 @@
 		<ns1:populations from="92" population="actors" to="94" xsi:type="ns1:Range"/>
 		<ns1:populations from="0" population="plot" to="94" xsi:type="ns1:Range"/>
 	</ns1:brainModel>
-	<ns1:bodyModel>arm_robot/arm_robot.sdf</ns1:bodyModel>
+	<ns1:bodyModel robotId="armrobot">arm_robot/arm_robot.sdf</ns1:bodyModel>
 	<ns1:transferFunction src="update_target_angle.py" xsi:type="ns1:PythonTransferFunction"/>
 	<ns1:transferFunction src="trigger_dopamine.py" xsi:type="ns1:PythonTransferFunction"/>
 	<ns1:transferFunction src="propagate_motor_commands.py" xsi:type="ns1:PythonTransferFunction"/>

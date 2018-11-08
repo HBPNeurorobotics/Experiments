@@ -6,7 +6,7 @@
 		<ns1:populations from="5" population="actors" to="8" xsi:type="ns1:Range"/>
 		<ns1:populations from="0" population="record" to="8" xsi:type="ns1:Range"/>
 	</ns1:brainModel>
-	<ns1:bodyModel>lauron_model/model.sdf</ns1:bodyModel>
+	<ns1:bodyModel robotId="lauron">lauron_model/model.sdf</ns1:bodyModel>
 	<ns1:extRobotController>lauron_model/lauron_ext_controller.sh</ns1:extRobotController>
 	<ns1:transferFunction src="csv_spike_monitor.py" xsi:type="ns1:PythonTransferFunction"/>
 	<ns1:transferFunction src="csv_joint_state_monitor.py" xsi:type="ns1:PythonTransferFunction"/>

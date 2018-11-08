@@ -3,7 +3,7 @@
 	<ns1:brainModel>
 		<ns1:file>brain_model/eye_movements_simple.py</ns1:file>
 	</ns1:brainModel>
-	<ns1:bodyModel>TUM_Head/RobotHead.sdf</ns1:bodyModel>
+	<ns1:bodyModel robotId="tumhead">TUM_Head/RobotHead.sdf</ns1:bodyModel>
 	<ns1:transferFunction src="grab_events.py" xsi:type="ns1:PythonTransferFunction"/>
 	<ns1:transferFunction src="display_events.py" xsi:type="ns1:PythonTransferFunction"/>
 	<ns1:transferFunction src="head_control.py" xsi:type="ns1:PythonTransferFunction"/>

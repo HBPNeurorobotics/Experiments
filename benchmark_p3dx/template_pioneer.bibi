@@ -3,7 +3,7 @@
   <brainModel>
     <file>brain_model/idle_brain.py</file>
   </brainModel>
-  <bodyModel>p3dx/pioneer3dx.sdf</bodyModel>
+  <bodyModel robotId="p3dx">p3dx/pioneer3dx.sdf</bodyModel>
   <transferFunction xsi:type="PythonTransferFunction" src="move_square.py"/>
   <transferFunction xsi:type="PythonTransferFunction" src="benchmark_evaluation.py"/>
 </bibi>

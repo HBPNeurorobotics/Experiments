@@ -12,7 +12,7 @@
 	<configuration type="user-interaction-settings" src="ExDBraitenbergMouseLab.uis"/>
     <maturity>production</maturity>
     <environmentModel src="biologylab_world/biologylab.sdf">
-        <robotPose x="-1.0" y="-2.0" z="1.135" roll="0.0" pitch="-0.0" yaw="1.58692500941"/>
+        <robotPose robotId="mouse" x="-1.0" y="-2.0" z="1.135" roll="0.0" pitch="-0.0" yaw="1.58692500941"/>
     </environmentModel>
     <visualModel src="mouse_v2_model/meshes/mouse_v2_model_animated.dae" scale="0.01">
         <visualPose x="-0.895" y="-1.9975" z="1.115" roll="0.0" pitch="-0.0" yaw="1.5708"/>

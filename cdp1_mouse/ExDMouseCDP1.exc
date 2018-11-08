@@ -12,7 +12,7 @@
     <configuration type="user-interaction-settings" src="ExDMouseCDP1.uis"/>
     <maturity>production</maturity>
     <environmentModel src="cdp1_world/cdp1_world.sdf">
-        <robotPose x="0.0" y="0.0" z="0.0" roll="0.0" pitch="-0.0" yaw="0.0"/>
+        <robotPose robotId="mouse" x="0.0" y="0.0" z="0.0" roll="0.0" pitch="-0.0" yaw="0.0"/>
     </environmentModel>
     <bibiConf src="MouseCDP1.bibi"/>
     <experimentControl>

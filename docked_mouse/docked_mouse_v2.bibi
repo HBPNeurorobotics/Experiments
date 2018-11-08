@@ -4,6 +4,6 @@
     <file>brain_model/idle_brain.py</file>
     <populations population="neurons" xsi:type="Range" from="0" to="2"/>
   </brainModel>
-  <bodyModel>mouse_v2_model/model.sdf</bodyModel>
+  <bodyModel robotId="mouse">mouse_v2_model/model.sdf</bodyModel>
   <extRobotController>docked_mouse_v2_model/cpg_walking_ext_controller.sh</extRobotController>
 </bibi>

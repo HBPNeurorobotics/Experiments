@@ -6,7 +6,7 @@
 		<ns1:populations from="2" population="actors" to="4" xsi:type="ns1:Range"/>
 		<ns1:populations from="0" population="record" to="4" xsi:type="ns1:Range"/>
 	</ns1:brainModel>
-	<ns1:bodyModel>mouse_v2_model/model.sdf</ns1:bodyModel>
+	<ns1:bodyModel robotId="mouse">mouse_v2_model/model.sdf</ns1:bodyModel>
 	<ns1:transferFunction src="all_neurons_spike_monitor.py" xsi:type="ns1:PythonTransferFunction"/>
 	<ns1:transferFunction src="head_twist.py" xsi:type="ns1:PythonTransferFunction"/>
 	<ns1:transferFunction src="eye_sensor_transmit_right.py" xsi:type="ns1:PythonTransferFunction"/>

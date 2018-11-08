@@ -10,14 +10,14 @@ def csv_robot_position(t, position, recorder, robot_index):
 
             # if the value is invalid, reset the index below
             if robot_index.value >= len(position.value.name) or\
-               position.value.name[robot_index.value] != 'robot':
+               position.value.name[robot_index.value] != 'p3dx':
                 robot_index.value = None
 
         # robot index is invalid, find and set it
         if robot_index.value is None:
 
-            # 'robot' is guaranteed by the NRP, if not found raise error
-            robot_index.value = position.value.name.index('robot')
+            # 'husky' is the bodyModel declared in the bibi, if not found raise error
+            robot_index.value = position.value.name.index('p3dx')
 
         # record the current robot position
         recorder.record_entry(position.value.pose[robot_index.value].position.x,

@@ -12,7 +12,7 @@
 	<configuration type="user-interaction-settings" src="ExDVisualTrackingICub.uis"/>
     <maturity>development</maturity>
     <environmentModel src="virtual_room_lausanne/virtual_room_tracking_icub.sdf">
-        <robotPose x="0.0" y="0.0" z="0.644" roll="0.0" pitch="0.0" yaw="-1.570796"/>
+        <robotPose robotId="icub" x="0.0" y="0.0" z="0.644" roll="0.0" pitch="0.0" yaw="-1.570796"/>
     </environmentModel>
     <bibiConf src="visual_tracking_icub.bibi"/>
     <cameraPose>

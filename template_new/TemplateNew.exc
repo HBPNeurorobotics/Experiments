@@ -10,7 +10,7 @@
     <configuration type="3d-settings" src="TemplateNew.ini"/>
     <maturity>production</maturity>
     <environmentModel src="empty_world/empty_world.sdf">
-        <robotPose x="0.0" y="0.0" z="0.5" roll="0.0" pitch="-0.0" yaw="0.0"/>
+        <robotPose robotId="emptySDF" x="0.0" y="0.0" z="0.5" roll="0.0" pitch="-0.0" yaw="0.0"/>
     </environmentModel>
     <bibiConf src="TemplateNew.bibi"/>
     <cameraPose>

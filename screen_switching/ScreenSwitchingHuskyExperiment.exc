@@ -18,7 +18,7 @@
 	<configuration type="user-interaction-settings" src="ScreenSwitchingHuskyExperiment.uis"/>
     <maturity>development</maturity>
     <environmentModel src="virtual_room_lausanne/virtual_room.sdf">
-        <robotPose x="0.0" y="0.0" z="0.5" roll="0.0" pitch="-0.0" yaw="3.14159265359"/>
+        <robotPose robotId="husky" x="0.0" y="0.0" z="0.5" roll="0.0" pitch="-0.0" yaw="3.14159265359"/>
     </environmentModel>
     <bibiConf src="milestone2.bibi"/>
     <experimentControl>

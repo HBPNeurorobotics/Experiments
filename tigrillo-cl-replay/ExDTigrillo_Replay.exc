@@ -3,7 +3,7 @@
 	xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
 	xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
 	
-    <name>A. Tigrillo CL Replay</name>    
+    <name>Tigrillo CL Replay</name>
     <thumbnail>ExDTigrillo.png</thumbnail>    
     <description>Use recorded motor signals</description>    
     <timeout>3600</timeout>    
@@ -13,7 +13,7 @@
     
     <!--environmentModel src="empty_virtuallab/empty_virtuallab.sdf"-->
     <environmentModel src="empty_world/empty_world_tigrillo.sdf">
-        <robotPose x="0.0" y="0.0" z="0.5" roll="0.0" pitch="-0.0" yaw="0.0" />
+        <robotPose robotId="tigrillo" x="0.0" y="0.0" z="0.5" roll="0.0" pitch="-0.0" yaw="0.0" />
     </environmentModel>    
     <bibiConf src="Tigrillo.bibi"/>
     <cameraPose>

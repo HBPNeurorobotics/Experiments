@@ -12,7 +12,7 @@
 	<configuration type="user-interaction-settings" src="config/ExDTemplateICub.uis"/>
     <maturity>production</maturity>
     <environmentModel src="empty_world/empty_world.sdf">
-        <robotPose x="0.0" y="0.0" z="0.8" roll="0.0" pitch="-0.0" yaw="2.29524196972"/>
+        <robotPose robotId="icub" x="0.0" y="0.0" z="0.8" roll="0.0" pitch="-0.0" yaw="2.29524196972"/>
     </environmentModel>
     <bibiConf src="config/template_icub.bibi"/>
     <cameraPose>

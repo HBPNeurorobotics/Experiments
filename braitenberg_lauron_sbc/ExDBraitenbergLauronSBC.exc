@@ -11,7 +11,7 @@
 	<configuration type="user-interaction-settings" src="ExDBraitenbergLauronSBC.uis"/>
     <maturity>development</maturity>
     <environmentModel src="spacebotcup_world/spacebotcup_world.sdf">
-        <robotPose x="0.0" y="0.0" z="1.25" roll="0.0" pitch="-0.0" yaw="0.0"/>
+        <robotPose robotId="lauron" x="0.0" y="0.0" z="1.25" roll="0.0" pitch="-0.0" yaw="0.0"/>
     </environmentModel>
     <bibiConf src="braitenberg_lauron.bibi"/>
     <cameraPose>

@@ -17,10 +17,10 @@ import geometry_msgs.msg
 @nrp.Neuron2Robot(Topic('/robot/cmd_vel', geometry_msgs.msg.Twist))
 def move_square(t, step_index, position, initial_pose):
     if initial_pose.value is None:
-        initial_pose.value = position.value.pose[position.value.name.index('robot')].position
+        initial_pose.value = position.value.pose[position.value.name.index('p3dx')].position
     linear = geometry_msgs.msg.Vector3(0,0,0)
     angular = geometry_msgs.msg.Vector3(0,0,0)
-    current_pose = position.value.pose[position.value.name.index('robot')]
+    current_pose = position.value.pose[position.value.name.index('p3dx')]
     import math
     cos45deg = math.cos(math.pi / 4)
     if step_index.value == 0:

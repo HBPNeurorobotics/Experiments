@@ -6,7 +6,7 @@
         <populations population="sensors" xsi:type="Range" from="0" to="2"/>
     </brainModel>
     
-    <bodyModel>tigrillo2/model.sdf</bodyModel>
+    <bodyModel robotId="tigrillo">tigrillo2/model.sdf</bodyModel>
 
     <transferFunction xsi:type="PythonTransferFunction" src="tf_CPG_input.py"/>
 </bibi>

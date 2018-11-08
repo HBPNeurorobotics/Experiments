@@ -8,6 +8,6 @@
     <!--<populations population="neurons" xsi:type="Range" from="0" to="2"/>-->
     <!--<populations population="record" xsi:type="Range" from="0" to="2"/>-->
   </brainModel>
-  <bodyModel>myoarm_small/model.sdf</bodyModel>
+  <bodyModel robotId="myoarm">myoarm_small/model.sdf</bodyModel>
   
 </bibi>

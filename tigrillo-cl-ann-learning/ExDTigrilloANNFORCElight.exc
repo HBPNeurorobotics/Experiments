@@ -3,7 +3,7 @@
 	xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
 	xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
 	
-    <name>A. Tigrillo ANN Learning in Closed Loop</name>    
+    <name>Tigrillo ANN Learning in Closed Loop</name>
     <thumbnail>ExDTigrillo.png</thumbnail>    
     <description>Tigrillo with an ANN that learns with FORCE</description>    
     <timeout>3600</timeout>    
@@ -12,7 +12,7 @@
     <maturity>development</maturity>
     
     <environmentModel src="virtual_room/virtual_room_tigrillo.sdf">   
-        <robotPose x="0.0" y="0.0" z="0.3" ux="0.0" uy="0.0" uz="0.0" theta="0.0"/>
+        <robotPose robotId="tigrillo" x="0.0" y="0.0" z="0.3" ux="0.0" uy="0.0" uz="0.0" theta="0.0"/>
     </environmentModel>
     <bibiConf src="tigrillo.bibi"/>
     <cameraPose>

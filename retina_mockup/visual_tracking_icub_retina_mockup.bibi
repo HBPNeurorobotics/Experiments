@@ -6,7 +6,7 @@
 		<ns1:populations from="0" population="actors" to="320" xsi:type="ns1:Range"/>
 		<ns1:populations from="0" population="record" to="320" xsi:type="ns1:Range"/>
 	</ns1:brainModel>
-	<ns1:bodyModel>icub_model/model_retina.sdf</ns1:bodyModel>
+	<ns1:bodyModel robotId="icub">icub_model/model_retina.sdf</ns1:bodyModel>
 	<ns1:configuration src="mockup_retina_configuration.py" type="retina"/>
 	<ns1:transferFunction src="all_neurons_monitor.py" xsi:type="ns1:PythonTransferFunction"/>
 	<ns1:transferFunction src="move_target.py" xsi:type="ns1:PythonTransferFunction"/>

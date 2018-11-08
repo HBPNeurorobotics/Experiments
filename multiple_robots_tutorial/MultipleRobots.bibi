@@ -20,6 +20,6 @@
 		<ns1:populations from="191" population="red_right" to="192" xsi:type="ns1:Range"/>
 		<ns1:populations from="0" population="record" to="192" xsi:type="ns1:Range"/>
 	</ns1:brainModel>
-	<ns1:bodyModel>icub_model/model.sdf</ns1:bodyModel>
+	<ns1:bodyModel robotId="icub">icub_model/model.sdf</ns1:bodyModel>
 	<ns1:transferFunction src="all_neurons_monitor.py" xsi:type="ns1:PythonTransferFunction"/>
 </ns1:bibi>

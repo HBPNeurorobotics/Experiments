@@ -5,6 +5,6 @@
     <populations population="neurons" xsi:type="Range" from="0" to="2"/>
     <populations population="record" xsi:type="Range" from="0" to="2"/>
   </brainModel>
-  <bodyModel>roboy/model.sdf</bodyModel>
+  <bodyModel robotId="roboy">roboy/model.sdf</bodyModel>
 
 </bibi>

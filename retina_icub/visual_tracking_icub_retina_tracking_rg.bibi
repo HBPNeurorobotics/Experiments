@@ -8,7 +8,7 @@
 		<ns1:populations from="960" population="ganglion_output_ON" to="1280" xsi:type="ns1:Range"/>
 		<ns1:populations from="0" population="record" to="1280" xsi:type="ns1:Range"/>
 	</ns1:brainModel>
-	<ns1:bodyModel>icub_model/model_retina.sdf</ns1:bodyModel>
+	<ns1:bodyModel robotId="icub">icub_model/model_retina.sdf</ns1:bodyModel>
 	<ns1:configuration src="green_tracking_retina.py" type="retina"/>
 	<ns1:transferFunction src="all_neurons_monitor.py" xsi:type="ns1:PythonTransferFunction"/>
 	<ns1:transferFunction src="all_neurons_spike_monitor.py" xsi:type="ns1:PythonTransferFunction"/>

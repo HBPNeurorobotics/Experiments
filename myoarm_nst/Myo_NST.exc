@@ -12,7 +12,7 @@
 
     <maturity>development</maturity>
     <environmentModel src="cdp1_world/cdp1_world_holodeck.sdf">
-        <robotPose x="-1" y="-4.0" z="0.1" roll="0.0" pitch="-0.0" yaw="0.0"/>
+        <robotPose robotId="myoarm" x="-1" y="-4.0" z="0.1" roll="0.0" pitch="-0.0" yaw="0.0"/>
     </environmentModel>
 
     <bibiConf src="Myo_NST.bibi"/>

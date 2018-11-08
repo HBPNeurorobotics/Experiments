@@ -13,7 +13,7 @@
 	<configuration type="user-interaction-settings" src="MultipleRobots.uis"/>
     <maturity>development</maturity>
     <environmentModel src="multi_robots_environment/multi_robots_environment.sdf">
-        <robotPose x="0.0" y="-0.5" z="0.63" roll="0.0" pitch="0.0" yaw="-1.57079632679"/>
+        <robotPose robotId="icub" x="0.0" y="-0.5" z="0.63" roll="0.0" pitch="0.0" yaw="-1.57079632679"/>
     </environmentModel>
     <bibiConf src="MultipleRobots.bibi"/>
     <cameraPose>

@@ -4,7 +4,7 @@
 		<ns1:file>brain_model/idle_brain.py</ns1:file>
 		<ns1:populations from="0" population="neurons" to="2" xsi:type="ns1:Range"/>
 	</ns1:brainModel>
-	<ns1:bodyModel>mouse_v2_model/model.sdf</ns1:bodyModel>
+	<ns1:bodyModel robotId="mouse">mouse_v2_model/model.sdf</ns1:bodyModel>
 	<ns1:extRobotController>mouse_v2_model/mousev2_ext_controller.sh</ns1:extRobotController>
 	<ns1:transferFunction src="write_message_to_topic.py" xsi:type="ns1:PythonTransferFunction"/>
 	<ns1:transferFunction src="grab_image.py" xsi:type="ns1:PythonTransferFunction"/>

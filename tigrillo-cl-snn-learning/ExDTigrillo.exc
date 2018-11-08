@@ -1,7 +1,7 @@
 <ExD 
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
   xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig" xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
-  <name>A. Tigrillo SNN Learning in Closed Loop</name>
+  <name>Tigrillo SNN Learning in Closed Loop</name>
   <thumbnail>ExDTigrillo.png</thumbnail>
   <description>In this experiment, the quadruped robot Tigrillo uses a target actuation signal optimized previously with CMA-ES to learn how to use proprioceptive knee sensors in a closed loop system. This controller is made of a Liquid State Machine whose outputs are learned with the FORCE update rule and progressively mixed to the target signal until it walks fully in closed-loop.</description>
   <timeout>840</timeout>
@@ -10,7 +10,7 @@
   <configuration type="user-interaction-settings" src="ExDTigrillo.uis"/>
   <maturity>production</maturity>
   <environmentModel src="empty_virtuallab/empty_virtuallab.sdf">
-    <robotPose x="0.0" y="0.0" z="0.5" roll="0.0" pitch="-0.0" yaw="0.0" />
+    <robotPose robotId="tigrillo" x="0.0" y="0.0" z="0.5" roll="0.0" pitch="-0.0" yaw="0.0" />
   </environmentModel>
   <bibiConf src="ExDTigrillo.bibi" />
   <cameraPose>

@@ -6,7 +6,7 @@
 		<ns1:populations from="5" population="actors" to="8" xsi:type="ns1:Range"/>
 		<ns1:populations from="0" population="record" to="8" xsi:type="ns1:Range"/>
 	</ns1:brainModel>
-	<ns1:bodyModel>icub_model/model.sdf</ns1:bodyModel>
+	<ns1:bodyModel robotId="icub">icub_model/model.sdf</ns1:bodyModel>
 	<ns1:transferFunction src="csv_spike_monitor.py" xsi:type="ns1:PythonTransferFunction"/>
 	<ns1:transferFunction src="all_neurons_monitor.py" xsi:type="ns1:PythonTransferFunction"/>
 	<ns1:transferFunction src="set_eyepos.py" xsi:type="ns1:PythonTransferFunction"/>

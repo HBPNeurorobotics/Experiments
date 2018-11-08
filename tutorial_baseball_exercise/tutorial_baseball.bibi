@@ -3,7 +3,7 @@
 	<ns1:brainModel>
 		<ns1:file>brain_model/tutorial_baseball.py</ns1:file>
 	</ns1:brainModel>
-	<ns1:bodyModel>icub_model/model.sdf</ns1:bodyModel>
+	<ns1:bodyModel robotId="icub">icub_model/model.sdf</ns1:bodyModel>
 	<ns1:transferFunction src="welcome.py" xsi:type="ns1:PythonTransferFunction"/>
 	<ns1:transferFunction src="simple_move_robot.py" xsi:type="ns1:PythonTransferFunction"/>
 	<ns1:transferFunction src="monitor_population.py" xsi:type="ns1:PythonTransferFunction"/>
