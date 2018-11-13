@@ -6,7 +6,7 @@ from std_msgs.msg import Float64
 @nrp.MapVariable("lastballpos", initial_value=-1)
 @nrp.MapSpikeSink("ganglion", nrp.brain.circuit[slice(0, 1280, 1)], nrp.spike_recorder)
 @nrp.MapVariable("trajectory", initial_value="sinusoidal", scope=nrp.GLOBAL)
-@nrp.Neuron2Robot(Topic('/robot/eye_version/pos', Float64))
+@nrp.Neuron2Robot(Topic('/icub/eye_version/pos', Float64))
 def move_eye(t, eye_velocity, eye_position, lastballpos, ganglion, trajectory):
     deg2rad = lambda deg: (float(deg) / 360.) * (2. * np.pi)
     tf = hbp_nrp_cle.tf_framework.tf_lib

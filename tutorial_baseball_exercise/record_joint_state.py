@@ -2,7 +2,7 @@
 import numpy as np
 import sensor_msgs.msg
 
-@nrp.MapRobotSubscriber("joint_states", Topic('/robot/joints',
+@nrp.MapRobotSubscriber("joint_states", Topic('/icub/joints',
                                               sensor_msgs.msg.JointState))
 @nrp.MapCSVRecorder("joint_recorder", filename="joint_states.csv",
                     headers=["Time", "Name", "Position"])

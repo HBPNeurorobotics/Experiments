@@ -14,7 +14,7 @@ import geometry_msgs.msg
 # 'step_index' keeps track of the motion step the robot is currently applying
 @nrp.MapVariable("step_index", global_key="step_index", initial_value=0)
 @nrp.MapVariable("initial_pose", global_key="initial_pose", initial_value=None)
-@nrp.Neuron2Robot(Topic('/robot/cmd_vel', geometry_msgs.msg.Twist))
+@nrp.Neuron2Robot(Topic('/p3dx/cmd_vel', geometry_msgs.msg.Twist))
 def move_square(t, step_index, position, initial_pose):
     if initial_pose.value is None:
         initial_pose.value = position.value.pose[position.value.name.index('p3dx')].position

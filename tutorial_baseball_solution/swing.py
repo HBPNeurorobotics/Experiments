@@ -1,7 +1,7 @@
 # Imported Python Transfer Function
 import numpy as np
 @nrp.MapSpikeSink("motors", nrp.brain.motors, nrp.leaky_integrator_alpha)
-@nrp.MapRobotPublisher('r_shoulder_yaw', Topic('/robot/r_shoulder_yaw/pos', std_msgs.msg.Float64))
+@nrp.MapRobotPublisher('r_shoulder_yaw', Topic('/icub/r_shoulder_yaw/pos', std_msgs.msg.Float64))
 @nrp.Neuron2Robot()
 def swing(t, motors, r_shoulder_yaw):
     # clientLogger.info("Motor potential: {}".format(motors.voltage))

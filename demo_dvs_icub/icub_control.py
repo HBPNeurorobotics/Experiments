@@ -4,7 +4,7 @@ from dvs_msgs.msg import EventArray
 
 # Imported Python Transfer Function
 @nrp.MapVariable("last_event_count", initial_value=0)
-@nrp.MapRobotSubscriber('notification', Topic('/icub/notifications', std_msgs.msg.String))
+@nrp.MapRobotSubscriber('notification', Topic('/robot/notifications', std_msgs.msg.String))
 @nrp.MapRobotSubscriber('dvs_narrow_view', Topic('/dvs_narrow_view', sensor_msgs.msg.Image))
 @nrp.MapRobotPublisher('l_shoulder_roll', Topic('/robot/l_shoulder_roll/pos', std_msgs.msg.Float64))
 @nrp.MapRobotPublisher('l_shoulder_pitch', Topic('/robot/l_shoulder_pitch/pos', std_msgs.msg.Float64))

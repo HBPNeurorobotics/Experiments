@@ -4,7 +4,7 @@ import hbp_nrp_cle.tf_framework as nrp
 from hbp_nrp_cle.robotsim.RobotInterface import Topic
 import geometry_msgs.msg
 @nrp.MapSpikeSink("output_neuron", nrp.brain.neurons[1], nrp.leaky_integrator_alpha)
-@nrp.Neuron2Robot(Topic('/robot/cmd_vel', geometry_msgs.msg.Twist))
+@nrp.Neuron2Robot(Topic('/p3dx/cmd_vel', geometry_msgs.msg.Twist))
 # Example TF: get output neuron voltage and output constant on robot actuator. You could do something with the voltage here and command the robot accordingly.
 def turn_around(t, output_neuron):
     voltage=output_neuron.voltage

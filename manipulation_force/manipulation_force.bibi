@@ -9,7 +9,7 @@
 		<ns1:populations from="4" population="index_distal_extension_motor" to="5" xsi:type="ns1:Range"/>
 		<ns1:populations from="1" population="monitor_neurons" to="5" xsi:type="ns1:Range"/>
 	</ns1:brainModel>
-	<ns1:bodyModel robotId="armrobot">arm_robot_force/arm_robot_force.sdf</ns1:bodyModel>
+	<ns1:bodyModel robotId="robot">arm_robot_force/arm_robot_force.sdf</ns1:bodyModel>
 	<ns1:transferFunction src="distal_contraction_neuron_monitor.py" xsi:type="ns1:PythonTransferFunction"/>
 	<ns1:transferFunction src="motor_to_force_tf.py" xsi:type="ns1:PythonTransferFunction"/>
 	<ns1:transferFunction src="distal_angle_to_motor.py" xsi:type="ns1:PythonTransferFunction"/>

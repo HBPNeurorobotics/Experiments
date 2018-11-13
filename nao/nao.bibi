@@ -6,7 +6,7 @@
 		<ns1:populations from="5" population="actors" to="8" xsi:type="ns1:Range"/>
 		<ns1:populations from="0" population="record" to="8" xsi:type="ns1:Range"/>
 	</ns1:brainModel>
-	<ns1:bodyModel robotId="naoModel">nao_model/model.sdf</ns1:bodyModel>
+	<ns1:bodyModel robotId="nao">nao_model/model.sdf</ns1:bodyModel>
 	<ns1:extRobotController>nao_model/nao_ext_controller.sh</ns1:extRobotController>
 	<ns1:transferFunction src="all_neurons_spike_monitor.py" xsi:type="ns1:PythonTransferFunction"/>
 	<ns1:transferFunction src="linear_twist.py" xsi:type="ns1:PythonTransferFunction"/>

@@ -3,7 +3,7 @@
   <brainModel>
     <file>brain_model/idle_brain.py</file>
   </brainModel>
-  <bodyModel robotId="armrobot">arm_robot/arm_robot_gripper.sdf</bodyModel>
+  <bodyModel robotId="robot">arm_robot/arm_robot_gripper.sdf</bodyModel>
   <transferFunction xsi:type="PythonTransferFunction" src="arm_control.py"/>
   <transferFunction xsi:type="PythonTransferFunction" src="hand_control.py"/>
 </bibi>

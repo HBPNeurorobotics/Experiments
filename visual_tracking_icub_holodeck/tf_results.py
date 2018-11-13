@@ -4,7 +4,7 @@ from std_msgs.msg import Float64
 @nrp.MapVariable("eye_position", scope=nrp.GLOBAL)
 @nrp.MapSpikeSink("result_0_dv", nrp.brain.actors[1], nrp.leaky_integrator_alpha)
 @nrp.MapSpikeSink("result_1_dv", nrp.brain.actors[2], nrp.leaky_integrator_alpha)
-@nrp.Neuron2Robot(Topic('/robot/eye_version/pos', Float64))
+@nrp.Neuron2Robot(Topic('/icub/eye_version/pos', Float64))
 def tf_results(t, eye_position, result_0_dv, result_1_dv):
     def deg2rad(deg):
         """

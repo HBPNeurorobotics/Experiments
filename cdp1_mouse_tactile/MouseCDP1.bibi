@@ -6,7 +6,7 @@
     <!--<populations population="neurons" xsi:type="Range" from="0" to="2"/>-->
     <!--<populations population="record" xsi:type="Range" from="0" to="2"/>-->
   </brainModel>
-  <bodyModel robotId="mouse">cdp1_mouse_w_sled/model_tactile.sdf</bodyModel>
+  <bodyModel robotId="robot">cdp1_mouse_w_sled/model_tactile.sdf</bodyModel>
   <transferFunction xsi:type="PythonTransferFunction" src="spinalcordtf.py"/>
   <transferFunction xsi:type="PythonTransferFunction" src="csv_joint_state_monitor.py"/>
 </bibi>

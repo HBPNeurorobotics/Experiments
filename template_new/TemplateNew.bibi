@@ -3,5 +3,5 @@
   <brainModel>
     <file>empty/empty.py</file>
   </brainModel>
-  <bodyModel robotId="emptySDF">empty/empty.sdf</bodyModel>
+  <bodyModel robotId="robot">empty/empty.sdf</bodyModel>
 </bibi>

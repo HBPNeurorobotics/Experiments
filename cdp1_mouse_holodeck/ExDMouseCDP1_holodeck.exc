@@ -12,7 +12,7 @@
     <configuration type="user-interaction-settings" src="holodeck.uis"/>
     <maturity>production</maturity>
     <environmentModel src="cdp1_world/cdp1_world_holodeck.sdf">
-        <robotPose robotId="mouse" x="1.51587" y="-1.0442" z="1.3375" roll="0.0" pitch="-0.0" yaw="0.0"/>
+        <robotPose robotId="robot" x="1.51587" y="-1.0442" z="1.3375" roll="0.0" pitch="-0.0" yaw="0.0"/>
     </environmentModel>
     <bibiConf src="MouseCDP1.bibi"/>
     <experimentControl>

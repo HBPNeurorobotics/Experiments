@@ -4,8 +4,8 @@ from sensor_msgs.msg import JointState
 from std_msgs.msg import Float64
 @nrp.MapVariable("eye_position", initial_value=0, scope=nrp.GLOBAL)
 @nrp.MapVariable("eye_velocity", initial_value=0, scope=nrp.GLOBAL)
-@nrp.MapRobotSubscriber("joints", Topic("/robot/joints", JointState))
-@nrp.MapRobotSubscriber("eye_vel", Topic("/robot/eye_version/vel", Float64))
+@nrp.MapRobotSubscriber("joints", Topic("/icub/joints", JointState))
+@nrp.MapRobotSubscriber("eye_vel", Topic("/icub/eye_version/vel", Float64))
 @nrp.Robot2Neuron()
 def set_eyepos(t, eye_position, eye_velocity, joints, eye_vel):
     joints = joints.value

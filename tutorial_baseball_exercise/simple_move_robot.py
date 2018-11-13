@@ -1,7 +1,7 @@
-@nrp.MapRobotPublisher('r_shoulder_roll', Topic('/robot/r_shoulder_roll/pos', std_msgs.msg.Float64))
-@nrp.MapRobotPublisher('r_shoulder_pitch', Topic('/robot/r_shoulder_pitch/pos', std_msgs.msg.Float64))
-@nrp.MapRobotPublisher('r_elbow', Topic('/robot/r_elbow/pos', std_msgs.msg.Float64))
-@nrp.MapRobotPublisher('eye_tilt', Topic('/robot/eye_tilt/pos', std_msgs.msg.Float64))
+@nrp.MapRobotPublisher('r_shoulder_roll', Topic('/icub/r_shoulder_roll/pos', std_msgs.msg.Float64))
+@nrp.MapRobotPublisher('r_shoulder_pitch', Topic('/icub/r_shoulder_pitch/pos', std_msgs.msg.Float64))
+@nrp.MapRobotPublisher('r_elbow', Topic('/icub/r_elbow/pos', std_msgs.msg.Float64))
+@nrp.MapRobotPublisher('eye_tilt', Topic('/icub/eye_tilt/pos', std_msgs.msg.Float64))
 @nrp.Neuron2Robot()
 def simple_move_robot(t, r_shoulder_roll, r_shoulder_pitch , r_elbow, eye_tilt):
     #################################################

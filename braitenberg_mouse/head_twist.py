@@ -5,7 +5,7 @@ from hbp_nrp_cle.robotsim.RobotInterface import Topic
 import std_msgs.msg
 @nrp.MapSpikeSink("left_neuron", nrp.brain.actors[0], nrp.leaky_integrator_alpha)
 @nrp.MapSpikeSink("right_neuron", nrp.brain.actors[1], nrp.leaky_integrator_alpha)
-@nrp.Neuron2Robot(Topic('/robot/mouse_head_joint/cmd_pos', std_msgs.msg.Float64))
+@nrp.Neuron2Robot(Topic('/mouse/mouse_head_joint/cmd_pos', std_msgs.msg.Float64))
 def head_twist(t, left_neuron, right_neuron):
         voltage_right=right_neuron.voltage
         voltage_left=left_neuron.voltage
