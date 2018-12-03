@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bibi xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.humanbrainproject.eu/SP10/2014/BIBI" xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/BIBI ../bibi_configuration.xsd">
+  <timestep>1</timestep>
+  <brainModel>
+    <file>brains/idle_brain.py</file>
+  </brainModel>
+  <bodyModel>opensim_knee_jerk_tut/model.sdf</bodyModel>
+  <transferFunction xsi:type="PythonTransferFunction" src="reflex_controller.py"/>
+</bibi>
