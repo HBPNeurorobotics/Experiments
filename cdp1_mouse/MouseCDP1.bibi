@@ -7,5 +7,4 @@
   </brainModel>
   <bodyModel robotId="robot">cdp1_mouse_w_sled/model.sdf</bodyModel>
   <transferFunction xsi:type="PythonTransferFunction" src="spinalcordtf.py"/>
-  <transferFunction xsi:type="PythonTransferFunction" src="csv_joint_state_monitor.py"/>
 </bibi>

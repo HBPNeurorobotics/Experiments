@@ -5,7 +5,5 @@
         </brainModel>
         <bodyModel robotId="tigrillo">tigrillo2/model.sdf</bodyModel>
         <transferFunction src="tf_SNN_FORCE.py" xsi:type="PythonTransferFunction"/>
-        <transferFunction src="csv_spike_monitor.py" xsi:type="PythonTransferFunction"/>
         <transferFunction src="send_sensor2brain.py" xsi:type="PythonTransferFunction"/>
-        <transferFunction src="csv_joint_state_monitor.py" xsi:type="PythonTransferFunction"/>
 </bibi>

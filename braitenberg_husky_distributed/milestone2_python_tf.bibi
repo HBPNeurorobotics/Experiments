@@ -9,8 +9,6 @@
 	<ns1:bodyModel robotId="husky">husky_model/model.sdf</ns1:bodyModel>
 	<ns1:mode>SynchronousNestSimulation</ns1:mode>
 	<ns1:transferFunction src="braitenberg_husky_linear_twist.py" xsi:type="ns1:PythonTransferFunction"/>
-	<ns1:transferFunction src="csv_spike_monitor.py" xsi:type="ns1:PythonTransferFunction"/>
-	<ns1:transferFunction src="csv_joint_state_monitor.py" xsi:type="ns1:PythonTransferFunction"/>
 	<ns1:transferFunction src="all_neurons_spike_monitor.py" xsi:type="ns1:PythonTransferFunction"/>
 	<ns1:transferFunction src="eye_sensor_transmit.py" xsi:type="ns1:PythonTransferFunction"/>
 </ns1:bibi>
