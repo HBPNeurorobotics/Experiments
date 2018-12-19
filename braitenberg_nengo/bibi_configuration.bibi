@@ -1,0 +1,13 @@
+<ns1:bibi 
+  xmlns:ns1="http://schemas.humanbrainproject.eu/SP10/2014/BIBI" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns1:brainModel>
+    <ns1:file>brain_model/braitenberg_nengo.py</ns1:file>
+  </ns1:brainModel>
+  <ns1:bodyModel>husky_model/model.sdf</ns1:bodyModel>
+  <ns1:mode>SynchronousNengoSimulation</ns1:mode>
+  <ns1:transferFunction src="linear_twist.py" xsi:type="ns1:PythonTransferFunction" />
+  <ns1:transferFunction src="csv_robot_position.py" xsi:type="ns1:PythonTransferFunction" />
+  <ns1:transferFunction src="eye_sensor_transmit.py" xsi:type="ns1:PythonTransferFunction" />
+  <ns1:transferFunction src="csv_joint_state_monitor.py" xsi:type="ns1:PythonTransferFunction" />
+</ns1:bibi>

@@ -71,7 +71,12 @@
       </xs:enumeration>
       <xs:enumeration value="SynchronousRobotRosNest">
         <xs:annotation>
-          <xs:documentation>In this mode, the NRP can communicate with a robot that uses Ros, with a synchronized Nest for the neural network simulation</xs:documentation>
+          <xs:documentation>In this mode, the NRP can communicate with a robot that uses ROS, with a synchronized Nest for the neural network simulation</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="SynchronousNengoSimulation">
+        <xs:annotation>
+          <xs:documentation>In this mode, the NRP can communicate with a robot that uses ROS, with a synchronized Nengo for the neural network simulation</xs:documentation>
         </xs:annotation>
       </xs:enumeration>
     </xs:restriction>
