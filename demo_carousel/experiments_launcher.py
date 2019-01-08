@@ -45,7 +45,7 @@ class ExperimentsLauncher(object):
         """
         # instantiate a virtual coach instance and an empty dictionary to
         # contain the experiments we want to run constantly
-        self.__vc = virtual_coach.VirtualCoach('local', storage_username='nrpuser', storage_password='password')
+        self.__vc = virtual_coach.VirtualCoach('local', storage_username='demo', storage_password='demo')
         self.__experiments_list = {}
         #helper variables
         self.__last_status = [None]
@@ -106,7 +106,7 @@ class ExperimentsLauncher(object):
                 while not self.__launched:
                     try:
                         self.__sim = self.__vc.launch_experiment(
-                            str(self.__experiments_list[experiment]), cloned=False)
+                            str(self.__experiments_list[experiment]), cloned=True)
                         self.__launched = True
                     except Exception as e:
                        logger.info("Problem starting simulation:")
