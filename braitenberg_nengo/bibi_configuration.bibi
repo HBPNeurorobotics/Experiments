@@ -10,4 +10,7 @@
   <ns1:transferFunction src="csv_robot_position.py" xsi:type="ns1:PythonTransferFunction" />
   <ns1:transferFunction src="eye_sensor_transmit.py" xsi:type="ns1:PythonTransferFunction" />
   <ns1:transferFunction src="csv_joint_state_monitor.py" xsi:type="ns1:PythonTransferFunction" />
+  <ns1:transferFunction src="ensembles_dimensions_plot.py" xsi:type="ns1:PythonTransferFunction" />
+  <ns1:transferFunction src="robot_control_plot.py" xsi:type="ns1:PythonTransferFunction" />
+  <ns1:transferFunction src="documentation.py" xsi:type="ns1:PythonTransferFunction" />
 </ns1:bibi>

@@ -11,15 +11,12 @@ import geometry_msgs.msg
 def linear_twist(t, wheel_neurons):
     """
     The transfer function which calculates the linear twist of the husky robot based on the
-    voltage of left and right wheel neuron.
+    turn and forward signal of the Nengo brain.
 
     :param t: the current simulation time
-    :param left_wheel_neuron: the left wheel neuron device
-    :param right_wheel_neuron: the right wheel neuron device
+    :param wheel_neurons: connection to the two dimensional output signal of the Nengo brain
     :return: a geometry_msgs/Twist message setting the linear twist fo the husky robot movement.
     """
     return geometry_msgs.msg.Twist(
-        linear=geometry_msgs.msg.Vector3(x=10.0 * min((abs(wheel_neurons.value[0]), abs(wheel_neurons.value[1]))), y=0.0,
-                                         z=0.0),
-        angular=geometry_msgs.msg.Vector3(x=0.0, y=0.0, z=7.0 * (
-            wheel_neurons.value[1] - wheel_neurons.value[0])))
+        linear=geometry_msgs.msg.Vector3(x=wheel_neurons.value[0], y=0.0, z=0.0),
+        angular=geometry_msgs.msg.Vector3(x=0.0, y=0.0, z=7 * wheel_neurons.value[1]))
