@@ -5,7 +5,7 @@
     <name>CDP1 Mouse experiment - Tactile feedback</name>
     <thumbnail>ExDMouseCDP1.jpg</thumbnail>
     <description>CDP-1 mouse experiment MVP with tactile feedback</description>
-    <timeout>1000000000</timeout>
+    <timeout>1800</timeout>
     <configuration type="3d-settings" src="ExDMouseCDP1.ini"/>
     <configuration type="brainvisualizer" src="MouseCDP1NeuronCoords.json"/>
     <maturity>development</maturity>

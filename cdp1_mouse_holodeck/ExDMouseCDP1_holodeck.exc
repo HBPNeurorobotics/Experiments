@@ -6,7 +6,7 @@
     <thumbnail>ExDMouseCDP1.jpg</thumbnail>
     <description>CDP-1 mouse experiment MVP</description>
     <tags>mouse biological cdp1 holodeck</tags>
-    <timeout>1000000000</timeout>
+    <timeout>1800</timeout>
     <configuration type="3d-settings" src="holodeck.ini"/>
     <configuration type="brainvisualizer" src="MouseCDP1NeuronCoords.json"/>
     <configuration type="user-interaction-settings" src="holodeck.uis"/>

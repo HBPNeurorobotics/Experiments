@@ -5,7 +5,7 @@
     <name>2 DOF NST Myorobotics Arm for WP4 Cerebellum Experiment</name>
     <thumbnail>Myo_NST.jpg</thumbnail>
     <description>Loads the 2 DOF Myorobotics Arm into the Holodeck. Muscles can be controlled via ROS messages.</description>
-    <timeout>1000000000</timeout>
+    <timeout>1800</timeout>
     <configuration type="3d-settings" src="holodeck.ini"/>
     <configuration type="brainvisualizer" src="brainvisualizer.json"/>
 	<configuration type="user-interaction-settings" src="holodeck.uis"/>
