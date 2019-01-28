@@ -2,7 +2,7 @@ import hbp_nrp_cle.tf_framework as nrp
 from hbp_nrp_cle.robotsim.RobotInterface import Topic
 
 
-@nrp.MapRobotSubscriber("camera", Topic('/husky/camera', sensor_msgs.msg.Image))
+@nrp.MapRobotSubscriber("camera", Topic('/husky/husky/camera', sensor_msgs.msg.Image))
 @nrp.MapSpikeSource("sensor_neurons", nrp.brain.sensors, nrp.raw_signal)
 @nrp.Robot2Neuron()
 def eye_sensor_transmit(t, camera, sensor_neurons):

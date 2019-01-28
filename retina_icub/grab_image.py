@@ -2,8 +2,8 @@
 #
 import std_msgs.msg
 from rospy.numpy_msg import numpy_msg
-@nrp.MapRobotSubscriber("ganglion_ON_data",Topic('/icub_model/left_eye_camera/retina/SNL_ganglion_ON/data', numpy_msg(std_msgs.msg.Float64MultiArray)))
-@nrp.MapRobotSubscriber("ganglion_OFF_data",Topic('/icub_model/left_eye_camera/retina/SNL_ganglion_OFF/data', numpy_msg(std_msgs.msg.Float64MultiArray)))
+@nrp.MapRobotSubscriber("ganglion_ON_data",Topic('/icub/icub_model/left_eye_camera/retina/SNL_ganglion_ON/data', numpy_msg(std_msgs.msg.Float64MultiArray)))
+@nrp.MapRobotSubscriber("ganglion_OFF_data",Topic('/icub/icub_model/left_eye_camera/retina/SNL_ganglion_OFF/data', numpy_msg(std_msgs.msg.Float64MultiArray)))
 @nrp.MapSpikeSource("ganglion_OFF", nrp.map_neurons(range(0, 320), lambda i: nrp.brain.ganglion_input_OFF[i]), nrp.dc_source)
 @nrp.MapSpikeSource("ganglion_ON", nrp.map_neurons(range(0, 320), lambda i: nrp.brain.ganglion_input_ON[i]), nrp.dc_source)
 @nrp.Robot2Neuron()

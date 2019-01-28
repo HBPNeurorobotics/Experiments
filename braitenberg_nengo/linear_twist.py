@@ -7,7 +7,7 @@ from hbp_nrp_cle.robotsim.RobotInterface import Topic
 import geometry_msgs.msg
 
 @nrp.MapSpikeSink("wheel_neurons", nrp.brain.actors, nrp.raw_signal)
-@nrp.Neuron2Robot(Topic('/husky/cmd_vel', geometry_msgs.msg.Twist))
+@nrp.Neuron2Robot(Topic('/husky/husky/cmd_vel', geometry_msgs.msg.Twist))
 def linear_twist(t, wheel_neurons):
     """
     The transfer function which calculates the linear twist of the husky robot based on the

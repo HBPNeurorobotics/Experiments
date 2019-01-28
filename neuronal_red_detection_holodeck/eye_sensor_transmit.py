@@ -1,6 +1,6 @@
 # Imported Python Transfer Function
 #
-@nrp.MapRobotSubscriber("camera", Topic('/husky/camera', sensor_msgs.msg.Image))
+@nrp.MapRobotSubscriber("camera", Topic('/husky/husky/camera', sensor_msgs.msg.Image))
 @nrp.MapSpikeSource("red_left_eye", nrp.map_neurons(range(0, 300), lambda i: nrp.brain.sensors[i]), nrp.ac_source)
 @nrp.MapSpikeSource("red_right_eye", nrp.map_neurons(range(300, 600), lambda i: nrp.brain.sensors[i]), nrp.ac_source)
 @nrp.MapSpikeSource("green_blue_eyes", nrp.brain.circuit[708], nrp.poisson)

@@ -2,7 +2,7 @@
 #
 import sensor_msgs.msg
 import hbp_nrp_cle.tf_framework.tf_lib #import detect_red
-@nrp.MapRobotSubscriber("camera", Topic('/husky/camera', sensor_msgs.msg.Image))
+@nrp.MapRobotSubscriber("camera", Topic('/husky/husky/camera', sensor_msgs.msg.Image))
 @nrp.MapSpikeSource("red_left_eye1", nrp.brain.circuit[0], nrp.poisson, delay=0.1, weight=5.0)
 @nrp.MapSpikeSource("red_left_eye2", nrp.brain.circuit[2], nrp.poisson, delay=0.1, weight=5.0)
 @nrp.MapSpikeSource("red_right_eye1", nrp.brain.circuit[1], nrp.poisson, delay=0.1, weight=5.0)

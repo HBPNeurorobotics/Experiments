@@ -2,8 +2,8 @@
 #
 import sensor_msgs.msg
 import hbp_nrp_cle.tf_framework.tf_lib
-@nrp.MapRobotSubscriber("camera_left", Topic('/mouse_left_eye/mouse/left_eye', sensor_msgs.msg.Image))
-@nrp.MapRobotSubscriber("camera_right", Topic('/mouse_right_eye/mouse/right_eye', sensor_msgs.msg.Image))
+@nrp.MapRobotSubscriber("camera_left", Topic('/mouse/mouse_left_eye/mouse/left_eye', sensor_msgs.msg.Image))
+@nrp.MapRobotSubscriber("camera_right", Topic('/mouse/mouse_right_eye/mouse/right_eye', sensor_msgs.msg.Image))
 @nrp.MapSpikeSource("red_left_eye", nrp.brain.sensors[0], nrp.poisson)
 @nrp.MapSpikeSource("red_right_eye", nrp.brain.sensors[1], nrp.poisson)
 @nrp.Robot2Neuron()

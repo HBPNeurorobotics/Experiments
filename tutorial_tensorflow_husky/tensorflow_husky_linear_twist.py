@@ -9,7 +9,7 @@ import geometry_msgs.msg
 @nrp.MapVariable("state", initial_value=None, scope=nrp.GLOBAL)
 @nrp.MapSpikeSink("left_wheel_neuron", nrp.brain.actors[1], nrp.leaky_integrator_alpha)
 @nrp.MapSpikeSink("right_wheel_neuron", nrp.brain.actors[2], nrp.leaky_integrator_alpha)
-@nrp.Neuron2Robot(Topic('/husky/cmd_vel', geometry_msgs.msg.Twist))
+@nrp.Neuron2Robot(Topic('/husky/husky/cmd_vel', geometry_msgs.msg.Twist))
 def linear_twist(t, state, left_wheel_neuron, right_wheel_neuron):
 
     # determine the stimulus, only drive the wheels if actively searching

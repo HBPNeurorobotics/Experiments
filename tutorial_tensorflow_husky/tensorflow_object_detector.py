@@ -13,7 +13,7 @@
 @nrp.MapSpikeSource("left_eye", nrp.brain.sensors[slice(0, 3, 2)], nrp.poisson)
 @nrp.MapSpikeSource("right_eye", nrp.brain.sensors[slice(1, 4, 2)], nrp.poisson)
 # subscribe to images from the robot
-@nrp.MapRobotSubscriber("camera", Topic('/husky/camera', sensor_msgs.msg.Image))
+@nrp.MapRobotSubscriber("camera", Topic('/husky/husky/camera', sensor_msgs.msg.Image))
 # publish an annotated image as output of this transfer function
 @nrp.Neuron2Robot(Topic('/detections', sensor_msgs.msg.Image))
 def object_detection(t, detection_graph, sess, category_index, bridge, state, target, camera, left_eye, right_eye):

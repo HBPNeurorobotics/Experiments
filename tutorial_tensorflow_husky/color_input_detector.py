@@ -4,7 +4,7 @@ objects to search for.
 """
 @nrp.MapVariable("state", initial_value=None, scope=nrp.GLOBAL)
 @nrp.MapVariable("target", initial_value=None, scope=nrp.GLOBAL)
-@nrp.MapRobotSubscriber("camera", Topic('/husky/camera', sensor_msgs.msg.Image))
+@nrp.MapRobotSubscriber("camera", Topic('/husky/husky/camera', sensor_msgs.msg.Image))
 @nrp.Robot2Neuron()
 def input_detector(t, state, target, camera):
 

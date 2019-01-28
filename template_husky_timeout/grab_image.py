@@ -1,7 +1,7 @@
 # Imported Python Transfer Function
 #
 import sensor_msgs.msg
-@nrp.MapRobotSubscriber("camera", Topic('/husky/camera', sensor_msgs.msg.Image))
+@nrp.MapRobotSubscriber("camera", Topic('/husky/husky/camera', sensor_msgs.msg.Image))
 @nrp.MapSpikeSource("input_neuron", nrp.brain.neurons[0], nrp.poisson)
 @nrp.Robot2Neuron()
 # Example TF: get image and fire at constant rate. You could do something with the image here and fire accordingly.

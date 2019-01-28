@@ -9,7 +9,7 @@ import geometry_msgs.msg
 
 @nrp.MapSpikeSink("left_wheel_neuron", nrp.brain.left, nrp.leaky_integrator_exp, weight=2.0, timesteps=100)
 @nrp.MapSpikeSink("right_wheel_neuron", nrp.brain.right, nrp.leaky_integrator_exp, weight=2.0, timesteps=100)
-@nrp.Neuron2Robot(Topic('/husky/cmd_vel', geometry_msgs.msg.Twist), triggers="left_wheel_neuron")
+@nrp.Neuron2Robot(Topic('/husky/husky/cmd_vel', geometry_msgs.msg.Twist), triggers="left_wheel_neuron")
 def linear_twist(t, left_wheel_neuron, right_wheel_neuron):
     """
     The transfer function which calculates the linear twist of the husky robot based on the

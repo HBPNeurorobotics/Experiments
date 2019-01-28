@@ -1,6 +1,6 @@
 import hbp_nrp_cle.tf_framework as nrp
 
-@nrp.MapRobotSubscriber("camera", Topic('/icub_model/left_eye_camera/image_raw', sensor_msgs.msg.Image))
+@nrp.MapRobotSubscriber("camera", Topic('/icub/icub_model/left_eye_camera/image_raw', sensor_msgs.msg.Image))
 @nrp.MapSpikeSource("left_input_neuron", nrp.brain.icub_input_left[0], nrp.poisson)
 @nrp.MapSpikeSource("right_input_neuron", nrp.brain.icub_input_right[0], nrp.poisson)
 @nrp.Robot2Neuron()
