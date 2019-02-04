@@ -240,7 +240,7 @@
     <xsd:annotation>
       <xsd:documentation>This type is the root type for an experiment configuration.</xsd:documentation>
     </xsd:annotation>
-    <xsd:all>
+    <xsd:sequence>
       <xsd:element name="name" type="xsd:string">
         <xsd:annotation>
           <xsd:documentation>This element denotes the name of the experiment as it appears in the experiment list.</xsd:documentation>
@@ -261,7 +261,7 @@
           <xsd:documentation>List of space separated tags that describe the experiment.</xsd:documentation>
         </xsd:annotation>
       </xsd:element>
-      <xsd:element name="timeout" type="xsd:double" minOccurs="0">
+      <xsd:element name="timeout" type="Timeout" minOccurs="0" maxOccurs="1">
         <xsd:annotation>
           <xsd:documentation>The timeout of an experiment is the time an experiment is allowed to run by default, specified in seconds. If that time has elapsed, the users are asked whether they want to extend the runtime of the simulation. On the servers, this will only be allowed if the timeout fits within the cluster allocation.</xsd:documentation>
         </xsd:annotation>
@@ -339,8 +339,23 @@
           <xsd:documentation>Settings for the relay of the component relaying information from the simulation backend to the visualization client.</xsd:documentation>
         </xsd:annotation>
       </xsd:element>
-    </xsd:all>
+    </xsd:sequence>
   </xsd:complexType>
+
+  <xsd:complexType name="Timeout">
+    <xsd:simpleContent>
+        <xsd:extension base="xsd:double">
+            <xsd:attribute name="time" type="TimeoutTime"/>
+        </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+
+  <xsd:simpleType name="TimeoutTime">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="simulation"/>
+      <xsd:enumeration value="real"/>
+    </xsd:restriction>
+  </xsd:simpleType>
 
   <xsd:complexType name="ExperimentControl">
     <xsd:annotation>
