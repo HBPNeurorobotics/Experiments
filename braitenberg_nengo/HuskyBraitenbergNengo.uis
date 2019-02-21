@@ -6,12 +6,9 @@
       "rotation": 1
     }
   },
-  "autosaveOnExit": {
-    "transferFunctions": {
-      "CSVData": false
-    },
-    "lastWorkspaceLayouts": {
-      "default-owner": {
+  "workspaces": {
+    "custom": [],
+    "autosave": {
         "settings": {
           "hasHeaders": true,
           "constrainDragToContainer": false,
@@ -167,5 +164,4 @@
         "maximisedItemId": null
       }
     }
-  }
 }
