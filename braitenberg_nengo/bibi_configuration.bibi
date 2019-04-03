@@ -11,4 +11,5 @@
   <ns1:transferFunction src="ensembles_dimensions_plot.py" xsi:type="ns1:PythonTransferFunction" />
   <ns1:transferFunction src="robot_control_plot.py" xsi:type="ns1:PythonTransferFunction" />
   <ns1:transferFunction src="documentation.py" xsi:type="ns1:PythonTransferFunction" />
+  <ns1:transferFunction src="all_neurons_spike_monitor.py" xsi:type="ns1:PythonTransferFunction" />
 </ns1:bibi>
