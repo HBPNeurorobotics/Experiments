@@ -10,7 +10,7 @@
     <xs:annotation>
       <xs:documentation>This class represents the root of the BIBI configuration.</xs:documentation>
     </xs:annotation>
-    <xs:sequence>
+    <xs:all>
       <xs:element name="timestep" type="TimeStep" minOccurs="0">
         <xs:annotation>
           <xs:documentation>If specified, the CLE uses a different timestep than the default timestep of 20ms. The timestep is specified in milliseconds and depicts the time between two successive loops of the CLE in simulation time.</xs:documentation>
@@ -46,7 +46,7 @@
           <xs:documentation>The transfer functions that are used to couple a neural network to robot</xs:documentation>
         </xs:annotation>
       </xs:element>
-    </xs:sequence>
+    </xs:all>
   </xs:complexType>
 
   <xs:simpleType name="SimulationMode">
