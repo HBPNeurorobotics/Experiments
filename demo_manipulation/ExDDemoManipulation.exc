@@ -27,4 +27,9 @@
             <cameraPosition x="0.84782" y="-2.38183" z="2.4"/>
         <cameraLookAt x="0" y="0" z="1"/>
     </cameraPose>
+    <gzbridgesettings>
+      <pose_update_delta_translation>1.e-6</pose_update_delta_translation>
+      <pose_update_delta_rotation>1.e-7</pose_update_delta_rotation>
+      <pose_update_early_threshold>0.02</pose_update_early_threshold>
+    </gzbridgesettings>
 </ExD>
