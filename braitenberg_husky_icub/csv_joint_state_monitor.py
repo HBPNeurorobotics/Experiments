@@ -1,4 +1,4 @@
-@nrp.MapRobotSubscriber("joint_state", Topic('/joint_states', sensor_msgs.msg.JointState))
+@nrp.MapRobotSubscriber("joint_state", Topic('/husky/joint_states', sensor_msgs.msg.JointState))
 @nrp.MapCSVRecorder("recorder", filename="all_joints_positions.csv", headers=["Name", "time", "Position"])
 @nrp.Robot2Neuron()
 def csv_joint_state_monitor(t, joint_state, recorder):

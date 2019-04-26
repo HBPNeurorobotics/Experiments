@@ -2,7 +2,7 @@
 #
 import numpy as np
 @nrp.MapVariable("topic_index", initial_value=-1)
-@nrp.MapRobotSubscriber("topic_joint_states", Topic('/joint_states', sensor_msgs.msg.JointState))
+@nrp.MapRobotSubscriber("topic_joint_states", Topic('/robot/joint_states', sensor_msgs.msg.JointState))
 @nrp.MapSpikeSource("input_layer", nrp.map_neurons(range(0, 90), lambda i: nrp.brain.sensors[i]), nrp.poisson, weight=100.0)
 @nrp.Robot2Neuron()
 def propagate_input_signal(t, topic_index, topic_joint_states, input_layer):

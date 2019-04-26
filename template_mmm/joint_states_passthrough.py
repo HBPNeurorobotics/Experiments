@@ -2,7 +2,7 @@
 #
 from sensor_msgs.msg import JointState
 @nrp.MapRobotSubscriber("joints", Topic("/mmmrobot/joints", JointState))
-@nrp.Neuron2Robot(Topic('/joint_states', JointState))
+@nrp.Neuron2Robot(Topic('/mmmrobot/joint_states', JointState))
 def joint_states_passthrough(t, joints):
     return joints.value
 #

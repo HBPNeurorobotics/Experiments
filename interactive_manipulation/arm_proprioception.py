@@ -1,6 +1,6 @@
 # Imported Python Transfer Function
 #
-@nrp.MapRobotSubscriber("joint_data", Topic('/joint_states', sensor_msgs.msg.JointState))
+@nrp.MapRobotSubscriber("joint_data", Topic('/arm_robot/joint_states', sensor_msgs.msg.JointState))
 @nrp.MapSpikeSource("shoulder_encoding", nrp.brain.shoulder, nrp.fixed_frequency)
 @nrp.MapSpikeSource("elbow_flexion_encoding", nrp.brain.elbow_flexion, nrp.fixed_frequency)
 @nrp.MapSpikeSource("elbow_rotation_encoding", nrp.brain.elbow_rotation, nrp.fixed_frequency)

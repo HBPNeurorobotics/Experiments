@@ -5,7 +5,7 @@ from sensor_msgs.msg import JointState
 @nrp.MapRobotPublisher('output_layer_plot', Topic('/output_layer', sensor_msgs.msg.Image))
 @nrp.MapRobotPublisher('head_pan', Topic('/robot/RHM0_joint/cmd_pos', std_msgs.msg.Float64))
 @nrp.MapRobotPublisher('head_tilt', Topic('/robot/SwingXAxis_joint/cmd_pos', std_msgs.msg.Float64))
-@nrp.MapRobotSubscriber("joint_states_msg", Topic('/joint_states', JointState))
+@nrp.MapRobotSubscriber("joint_states_msg", Topic('/robot/joint_states', JointState))
 @nrp.Neuron2Robot()
 def head_control(t, output_layer_plot, head_pan, head_tilt, motor_recorder, joint_states_msg):
     if joint_states_msg.value is None:

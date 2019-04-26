@@ -1,7 +1,7 @@
 # Imported Python Transfer Function
 import sensor_msgs.msg
 import hbp_nrp_cle.tf_framework.tf_lib #import detect_red
-@nrp.MapRobotSubscriber("camera", '/husky/camera')
+@nrp.MapRobotSubscriber("camera", Topic('/husky/husky/camera', sensor_msgs.msg.Image))
 @nrp.MapSpikeSource("left_injector", nrp.brain.left, nrp.injector, n=10)
 @nrp.MapSpikeSource("right_injector", nrp.brain.right, nrp.injector, n=10)
 @nrp.MapVariable("last", initial_value=(True, True))

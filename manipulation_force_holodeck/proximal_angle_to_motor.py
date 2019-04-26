@@ -5,7 +5,7 @@
 @nrp.MapSpikeSource("extension", nrp.brain.index_proximal_extension_motor, nrp.fixed_frequency)
 @nrp.MapSpikeSource("contraction", nrp.brain.index_proximal_contraction_motor, nrp.fixed_frequency)
 @nrp.MapRobotSubscriber("target_angle", Topic('/target_angle_index_finger_proximal', std_msgs.msg.Float64))
-@nrp.MapRobotSubscriber("topic_joint_state", Topic('/joint_states', sensor_msgs.msg.JointState))
+@nrp.MapRobotSubscriber("topic_joint_state", Topic('/robot/joint_states', sensor_msgs.msg.JointState))
 @nrp.Robot2Neuron()
 def proximal_angle_to_motor(t, topic_index, spike_rate_scale, extension, contraction, target_angle, topic_joint_state):
     try:

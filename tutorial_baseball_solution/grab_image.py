@@ -2,7 +2,7 @@
 import numpy as np
 import sensor_msgs.msg
 from cv_bridge import CvBridge
-@nrp.MapRobotSubscriber("camera", Topic("/icub_model/left_eye_camera/image_raw", sensor_msgs.msg.Image))
+@nrp.MapRobotSubscriber("camera", Topic("/icub/icub_model/left_eye_camera/image_raw", sensor_msgs.msg.Image))
 @nrp.MapSpikeSource("sensors", nrp.map_neurons(range(0, nrp.config.brain_root.n_sensors), lambda i: nrp.brain.sensors[i]), nrp.dc_source)
 @nrp.MapVariable("last_mean_green", initial_value=None, scope=nrp.GLOBAL)
 @nrp.Robot2Neuron()

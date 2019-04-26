@@ -9,7 +9,7 @@
 @nrp.MapSpikeSource("teaching_motor_contract", nrp.brain.actors[0], nrp.poisson, weight=100.0)
 @nrp.MapSpikeSource("teaching_motor_extend", nrp.brain.actors[1], nrp.poisson, weight=100.0)
 @nrp.MapRobotPublisher("topic_arm", Topic('/robot/hollie_real_left_arm_2_joint/cmd_pos', std_msgs.msg.Float64))
-@nrp.MapRobotSubscriber("topic_joint_states", Topic('/joint_states', sensor_msgs.msg.JointState))
+@nrp.MapRobotSubscriber("topic_joint_states", Topic('/robot/joint_states', sensor_msgs.msg.JointState))
 @nrp.Neuron2Robot()
 def propagate_motor_commands(t, old_joint_angle, joint_angle, is_random_movement, topic_index, motor_contract, motor_extend, teaching_motor_contract, teaching_motor_extend, topic_arm, topic_joint_states):
     try:
