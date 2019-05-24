@@ -126,14 +126,14 @@
             <xs:documentation>Robot id the pose refers to</xs:documentation>
           </xs:annotation>
        </xs:attribute>
-        <xs:attribute name="customAsset" type="xs:boolean" use="optional">
+        <xs:attribute name="model" type="xs:string" use="optional">
           <xs:annotation>
-            <xs:documentation>Whether the model is custom</xs:documentation>
+            <xs:documentation>If the model is custom, it tells the name of the model</xs:documentation>
           </xs:annotation>
        </xs:attribute>
-        <xs:attribute name="assetPath" type="xs:string" use="optional">
+        <xs:attribute name="isCustom" type="xs:boolean" use="optional">
           <xs:annotation>
-            <xs:documentation>Assets path</xs:documentation>
+            <xs:documentation>Whether the model is custom</xs:documentation>
           </xs:annotation>
        </xs:attribute>
       </xs:extension>
