@@ -240,7 +240,7 @@
     <xsd:annotation>
       <xsd:documentation>This type is the root type for an experiment configuration.</xsd:documentation>
     </xsd:annotation>
-    <xsd:all>
+    <xsd:sequence>
       <xsd:element name="name" type="xsd:string">
         <xsd:annotation>
           <xsd:documentation>This element denotes the name of the experiment as it appears in the experiment list.</xsd:documentation>
@@ -339,7 +339,12 @@
           <xsd:documentation>Settings for the relay of the component relaying information from the simulation backend to the visualization client.</xsd:documentation>
         </xsd:annotation>
       </xsd:element>
-    </xsd:all>
+     <xsd:element name ="cloneDate" type ="xsd:dateTime" minOccurs="0" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation>If specified, the date when the experiment was cloned</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
   </xsd:complexType>
 
   <xsd:complexType name="Timeout">
@@ -418,20 +423,6 @@
             <xsd:documentation>The path to an Python script that describes the state machine. This script has to have a variable with global scope that must have the name sm or stateMachine.</xsd:documentation>
           </xsd:annotation>
         </xsd:attribute>
-      </xsd:extension>
-    </xsd:complexContent>
-  </xsd:complexType>
-
-  <xsd:complexType name="SCXMLStateMachine">
-    <xsd:annotation>
-      <xsd:documentation>This type denotes an SCXML state machine. SCXML is a W3C standard for state charts. However, state machines in this format are currently not run. State machines in SCXML are currently not interpreted.</xsd:documentation>
-    </xsd:annotation>
-    <xsd:complexContent>
-      <xsd:extension base="StateMachine">
-        <xsd:sequence>
-          <xsd:element ref="sc:scxml" minOccurs="0"/>
-        </xsd:sequence>
-        <xsd:attribute name="src" type="xsd:string"/>
       </xsd:extension>
     </xsd:complexContent>
   </xsd:complexType>
