@@ -240,7 +240,7 @@
     <xsd:annotation>
       <xsd:documentation>This type is the root type for an experiment configuration.</xsd:documentation>
     </xsd:annotation>
-    <xsd:sequence>
+    <xsd:all>
       <xsd:element name="name" type="xsd:string">
         <xsd:annotation>
           <xsd:documentation>This element denotes the name of the experiment as it appears in the experiment list.</xsd:documentation>
@@ -344,7 +344,7 @@
           <xsd:documentation>If specified, the date when the experiment was cloned</xsd:documentation>
         </xsd:annotation>
       </xsd:element>
-    </xsd:sequence>
+    </xsd:all>
   </xsd:complexType>
 
   <xsd:complexType name="Timeout">
