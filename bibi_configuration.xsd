@@ -221,6 +221,11 @@
     <xs:annotation>
       <xs:documentation>This is the abstract type for a transfer function specification. A transfer function may be specified either in XML or in Python. These specification options are reflected in subclasses of the abstract transfer function type.</xs:documentation>
     </xs:annotation>
+    <xs:attribute name="active" type="xs:boolean" default="true">
+      <xs:annotation>
+        <xs:documentation>Whether the Transfer Function is active</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
   </xs:complexType>
 
   <xs:complexType name="PythonTransferFunction">
