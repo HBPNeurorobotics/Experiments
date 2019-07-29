@@ -1,0 +1,12 @@
+<ns1:bibi 
+  xmlns:ns1="http://schemas.humanbrainproject.eu/SP10/2014/BIBI" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns1:brainModel>
+    <ns1:file>brain_model/braitenberg_explorer_brain.py</ns1:file>
+    <ns1:populations population="sensors" from="0" step="1" to="2" xsi:type="ns1:Range" />
+    <ns1:populations population="actors" from="2" step="1" to="4" xsi:type="ns1:Range" />
+  </ns1:brainModel>
+  <ns1:bodyModel>p3dx/pioneer3dx.sdf</ns1:bodyModel>
+  <ns1:transferFunction src="transmit_positions.py" xsi:type="ns1:PythonTransferFunction" />
+  <ns1:transferFunction src="navigate.py" xsi:type="ns1:PythonTransferFunction" />
+</ns1:bibi>

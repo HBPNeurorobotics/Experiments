@@ -1,0 +1,96 @@
+﻿#!/usr/bin/env python
+
+import hbp_nrp_excontrol.nrp_states as states
+from hbp_nrp_excontrol.nrp_states import SetModelPose
+from hbp_nrp_excontrol.logs import clientLogger
+import smach
+from smach import StateMachine, CBState
+import rospy
+from gazebo_msgs.msg import ModelStates
+from geometry_msgs.msg import Vector3
+import numpy as np
+import csv
+
+FINISHED = 'FINISHED'
+ERROR = 'ERROR'
+PREEMPTED = 'PREEMPTED'
+# State machine initialization
+sm = StateMachine(outcomes=[FINISHED, ERROR, PREEMPTED])
+
+# userdata allows to share variables accross states
+sm.userdata.state = np.array([0.,0.])
+sm.userdata.trap_counter = 0
+sm.userdata.trap_state = None
+
+def state_callback(msg):
+    '''this function is called whenever the robot state changed
+        the position (x,y) is saved in userdata'''
+    p = msg.pose[0]
+    sm.userdata.state[0] = p.position.x
+    sm.userdata.state[1] = p.position.y
+
+# the subscriber calls state_callback() whenever it receives a 'ModelState' message from '/gazebo/model_states'
+rospy.Subscriber('/gazebo/model_states', ModelStates, state_callback)
+
+def check_trap():
+    @smach.cb_interface(input_keys=['trap_counter', 'trap_state', 'state'],
+                        output_keys=['trap_counter', 'trap_state'],
+                        outcomes=['valid', 'invalid'])
+    def check(userdata):
+        if userdata.trap_counter == 0:
+            userdata.trap_state = userdata.state.copy()
+            userdata.trap_counter += 1
+            return 'invalid'
+        else:
+            if np.linalg.norm(userdata.state - userdata.trap_state) > 0.05:
+                userdata.trap_state = None
+                userdata.trap_counter = 0
+                return 'invalid'
+            else:
+                userdata.trap_counter += 1 
+                if userdata.trap_counter < 10:
+                    return 'invalid'
+                else:
+                    userdata.trap_state = None
+                    userdata.trap_counter = 0
+                    return 'valid'
+    return check
+
+@smach.cb_interface(output_keys=['random_theta'])
+def random_position(userdata, position):
+    x = np.random.choice([-4.0, 4.0])
+    y = np.random.choice([-4.0, 4.0])
+    theta = -np.sign(y) * np.pi / 4.0
+    if x != -4.0:
+        theta *= 3.0
+    userdata.random_theta = - np.sign(y) * np.pi / 4.0
+    robot_height = 0.023
+    return Vector3(x, y, robot_height)
+
+@smach.cb_interface(input_keys=['random_theta'])
+def random_orientation(userdata, orientation):
+    return Vector3(0.0, 0.0, userdata.random_theta)
+
+def new_spawn():
+    return SetModelPose('robot', random_position, random_orientation, Vector3(1.0, 1.0, 1.0))
+
+with sm:
+ 
+    # Verify wether the robot is trapped/stuck somewhere or not
+    StateMachine.add("check_trap",
+                     CBState(check_trap()),
+                     transitions = {"valid": "move_robot",
+                                    "invalid": "check_wait"})
+    
+    # Wait 1sec before checking again
+    StateMachine.add("check_wait",
+                     states.ClockDelayState(1),
+                     transitions = {"valid": "check_wait",
+                                    "invalid": "check_trap",
+                                    "preempted": PREEMPTED})
+    # Displace the robot in a new position
+    StateMachine.add("move_robot",
+                     new_spawn(),
+                     transitions = {"succeeded": 'check_wait',
+                                    "preempted": PREEMPTED,
+                                    "aborted": ERROR})

@@ -1,0 +1,146 @@
+import hbp_nrp_excontrol.nrp_states as states
+from gazebo_msgs.srv import SpawnEntity, SpawnEntityRequest
+from gazebo_msgs.msg import ModelState
+from smach import StateMachine
+import smach_ros
+import smach
+from smach import CBState
+from hbp_nrp_excontrol.nrp_states import WaitToClockState
+import rospy
+from std_msgs.msg import Float64MultiArray
+from geometry_msgs.msg import Pose, Point, Quaternion
+from hbp_nrp_excontrol.logs import clientLogger
+from geometry_msgs.msg import Vector3
+
+
+lattice_point_name = "SOM_lattice_point"
+cylinder_sdf_xml = """
+<?xml version='1.0'?>
+<sdf version='1.5'>
+  <model name='{lattice_point_name}'>
+    <static>1</static>
+    <pose>0 0 0 0 0 0</pose>
+    <link name='{lattice_point_name}'>
+      <visual name='visual'>
+        <cast_shadows> 0 </cast_shadows>
+        <geometry>
+          <cylinder>
+            <radius>0.1</radius>
+            <length>0.07</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <script>
+           <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Red</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>
+"""
+
+waypoint_name = "waypoint"
+waypoint_sdf_xml = """
+<?xml version='1.0'?>
+<sdf version='1.5'>
+  <model name='{waypoint_name}'>
+    <static>1</static>
+    <pose>0 0 0 0 0 0</pose>
+    <link name='{waypoint_name}'>
+      <visual name='visual'>
+        <cast_shadows> 0 </cast_shadows>
+        <geometry>
+          <cylinder>
+            <radius>0.2</radius>
+            <length>0.05</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <script>
+           <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Green</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>
+"""
+
+
+
+@smach.cb_interface(input_keys=[], output_keys=[], outcomes=['finished'])
+def draw_cb(userdata):
+    global lattice_point_name
+    global cylinder_sdf_xml
+    global lattice, waypoints
+    
+    # SOM LATTICE
+    clientLogger.info("Drawing lattice points")
+    Nn = lattice.layout.dim[0].size
+    for i in range(Nn):
+        for j in range(Nn):
+            idx = Nn * 2 * i + 2 * j
+            spawn_proxy = rospy.ServiceProxy('/gazebo/spawn_sdf_entity',
+                                               SpawnEntity, persistent=True)
+            lattice_msg = SpawnEntityRequest()
+            lattice_msg.entity_name = lattice_point_name + str(idx // 2)
+            lattice_msg.entity_xml = cylinder_sdf_xml.format(lattice_point_name=lattice_point_name)
+            lattice_msg.initial_pose.position.x = lattice.data[idx + 0]
+            lattice_msg.initial_pose.position.y = lattice.data[idx + 1]
+            lattice_msg.initial_pose.position.z = 0.0
+            lattice_msg.reference_frame = "world"
+            spawn_proxy(lattice_msg)
+            
+    
+    # WAYPOINTS   
+    clientLogger.info("Drawing waypoints")
+    Nw = waypoints.layout.dim[0].size
+    for i in range(Nw):
+        idx = 2 * i
+        spawn_proxy = rospy.ServiceProxy('/gazebo/spawn_sdf_entity',
+                                               SpawnEntity, persistent=True)
+        waypoints_msg = SpawnEntityRequest()
+        waypoints_msg.entity_name = waypoint_name + '1' + str(idx)
+        waypoints_msg.entity_xml = waypoint_sdf_xml.format(waypoint_name=waypoint_name)
+        waypoints_msg.initial_pose.position.x = waypoints.data[idx + 0]
+        waypoints_msg.initial_pose.position.y = waypoints.data[idx + 1]
+        waypoints_msg.initial_pose.position.z = 0.0
+        waypoints_msg.reference_frame = "world"
+        spawn_proxy(waypoints_msg)
+                    
+    return 'finished'
+
+
+def lattice_callback(userdata, data):
+    global lattice
+    lattice = data
+    clientLogger.info('Received lattice points')
+    return False
+
+def waypoints_callback(userdata, data):
+    global waypoints
+    waypoints = data
+    clientLogger.info('Received waypoints')
+    return False
+
+def robot_position_callback(user_data, position):
+    robot_height = 0.023
+    return Vector3(waypoints.data[0], waypoints.data[1], robot_height)
+
+    
+FINISHED = 'FINISHED'
+ERROR = 'ERROR'
+PREEMPTED = 'PREEMPTED'
+sm = smach.StateMachine(outcomes=['DONE'])
+
+with sm:
+    smach.StateMachine.add('RETRIEVE_LATTICE', smach_ros.MonitorState("/tf/lattice", Float64MultiArray, lattice_callback), 
+        transitions={'invalid':'RETRIEVE_WAYPOINTS', 'valid':'RETRIEVE_LATTICE', 'preempted':'RETRIEVE_LATTICE'})
+    smach.StateMachine.add('RETRIEVE_WAYPOINTS', smach_ros.MonitorState("/tf/pathway", Float64MultiArray, waypoints_callback), 
+        transitions={'invalid':'MOVE_ROBOT', 'valid':'RETRIEVE_WAYPOINTS', 'preempted':'RETRIEVE_WAYPOINTS'})
+    smach.StateMachine.add("MOVE_ROBOT", states.SetModelPose('robot', robot_position_callback, Vector3(0., 0., 0.), Vector3(1., 1., 1.)), 
+        transitions = {"succeeded": 'DRAW', "preempted": 'MOVE_ROBOT', "aborted": 'MOVE_ROBOT'})
+    smach.StateMachine.add('DRAW', CBState(draw_cb), transitions={'finished': 'DONE'})

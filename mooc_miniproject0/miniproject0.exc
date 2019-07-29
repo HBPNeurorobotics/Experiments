@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ExD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
+     xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
+  <name>Mini-project 0: Make the robot explore its environment by following Braitenberg rules</name>
+  <thumbnail>miniproject0.png</thumbnail>
+  <description>Your goal is to record the position of the robot while it explores its environment.
+  To do so, follow the instructions located in the python files laser_sensors_transmit.py, velocity_commands.py 
+  (Transfer Functions) and move_robot.exd (SMACH StateMachine).</description>
+  <tags>mooc pioneer robotics Braitenberg</tags>
+  <timeout>3600.0</timeout>
+  <configuration src="miniproject0.ini" type="3d-settings" />
+  <configuration src="brainvisualizer.json" type="brainvisualizer" />
+  <configuration src="miniproject0.uis" type="user-interaction-settings" />
+  <maturity>production</maturity>
+  <environmentModel src="mooc_arena/mooc_arena.sdf">
+    <robotPose robotId="robot" x="-4.0" y="-3.5" z="0.023" roll="0.0" pitch="0.0" yaw="1.04719734192" />
+  </environmentModel>
+  <bibiConf src="miniproject0.bibi" />
+  <experimentControl>
+    <stateMachine id="move_robot" src="move_robot.exd" xsi:type="SMACHStateMachine" />
+  </experimentControl>
+  <cameraPose>
+    <cameraPosition x="0.0" y="0.0" z="11.0" />
+    <cameraLookAt x="0.0" y="0.0" z="0.6" />
+  </cameraPose>
+  <rosLaunch src="robot_description.launch" />
+</ExD>

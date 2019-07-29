@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ExD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
+     xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
+  <name>Mini-project 2: Navigate the robot between any two points of its environment</name>
+  <thumbnail>miniproject2.png</thumbnail>
+  <description>Implement the SARSA algorithm to produce a series of waypoints that join any two given locations.</description>
+  <tags>mooc pioneer robotics template empty</tags>
+  <timeout>3600.0</timeout>
+  <configuration src="miniproject2.ini" type="3d-settings" />
+  <configuration src="brainvisualizer.json" type="brainvisualizer" />
+  <configuration src="miniproject2.uis" type="user-interaction-settings" />
+  <maturity>production</maturity>
+  <environmentModel src="mooc_arena/mooc_arena.sdf">
+    <robotPose pitch="0.0" roll="0.0" x="-4.0" y="-4.0" yaw="45.0" z="0.1" />
+  </environmentModel>
+  <bibiConf src="miniproject2.bibi" />
+  <experimentControl>
+    <stateMachine id="draw_waypoints" src="draw_waypoints.exd" xsi:type="SMACHStateMachine" />
+  </experimentControl>
+  <cameraPose>
+    <cameraPosition x="0.0" y="0.0" z="11.0" />
+    <cameraLookAt x="0.0" y="0.0" z="0.6" />
+  </cameraPose>
+  <rosLaunch src="robot_description.launch" />
+</ExD>
