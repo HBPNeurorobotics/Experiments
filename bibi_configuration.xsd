@@ -59,6 +59,11 @@
           <xs:documentation>In this mode, the NRP uses a synchronized Nest configuration for the neural network simulation</xs:documentation>
         </xs:annotation>
       </xs:enumeration>
+      <xs:enumeration value="SynchronousDirectNestSimulation">
+        <xs:annotation>
+          <xs:documentation>In this mode, the NRP uses a synchronized direct Nest configuration for the neural network simulation</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
       <xs:enumeration value="SynchronousSpinnakerSimulation">
         <xs:annotation>
           <xs:documentation>In this mode, the NRP uses a synchronized SpiNNaker configuration for the neural network simulation (single process only)</xs:documentation>
