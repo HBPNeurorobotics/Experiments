@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ExD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
+     xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
+    <name>Tutorial: Brain Visualizer</name>
+    <thumbnail>Images/Visualizer_official.jpg</thumbnail>
+    <description>Learn how to use the brain visualizer and highlight the first steps of human vision in a cortical model for contrast detection and surface filling-in.</description>
+    <timeout>100000</timeout> <!-- units = seconds -->
+    <configuration type="3d-settings" src="Visualizer_official.3ds"/>
+    <maturity>production</maturity>
+    <environmentModel src="crowding_virtuallab/moving_square_virtuallab.sdf">
+        <robotPose x="-8.500" y="-1.435" z="1.349" ux="0.0" uy="0.0" uz="0.0" theta="1.0"/>
+    </environmentModel>
+    <bibiConf src="Visualizer_official.bibi"/>
+    <cameraPose>
+        <cameraPosition x="-8.0" y="-3.0" z="1.5"/>
+        <cameraLookAt x="-9.0" y="-1.5" z="1.6"/>
+    </cameraPose>
+</ExD>
