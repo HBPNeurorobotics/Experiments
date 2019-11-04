@@ -1,8 +1,7 @@
 import sys
 import os
-pathToCode = os.environ['NN_CODE']
-pathToResults = pathToCode+"/../../results/"
-sys.path.append(pathToCode)
+pathToResults = "results/"
+sys.path.append('resources')
 
 import pickle
 import numpy as np

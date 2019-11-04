@@ -1,8 +1,5 @@
 import os
 
-import os
-pathToCode = os.environ['NN_CODE']
-
 def modify_network_structure(templateFile,outFileName,delay,weights):
 	""" Modify a templete network structure to create a second structure file.
 
@@ -13,9 +10,9 @@ def modify_network_structure(templateFile,outFileName,delay,weights):
 	weights -- list containign the delays to set.
 	"""
 	import sys
-	outFile = open(pathToCode+"/../nnStructures/"+outFileName,"w")
+	outFile = open("nnStructures/"+outFileName, "w")
 	section = None
-	for line in open(pathToCode+"/../nnStructures/templates/"+templateFile,"r"):
+	for line in open("nnStructures/templates/"+templateFile,"r"):
 		if line[0] == "@":section = float(line[1])
 		elif section == 1 or section==2 or section==3: line, flag = _replace_val(line,"__delay",delay)
 		elif section == 4 or section==5 or section==6:

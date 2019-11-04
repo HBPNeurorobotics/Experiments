@@ -1,13 +1,11 @@
 import sys
 import os
-pathToCode = os.environ['NN_CODE']
-sys.path.append(pathToCode)
+sys.path.append('resources')
 import subprocess
 from tools import structures_tools as tls
 import numpy as np
 from tools import general_tools as gt
 
-pathToResults = pathToCode+"/../../results/"
 
 def main():
 	""" This program launches a parameters systematic search for a ClosedLoopSimWebots.
@@ -36,7 +34,7 @@ def main():
 			for w3 in weights_3:
 				for eesAmplitude in eesAmplitudes:
 					resultName = name+"_eesAmp_%d_w1_%f_w2_%f_w3_%f_w4_%f_w5_%f" % (int(eesAmplitude),w1,w2,w3,w4,w5)
-					resultFile = gt.find("*"+resultName+"*.p",pathToResults)
+					resultFile = gt.find("*"+resultName+"*.p", 'results')
 					if not resultFile:
 						inputFile = "generatedStructures/ss_cl_w1_%f_w2_%f_w3_%f_w4_%f_w5_%f.txt" % (w1,w2,w3,w4,w5)
 						tls.modify_network_structure("templateClosedLoop2Dof.txt",inputFile,delay,[w1,w2,w3,w4,w5])

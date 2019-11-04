@@ -1,7 +1,6 @@
 import os
 import time
 import pyNN.nest as sim
-pathToCode = os.environ['NN_CODE']
 from AfferentFibersPopulation import AfferentFibersPopulation
 from SpinalNeuralNetwork import SpinalNeuralNetwork
 from EES import EES
@@ -50,7 +49,7 @@ class ClosedLoopSimulation:
         self._plotFlag = False
 
         # Setup results folder
-        self._resultsFolder = pathToCode+"/../../results/"
+        self._resultsFolder = "results/"
         if not os.path.exists(self._resultsFolder):
             os.makedirs(self._resultsFolder)
 

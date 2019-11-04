@@ -9,7 +9,6 @@ import random as rnd
 import time
 
 import os
-pathToCode = os.environ['NN_CODE']
 
 
 class EES():
@@ -54,12 +53,12 @@ class EES():
 
     def _load_rec_data(self):
         """ Load recruitment data from a previosly validated FEM model (Capogrosso et al 2013). """
-        recI_MG=np.loadtxt(pathToCode+'/recruitmentData/GM_full_S1_wire1')
-        recII_MG=np.loadtxt(pathToCode+'/recruitmentData/GM_full_ii_S1_wire1')
-        recMn_MG=np.loadtxt(pathToCode+'/recruitmentData/MGM_full_S1_wire1')
-        recI_TA=np.loadtxt(pathToCode+'/recruitmentData/TA_full_S1_wire1')
-        recII_TA=np.loadtxt(pathToCode+'/recruitmentData/TA_full_ii_S1_wire1')
-        recMn_TA=np.loadtxt(pathToCode+'/recruitmentData/MTA_full_S1_wire1')
+        recI_MG=np.loadtxt('resources/recruitmentData/GM_full_S1_wire1')
+        recII_MG=np.loadtxt('resources/recruitmentData/GM_full_ii_S1_wire1')
+        recMn_MG=np.loadtxt('resources/recruitmentData/MGM_full_S1_wire1')
+        recI_TA=np.loadtxt('resources/recruitmentData/TA_full_S1_wire1')
+        recII_TA=np.loadtxt('resources/recruitmentData/TA_full_ii_S1_wire1')
+        recMn_TA=np.loadtxt('resources/recruitmentData/MTA_full_S1_wire1')
 
         allPercIf_GM= recI_MG/max(recI_MG)
         allPercIIf_GM= recII_MG/max(recII_MG)

@@ -2,7 +2,6 @@ import subprocess
 import socket
 
 import os
-pathToCode = os.environ['NN_CODE']
 
 class ClosedLoopManager():
 	""" Simulation Manager.
@@ -25,7 +24,7 @@ class ClosedLoopManager():
 	def _run_neural_network(self):
 		""" Run the neural network as a subprocess. """
 
-		program = ['python',pathToCode+'/scripts/runClosedLoopNn.py',self._eesFreq,self._eesAmp,self._nnStructFile,self._species,self._totSimulationTime,self._figName ]
+		program = ['python','resources/scripts/runClosedLoopNn.py',self._eesFreq,self._eesAmp,self._nnStructFile,self._species,self._totSimulationTime,self._figName ]
 
 		if self._debug: print "Running: "+" ".join(program)
 		self._neuralNetwork = subprocess.Popen(program, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)

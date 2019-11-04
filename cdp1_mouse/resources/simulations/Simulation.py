@@ -3,7 +3,6 @@ import time
 import pyNN.nest as sim
 
 import os
-pathToCode = os.environ['NN_CODE']
 
 class Simulation:
     """ Interface class to design different types of neuronal simulation.
@@ -25,7 +24,7 @@ class Simulation:
         self.__printPeriod = 250 #ms
 
         # Setup results folder
-        self._resultsFolder = pathToCode+"/../../results/"
+        self._resultsFolder = "results/"
         if not os.path.exists(self._resultsFolder):
             os.makedirs(self._resultsFolder)
 

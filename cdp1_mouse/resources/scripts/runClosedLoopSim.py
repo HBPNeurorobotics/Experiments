@@ -1,8 +1,7 @@
 import sys
 args =  list(sys.argv)
 import os
-pathToCode = os.environ['NN_CODE']
-sys.path.append(pathToCode)
+sys.path.append('resources')
 from simulations import ClosedLoopSimWebots
 from tools import structures_tools as tls
 

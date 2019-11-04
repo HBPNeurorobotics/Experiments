@@ -27,11 +27,6 @@ def transferfunction( t, clm,
       import os
       import inspect
       clientLogger.info("Initializing Spinal Cord")
-      # Configure python search paths to allow import of the spinal cord code.
-      filename = inspect.getframeinfo(inspect.currentframe()).filename
-      path = os.path.dirname(os.path.abspath(filename))
-      path_to_code = os.path.join(path, 'resources')
-      os.environ['NN_CODE'] = path_to_code
       # WARNING: Currently, code changes in imported
       # modules after initial import are ignored.
       # And that counts since the launch of the plattform.
