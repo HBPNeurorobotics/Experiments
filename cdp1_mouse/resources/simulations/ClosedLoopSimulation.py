@@ -11,7 +11,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from tools import firings_tools as tlsf
 from tools import afferents_tools as tlsa
-from tools import networkPlotter as nnplt
+#from tools import networkPlotter as nnplt
 import pickle
 
 
@@ -44,7 +44,7 @@ class ClosedLoopSimulation:
         are connected use None (default = None).
         tStop -- Time in ms at wich the simulation will stop (default = 999999).
         """
-
+    
         self._debug = False
         self._plotFlag = False
 
@@ -101,7 +101,7 @@ class ClosedLoopSimulation:
         """ Print the total simulation time and extract the results. """
         self._extract_results()
         self._save_results()
-        if self._plotFlag: self._plotter.end_plotting()
+        #if self._plotFlag: self._plotter.end_plotting()
 
     def _init_afferents_fr(self):
         """ Initialize the dictionary necessary to update the afferent fibers. """
@@ -156,7 +156,7 @@ class ClosedLoopSimulation:
                 'name':self._resultsName,
                 'fps':int(1000./self._dtCommunication)}
         movie = None # ffmpeg problems in linux machine..
-        self._plotter = nnplt.musclespindles_network_plotter("LEFT_LG","LEFT_TA",movieParam=movie,rosPublish=True)
+        #self._plotter = nnplt.musclespindles_network_plotter("LEFT_LG","LEFT_TA",movieParam=movie,rosPublish=True)
 
     def _update_mm_data(self,mmData):
         """ Read and update muscles stretch in mm and time in ms form the musculoskeletal model. """
@@ -249,7 +249,7 @@ class ClosedLoopSimulation:
             activityColors[muscle]["IIf"] = self._cmap(((self._nApIIf[muscle][-1]-self._nApIIf[muscle][0])/self._nIIf/self._timeWindowRec*1000)/self._maxIIfFr)
             activityColors[muscle]["Mn"] = self._cmap(self._muscAct[muscle])
 
-        self._plotter.update_activity(activityColors,firingRates)
+        #self._plotter.update_activity(activityColors,firingRates)
 
     def _extract_results(self):
         """ Extract the simulation results. """
