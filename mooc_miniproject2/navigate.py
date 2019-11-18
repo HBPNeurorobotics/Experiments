@@ -31,9 +31,9 @@ def navigate(t, step_index, pose, initial_position, initial_orientation, waypoin
         current_orientation = current_pose.orientation
         current_position = current_pose.position
         p_robot = [ current_position.x, current_position.y ]
-        x = waypoints.value[stage.value, 0]
-        y = waypoints.value[stage.value, 1]
-        p_target = [lattice_points.value[x, y, 0.0], lattice_points.value[x, y, 1.0]]
+        x = int(waypoints.value[stage.value, 0])
+        y = int(waypoints.value[stage.value, 1])
+        p_target = [lattice_points.value[x, y, 0], lattice_points.value[x, y, 1]]
         delta_x = p_target[0] - p_robot[0]
         delta_y = p_target[1] - p_robot[1]
         norm = math.sqrt(delta_x**2 + delta_y**2)

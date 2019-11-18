@@ -70,10 +70,10 @@ def transmit_positions (t, tf_lattice, tf_pathway, lattice_points, waypoints):
     offset = lattice.layout.data_offset
 
     for i in range(Nw):
-        x = waypoints.value[i, 0]
-        y = waypoints.value[i, 1]
-        pathway.data[offset + dstride4 * i + 0] = lattice_points.value[x, y, 0]     
-        pathway.data[offset + dstride4 * i + 1] = lattice_points.value[x, y, 1]
+        x = int(waypoints.value[i, 0])
+        y = int(waypoints.value[i, 1])
+        pathway.data[int(offset + dstride4 * i + 0)] = lattice_points.value[x, y, 0]     
+        pathway.data[int(offset + dstride4 * i + 1)] = lattice_points.value[x, y, 1]
                      
     if t < 3:
         tf_lattice.send_message(std_msgs.msg.Float64MultiArray(lattice.layout, lattice.data))

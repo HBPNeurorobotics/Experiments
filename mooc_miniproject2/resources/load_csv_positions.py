@@ -14,7 +14,7 @@ def load_lattice(filepath):
     lattice = numpy.zeros((Nn,Nn,2))
     for i, line in enumerate(data):
         z = line[0]; y = line[1]; x = line[2]
-        lattice[x, y, z] = line[3]
+        lattice[int(x), int(y), int(z)] = line[3]
     return lattice
 
 def load_waypoints(filepath):
