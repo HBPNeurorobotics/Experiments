@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<ns1:bibi xmlns:ns1="http://schemas.humanbrainproject.eu/SP10/2014/BIBI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<ns1:brainModel>
+		<ns1:file>brain_model/braitenberg.py</ns1:file>
+		<ns1:populations from="0" population="sensors" to="5" xsi:type="ns1:Range"/>
+		<ns1:populations from="5" population="actors" to="8" xsi:type="ns1:Range"/>
+		<ns1:populations from="0" population="record" to="8" xsi:type="ns1:Range"/>
+	</ns1:brainModel>
+	<ns1:bodyModel robotId="icub">icub_model/model.sdf</ns1:bodyModel>
+	<ns1:transferFunction src="move_target.py" xsi:type="ns1:PythonTransferFunction"/>
+	<ns1:transferFunction src="tf_results.py" xsi:type="ns1:PythonTransferFunction"/>
+</ns1:bibi>
