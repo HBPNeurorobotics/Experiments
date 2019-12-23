@@ -3,12 +3,6 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ns1:brainModel>
     <ns1:file>brain_model/braitenberg_spinnaker.py</ns1:file>
-    <ns1:populations population="red_left_eye" count="2" xsi:type="ns1:Population" />
-    <ns1:populations population="red_right_eye" count="2" xsi:type="ns1:Population" />
-    <ns1:populations population="green_blue_eye" count="1" xsi:type="ns1:Population" />
-    <ns1:populations population="go_on" count="1" xsi:type="ns1:Population" />
-    <ns1:populations population="left_wheel_motor" count="1" xsi:type="ns1:Population" />
-    <ns1:populations population="right_wheel_motor" count="1" xsi:type="ns1:Population" />
   </ns1:brainModel>
   <ns1:bodyModel robotId="husky">husky_model/model.sdf</ns1:bodyModel>
   <ns1:mode>SynchronousSpinnakerSimulation</ns1:mode>
