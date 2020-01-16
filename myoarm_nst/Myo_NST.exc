@@ -3,7 +3,7 @@
      xmlns="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig"
      xsi:schemaLocation="http://schemas.humanbrainproject.eu/SP10/2014/ExDConfig ../ExDConfFile.xsd">
     <name>2 DOF NST Myorobotics Arm for WP4 Cerebellum Experiment</name>
-    <thumbnail>Myo_NST.jpg</thumbnail>
+    <thumbnail>Myo_NST.png</thumbnail>
     <description>Loads the 2 DOF Myorobotics Arm into the Holodeck. Muscles can be controlled via ROS messages.</description>
     <timeout>1800</timeout>
     <configuration type="3d-settings" src="holodeck.ini"/>
@@ -11,8 +11,8 @@
 	<configuration type="user-interaction-settings" src="holodeck.uis"/>
 
     <maturity>development</maturity>
-    <environmentModel src="cdp1_world/cdp1_world_holodeck.sdf">
-        <robotPose robotId="myoarm" x="-1" y="-4.0" z="0.1" roll="0.0" pitch="-0.0" yaw="0.0"/>
+    <environmentModel src="empty_world/empty_world.sdf">
+        <robotPose robotId="myoarm" x="0.0" y="0.0" z="0.01" roll="0.0" pitch="-0.0" yaw="1.57"/>
     </environmentModel>
 
     <bibiConf src="Myo_NST.bibi"/>
