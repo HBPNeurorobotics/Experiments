@@ -244,6 +244,11 @@
             <xs:documentation>The 'src' attribute denotes the path of a python file that contains the entire transfer function. If this attribute is present, the actual contents of the transfer function element is ignored and only the contents of the specified Python file are taken into account.</xs:documentation>
           </xs:annotation>
         </xs:attribute>
+        <xs:attribute name="priority" type="xs:nonNegativeInteger" use="optional">
+          <xs:annotation>
+            <xs:documentation>The 'priority' attribute is used to specify the order in which transfer functions are executed at every simulation step. Transfer functions with higher priority are executed first.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
